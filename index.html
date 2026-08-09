@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinguaExplorer - 12 Weeks TBLT-CLIL Portal</title>
+  <title>LinguaExplorer - 12 Weeks TBLT-CLIL Platform</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen select-none pb-12">
 
-  <!-- MODAL LOGIN / INPUT IDENTITAS & PASSWORD -->
+  <!-- MODAL LOGIN SISWA -->
   <div id="loginModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 w-full max-w-md border-4 border-emerald-500">
       <div class="text-center mb-6">
@@ -28,8 +28,8 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Password / PIN Akses</label>
-          <input type="password" id="inputPassword" required placeholder="Masukkan Password" class="w-full p-3 border-2 border-slate-200 rounded-xl font-semibold focus:border-emerald-500 focus:outline-none">
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Password / PIN Siswa</label>
+          <input type="password" id="inputPassword" required placeholder="Masukkan Password Siswa" class="w-full p-3 border-2 border-slate-200 rounded-xl font-semibold focus:border-emerald-500 focus:outline-none">
         </div>
 
         <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition">
@@ -39,29 +39,35 @@
     </div>
   </div>
 
-  <!-- HEADER PROGRAM & NAVIGASI TAB W1-W12 -->
+  <!-- HEADER NAVIGASI -->
   <header class="bg-emerald-600 text-white p-4 shadow-lg sticky top-0 z-40">
-    <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
       <div>
         <h1 class="text-2xl font-bold tracking-wide">🌿 LinguaExplorer</h1>
         <p class="text-xs text-emerald-100">Siswa: <span id="displayStudentName" class="font-semibold text-yellow-200">Belum Login</span></p>
       </div>
       
-      <!-- Tab Navigasi 12 Minggu -->
-      <nav class="flex flex-wrap justify-center gap-1 bg-emerald-800/60 p-1.5 rounded-xl text-xs font-semibold max-w-full overflow-x-auto">
-        <button onclick="switchWeek(1)" id="tab-1" class="tab-btn px-2.5 py-1 rounded-lg bg-white text-emerald-800 shadow">W1</button>
-        <button onclick="switchWeek(2)" id="tab-2" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W2</button>
-        <button onclick="switchWeek(3)" id="tab-3" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W3</button>
-        <button onclick="switchWeek(4)" id="tab-4" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W4</button>
-        <button onclick="switchWeek(5)" id="tab-5" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W5</button>
-        <button onclick="switchWeek(6)" id="tab-6" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W6</button>
-        <button onclick="switchWeek(7)" id="tab-7" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W7</button>
-        <button onclick="switchWeek(8)" id="tab-8" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W8</button>
-        <button onclick="switchWeek(9)" id="tab-9" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W9</button>
-        <button onclick="switchWeek(10)" id="tab-10" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W10</button>
-        <button onclick="switchWeek(11)" id="tab-11" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W11</button>
-        <button onclick="switchWeek(12)" id="tab-12" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W12</button>
-      </nav>
+      <!-- Navigasi W1-W12 & Portal Guru -->
+      <div class="flex items-center gap-2 max-w-full overflow-x-auto pb-1 md:pb-0">
+        <nav class="flex gap-1 bg-emerald-800/60 p-1.5 rounded-xl text-xs font-semibold shrink-0">
+          <button onclick="switchWeek(1)" id="tab-1" class="tab-btn px-2.5 py-1 rounded-lg bg-white text-emerald-800 shadow">W1</button>
+          <button onclick="switchWeek(2)" id="tab-2" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W2</button>
+          <button onclick="switchWeek(3)" id="tab-3" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W3</button>
+          <button onclick="switchWeek(4)" id="tab-4" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W4</button>
+          <button onclick="switchWeek(5)" id="tab-5" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W5</button>
+          <button onclick="switchWeek(6)" id="tab-6" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W6</button>
+          <button onclick="switchWeek(7)" id="tab-7" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W7</button>
+          <button onclick="switchWeek(8)" id="tab-8" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W8</button>
+          <button onclick="switchWeek(9)" id="tab-9" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W9</button>
+          <button onclick="switchWeek(10)" id="tab-10" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W10</button>
+          <button onclick="switchWeek(11)" id="tab-11" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W11</button>
+          <button onclick="switchWeek(12)" id="tab-12" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W12</button>
+        </nav>
+
+        <button onclick="openTeacherPortal()" class="px-3 py-1.5 rounded-xl bg-amber-400 text-amber-950 font-bold text-xs hover:bg-amber-300 shadow shrink-0">
+          🔑 Portal Guru
+        </button>
+      </div>
     </div>
   </header>
 
@@ -69,7 +75,7 @@
 
     <!-- ==================== MODUL 1: NATURAL SCIENCES ==================== -->
 
-    <!-- WEEK 1: Animal Adaptations -->
+    <!-- WEEK 1 -->
     <div id="week-1" class="week-content space-y-6">
       <div class="bg-emerald-100 p-4 rounded-xl border-l-4 border-emerald-600"><h2 class="font-bold text-emerald-900">Module 1 - Week 1: Animal Adaptations</h2></div>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
@@ -93,7 +99,7 @@
       <button id="w1Submit" onclick="submitWeek(1, 'Super Animal Studio')" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W1</button>
     </div>
 
-    <!-- WEEK 2: Food Chains & Webs -->
+    <!-- WEEK 2 -->
     <div id="week-2" class="week-content hidden space-y-6">
       <div class="bg-emerald-100 p-4 rounded-xl border-l-4 border-emerald-600"><h2 class="font-bold text-emerald-900">Module 1 - Week 2: Food Chains & Webs</h2></div>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
@@ -106,7 +112,7 @@
       </section>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
         <h3 class="font-bold text-emerald-800 mb-2">2. Main Task: Arrange Food Chain Sequence</h3>
-        <input type="text" id="w2Text" class="w-full p-3 border-2 rounded-xl font-semibold" placeholder="Urutan: Grass -> Zebra -> Lion">
+        <input type="text" id="w2Text" class="w-full p-3 border-2 rounded-xl font-semibold text-sm" placeholder="Urutan: Grass -> Zebra -> Lion">
       </section>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
         <h3 class="font-bold text-emerald-800 mb-2">3. Oral Task: Explain Ecosystem Chain</h3>
@@ -116,13 +122,13 @@
       <button id="w2Submit" onclick="submitWeek(2, 'Ecosystem Web')" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W2</button>
     </div>
 
-    <!-- WEEK 3: Rainforest Layers -->
+    <!-- WEEK 3 -->
     <div id="week-3" class="week-content hidden space-y-6">
       <div class="bg-emerald-100 p-4 rounded-xl border-l-4 border-emerald-600"><h2 class="font-bold text-emerald-900">Module 1 - Week 3: Rainforest Layers</h2></div>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
         <h3 class="font-bold text-emerald-800 mb-2">1. Main Task: 3D Diorama Note & Upload Foto</h3>
         <textarea id="w3Notes" class="w-full p-3 border-2 rounded-xl text-sm mb-3" placeholder="Tuliskan 4 lapisan hutan hujan yang kamu buat pada diorama..."></textarea>
-        <label class="block text-xs font-bold text-slate-600 mb-1">Unggah Foto Diorama (Opsional):</label>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Unggah Foto Diorama:</label>
         <input type="file" id="w3File" accept="image/*" class="w-full text-sm border p-2 rounded-xl">
       </section>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
@@ -133,7 +139,7 @@
       <button id="w3Submit" onclick="submitWeek(3, 'Rainforest Diorama')" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W3</button>
     </div>
 
-    <!-- WEEK 4: Endangered Species -->
+    <!-- WEEK 4 -->
     <div id="week-4" class="week-content hidden space-y-6">
       <div class="bg-emerald-100 p-4 rounded-xl border-l-4 border-emerald-600"><h2 class="font-bold text-emerald-900">Module 1 - Week 4: Endangered Species Campaign</h2></div>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
@@ -142,7 +148,7 @@
         <button onclick="clearCanvas('w4Canvas')" class="mt-2 px-3 py-1 bg-slate-200 text-xs rounded-lg">Clear Canvas</button>
       </section>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
-        <h3 class="font-bold text-emerald-800 mb-2">2. Oral Task: Campaign Audio (1 Min)</h3>
+        <h3 class="font-bold text-emerald-800 mb-2">2. Oral Task: Campaign Audio</h3>
         <button id="w4RecBtn" onclick="toggleRecording(4)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
         <audio id="w4Audio" controls class="hidden h-10 mt-2"></audio>
       </section>
@@ -151,7 +157,7 @@
 
     <!-- ==================== MODUL 2: EARTH & ENVIRONMENT ==================== -->
 
-    <!-- WEEK 5: Water Cycle -->
+    <!-- WEEK 5 -->
     <div id="week-5" class="week-content hidden space-y-6">
       <div class="bg-sky-100 p-4 rounded-xl border-l-4 border-sky-600"><h2 class="font-bold text-sky-900">Module 2 - Week 5: The Water Cycle</h2></div>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
@@ -171,7 +177,7 @@
       <button id="w5Submit" onclick="submitWeek(5, 'Water Cycle Simulator')" class="w-full py-4 bg-sky-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W5</button>
     </div>
 
-    <!-- WEEK 6: Extreme Weather -->
+    <!-- WEEK 6 -->
     <div id="week-6" class="week-content hidden space-y-6">
       <div class="bg-sky-100 p-4 rounded-xl border-l-4 border-sky-600"><h2 class="font-bold text-sky-900">Module 2 - Week 6: Extreme Weather Reporter</h2></div>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
@@ -186,7 +192,7 @@
       <button id="w6Submit" onclick="submitWeek(6, 'Weather News Report')" class="w-full py-4 bg-sky-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W6</button>
     </div>
 
-    <!-- WEEK 7: Renewable Energy -->
+    <!-- WEEK 7 -->
     <div id="week-7" class="week-content hidden space-y-6">
       <div class="bg-sky-100 p-4 rounded-xl border-l-4 border-sky-600"><h2 class="font-bold text-sky-900">Module 2 - Week 7: Renewable Energy Windmill</h2></div>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
@@ -203,7 +209,7 @@
       <button id="w7Submit" onclick="submitWeek(7, 'Windmill STEM Challenge')" class="w-full py-4 bg-sky-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W7</button>
     </div>
 
-    <!-- WEEK 8: Zero Waste & Recycling -->
+    <!-- WEEK 8 -->
     <div id="week-8" class="week-content hidden space-y-6">
       <div class="bg-sky-100 p-4 rounded-xl border-l-4 border-sky-600"><h2 class="font-bold text-sky-900">Module 2 - Week 8: Zero Waste & Bin System</h2></div>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
@@ -224,7 +230,7 @@
 
     <!-- ==================== MODUL 3: PHYSICAL GEOGRAPHY ==================== -->
 
-    <!-- WEEK 9: Volcanoes -->
+    <!-- WEEK 9 -->
     <div id="week-9" class="week-content hidden space-y-6">
       <div class="bg-amber-100 p-4 rounded-xl border-l-4 border-amber-600"><h2 class="font-bold text-amber-900">Module 3 - Week 9: Volcano Eruption</h2></div>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-amber-100">
@@ -248,7 +254,7 @@
       <button id="w9Submit" onclick="submitWeek(9, 'Volcano Eruption')" class="w-full py-4 bg-amber-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W9</button>
     </div>
 
-    <!-- WEEK 10: Treasure Maps -->
+    <!-- WEEK 10 -->
     <div id="week-10" class="week-content hidden space-y-6">
       <div class="bg-amber-100 p-4 rounded-xl border-l-4 border-amber-600"><h2 class="font-bold text-amber-900">Module 3 - Week 10: Map Navigation</h2></div>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-amber-100">
@@ -266,7 +272,7 @@
       <button id="w10Submit" onclick="submitWeek(10, 'Treasure Map Task')" class="w-full py-4 bg-amber-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W10</button>
     </div>
 
-    <!-- WEEK 11: Travel Agent Pitch -->
+    <!-- WEEK 11 -->
     <div id="week-11" class="week-content hidden space-y-6">
       <div class="bg-amber-100 p-4 rounded-xl border-l-4 border-amber-600"><h2 class="font-bold text-amber-900">Module 3 - Week 11: Natural Wonders Travel Pitch</h2></div>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-amber-100">
@@ -283,25 +289,131 @@
       <button id="w11Submit" onclick="submitWeek(11, 'Travel Pitch Task')" class="w-full py-4 bg-amber-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W11</button>
     </div>
 
-    <!-- WEEK 12: Capstone Grand Showcase -->
+    <!-- WEEK 12 -->
     <div id="week-12" class="week-content hidden space-y-6">
       <div class="bg-gradient-to-r from-amber-500 to-emerald-600 text-white p-6 rounded-2xl text-center shadow-lg">
         <h2 class="text-3xl font-extrabold mb-1">🎓 Capstone Grand Showcase Expo</h2>
         <p class="text-xs">Junior Scientist & Explorer Expo Final Presentation</p>
       </div>
-
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-amber-200">
         <h3 class="font-bold text-amber-900 mb-2">1. Final Self-Reflection & Portfolio Summary</h3>
         <textarea id="w12Reflection" rows="3" class="w-full p-3 border-2 border-amber-200 rounded-xl text-sm mb-3" placeholder="Pesan, kesan, dan modul sains terfavorit selama 12 minggu..."></textarea>
       </section>
-
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-amber-200">
-        <h3 class="font-bold text-amber-900 mb-2">2. Final Expo Oral Speech (Summary Presentation)</h3>
+        <h3 class="font-bold text-amber-900 mb-2">2. Final Expo Oral Speech</h3>
         <button id="w12RecBtn" onclick="toggleRecording(12)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Pidato Expo Akhir</button>
         <audio id="w12Audio" controls class="hidden h-10 mt-2"></audio>
       </section>
-
       <button id="w12Submit" onclick="submitWeek(12, 'Capstone Showcase')" class="w-full py-4 bg-amber-600 text-white rounded-2xl font-bold text-lg shadow-xl">🏆 Submit Capstone Portfolio Program</button>
+    </div>
+
+    <!-- ==================== PORTAL DASHBOARD GURU ==================== -->
+    <div id="teacherPortalView" class="hidden space-y-6">
+      <div class="bg-emerald-700 text-white p-6 rounded-2xl shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+          <h2 class="text-2xl font-bold">👩‍🏫 Teacher Assessment Dashboard</h2>
+          <p class="text-emerald-200 text-xs mt-1">Sistem Evaluasi Portofolio & Rubrik Penilaian TBLT-CLIL</p>
+        </div>
+        <button onclick="loadSubmissions()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm shadow transition">
+          🔄 Muat Data Terbaru
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Tabel Tugas Siswa -->
+        <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-md border border-slate-200">
+          <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center justify-between">
+            📋 Daftar Tugas Siswa
+            <span id="totalCount" class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-bold">0 Data</span>
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-50 text-slate-500 border-b uppercase text-xs">
+                <tr>
+                  <th class="p-3">Siswa</th>
+                  <th class="p-3">Minggu</th>
+                  <th class="p-3">Tugas</th>
+                  <th class="p-3">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="submissionTable" class="divide-y divide-slate-100">
+                <tr><td colspan="4" class="text-center p-6 text-slate-400">Klik "Muat Data Terbaru" untuk memanggil data siswa.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Form Rubrik Penilaian Guru -->
+        <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 space-y-4">
+          <h3 class="text-lg font-bold text-slate-700 border-b pb-2">✏️ Form & Rubrik Penilaian</h3>
+
+          <div id="noSelectionNotice" class="text-slate-400 text-sm text-center py-8">
+            Pilih salah satu tugas siswa di tabel untuk mulai menilai.
+          </div>
+
+          <div id="assessmentForm" class="hidden space-y-4">
+            <div class="bg-slate-50 p-3 rounded-xl border text-xs space-y-1">
+              <p><strong>Nama:</strong> <span id="evalStudentName" class="text-emerald-700 font-bold">-</span></p>
+              <p><strong>Tugas:</strong> <span id="evalTaskName">-</span></p>
+              <p><strong>Jawaban Teks:</strong> <span id="evalText" class="italic text-slate-600">-</span></p>
+            </div>
+
+            <div id="mediaContainer" class="space-y-2">
+              <div id="imagePreview" class="hidden">
+                <label class="block text-xs font-bold text-slate-500 mb-1">Hasil Gambar/Foto:</label>
+                <img id="imgSrc" src="" class="w-full h-40 object-cover rounded-xl border">
+              </div>
+              <div id="audioPreview" class="hidden">
+                <label class="block text-xs font-bold text-slate-500 mb-1">Rekaman Suara Siswa:</label>
+                <audio id="audioSrc" controls class="w-full"></audio>
+              </div>
+            </div>
+
+            <hr>
+
+            <form onsubmit="saveGrade(event)" class="space-y-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-600">1. Komunikasi Tugas (1-4)</label>
+                <select id="scoreTask" required class="w-full p-2 border rounded-lg text-sm bg-slate-50">
+                  <option value="1">1 - Pesan sulit dipahami</option>
+                  <option value="2">2 - Pesan tersampaikan parsial</option>
+                  <option value="3" selected>3 - Tugas selesai & jelas</option>
+                  <option value="4">4 - Sangat lancar & detail</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-600">2. Kosa Kata CLIL (1-4)</label>
+                <select id="scoreVocab" required class="w-full p-2 border rounded-lg text-sm bg-slate-50">
+                  <option value="1">1 - &lt; 2 kosa kata ilmiah</option>
+                  <option value="2">2 - 2–3 kosa kata ilmiah</option>
+                  <option value="3" selected>3 - 4–5 kosa kata ilmiah</option>
+                  <option value="4">4 - Kosa kata variatif & tepat</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-600">3. Kelancaran/Fluency (1-4)</label>
+                <select id="scoreFluency" required class="w-full p-2 border rounded-lg text-sm bg-slate-50">
+                  <option value="1">1 - Banyak terhenti/terputus</option>
+                  <option value="2">2 - Kelancaran sedang</option>
+                  <option value="3" selected>3 - Jeda wajar & struktur benar</option>
+                  <option value="4">4 - Sangat lancar</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-600">Umpan Balik Guru:</label>
+                <textarea id="teacherFeedback" rows="2" class="w-full p-2 border rounded-lg text-xs" placeholder="Umpan balik untuk siswa..."></textarea>
+              </div>
+
+              <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow text-sm">
+                💾 Simpan Penilaian
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
 
   </main>
@@ -309,22 +421,24 @@
   <script>
     const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwgcfcfMx9CfCx-njEdz336BayzaUSUoH375cQ5X-3J1UK_ANsVzamK_CblIcp4FXps/exec";
     const DRIVE_FOLDER_ID = "19T7hUj80EBtXPJ-ZA_02vMHovz25AwlH";
-    const VALID_PASSWORD = "123";
+    const STUDENT_PASSWORD = "123";
+    const TEACHER_PASSWORD = "guru123";
 
     let currentStudent = { name: "", classId: "" };
     const audioData = {};
     const fileData = {};
     let mediaRecorder, audioChunks = [];
+    let submissions = [], selectedIndex = null;
 
-    // --- HANDLE LOGIN ---
+    // --- LOGIN SISWA ---
     function handleLogin(e) {
       e.preventDefault();
       const name = document.getElementById('inputStudentName').value.trim();
       const classId = document.getElementById('inputStudentClass').value.trim();
       const pwd = document.getElementById('inputPassword').value.trim();
 
-      if (pwd !== VALID_PASSWORD) {
-        alert("Password/PIN salah! Silakan coba lagi.");
+      if (pwd !== STUDENT_PASSWORD) {
+        alert("Password/PIN Siswa salah!");
         return;
       }
 
@@ -335,8 +449,21 @@
       document.getElementById('loginModal').classList.add('hidden');
     }
 
-    // --- NAVIGASI MINGGU ---
+    // --- AKSES PORTAL GURU ---
+    function openTeacherPortal() {
+      const pwd = prompt("Masukkan PIN Khusus Guru:");
+      if (pwd === TEACHER_PASSWORD) {
+        document.querySelectorAll('.week-content').forEach(el => el.classList.add('hidden'));
+        document.getElementById('teacherPortalView').classList.remove('hidden');
+        loadSubmissions();
+      } else if (pwd !== null) {
+        alert("PIN Guru Salah!");
+      }
+    }
+
+    // --- NAVIGASI TAB MINGGU ---
     function switchWeek(weekNum) {
+      document.getElementById('teacherPortalView').classList.add('hidden');
       document.querySelectorAll('.week-content').forEach(el => el.classList.add('hidden'));
       document.getElementById(`week-${weekNum}`).classList.remove('hidden');
 
@@ -352,7 +479,7 @@
       }
     }
 
-    // --- TTS (Text to Speech) ---
+    // --- TTS (TEXT TO SPEECH) ---
     function speak(text) {
       const msg = new SpeechSynthesisUtterance(text);
       msg.lang = 'en-US'; msg.rate = 0.8;
@@ -367,7 +494,7 @@
       if (step === 3) { state.innerText = "🌧️ Step 3: Precipitation - Rain is falling!"; speak("Precipitation"); }
     }
 
-    // --- CANVAS ENGINE (W1, W4) ---
+    // --- CANVAS DRAWING (W1, W4) ---
     function initCanvas(id) {
       const c = document.getElementById(id);
       if (!c) return;
@@ -400,7 +527,7 @@
 
     ['w1Canvas', 'w4Canvas'].forEach(initCanvas);
 
-    // --- FILE UPLOAD ENGINE (W3, W7, W11) ---
+    // --- FILE UPLOAD (W3, W7, W11) ---
     function setupFileInput(week) {
       const el = document.getElementById(`w${week}File`);
       if (!el) return;
@@ -443,7 +570,7 @@
       }
     }
 
-    // --- SUBMISSION TO GAS ---
+    // --- SUBMIT TUGAS SISWA KE GAS ---
     async function submitWeek(weekNum, taskName) {
       if (!currentStudent.name) {
         alert("Harap login terlebih dahulu.");
@@ -456,7 +583,6 @@
       let textRes = "Task Completed";
       let imgBase64 = fileData[weekNum] || "";
 
-      // Ekstraksi jawaban per minggu
       if (weekNum === 2) textRes = document.getElementById('w2Text').value;
       if (weekNum === 3) textRes = document.getElementById('w3Notes').value;
       if (weekNum === 5) textRes = document.getElementById('w5State').innerText;
@@ -471,7 +597,6 @@
       if (weekNum === 11) textRes = document.getElementById('w11Script').value;
       if (weekNum === 12) textRes = document.getElementById('w12Reflection').value;
 
-      // Canvas image
       const canvasEl = document.getElementById(`w${weekNum}Canvas`);
       if (canvasEl) imgBase64 = canvasEl.toDataURL('image/png');
 
@@ -495,11 +620,113 @@
         });
         submitBtn.disabled = false;
         submitBtn.innerText = `🚀 Kirim Tugas Minggu ${weekNum}`;
-        alert(`Tugas Minggu ${weekNum} (${taskName}) Berhasil Terkirim atas nama ${currentStudent.name}! 🎉`);
+        alert(`Tugas Minggu ${weekNum} (${taskName}) Berhasil Terkirim! 🎉`);
       } catch (err) {
         alert("Terjadi kesalahan koneksi.");
         submitBtn.disabled = false;
         submitBtn.innerText = `🚀 Kirim Tugas Minggu ${weekNum}`;
+      }
+    }
+
+    // --- DASHBOARD GURU FUNCTIONS ---
+    async function loadSubmissions() {
+      const tbody = document.getElementById('submissionTable');
+      tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-slate-400">⏳ Mengambil data...</td></tr>`;
+
+      try {
+        const res = await fetch(`${GAS_ENDPOINT}?action=getSubmissions`);
+        const data = await res.json();
+        submissions = data.data || [];
+        
+        document.getElementById('totalCount').innerText = `${submissions.length} Data`;
+        renderTable();
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-rose-500">Gagal memuat data dari Google Sheets.</td></tr>`;
+      }
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('submissionTable');
+      if (submissions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-slate-400">Belum ada data tugas.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = submissions.map((sub, idx) => `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="p-3 font-semibold text-slate-800">${sub.studentName}<br><span class="text-xs text-slate-400 font-normal">${sub.studentId}</span></td>
+          <td class="p-3 font-bold text-emerald-700">W${sub.week}</td>
+          <td class="p-3 text-slate-600">${sub.taskType}</td>
+          <td class="p-3">
+            <button onclick="selectSubmission(${idx})" class="px-3 py-1 bg-emerald-100 text-emerald-800 font-bold rounded-lg text-xs hover:bg-emerald-200">
+              Periksa & Nilai
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function selectSubmission(idx) {
+      selectedIndex = idx;
+      const item = submissions[idx];
+
+      document.getElementById('noSelectionNotice').classList.add('hidden');
+      document.getElementById('assessmentForm').classList.remove('hidden');
+
+      document.getElementById('evalStudentName').innerText = `${item.studentName} (${item.studentId})`;
+      document.getElementById('evalTaskName').innerText = `Minggu ${item.week} - ${item.taskType}`;
+      document.getElementById('evalText').innerText = item.textResponse || "(Tidak ada teks)";
+
+      const imgBox = document.getElementById('imagePreview');
+      if (item.drawingUrl || item.drawingBase64) {
+        document.getElementById('imgSrc').src = item.drawingUrl || item.drawingBase64;
+        imgBox.classList.remove('hidden');
+      } else {
+        imgBox.classList.add('hidden');
+      }
+
+      const audioBox = document.getElementById('audioPreview');
+      if (item.audioUrl || item.audioBase64) {
+        document.getElementById('audioSrc').src = item.audioUrl || item.audioBase64;
+        audioBox.classList.remove('hidden');
+      } else {
+        audioBox.classList.add('hidden');
+      }
+    }
+
+    async function saveGrade(e) {
+      e.preventDefault();
+      if (selectedIndex === null) return;
+
+      const item = submissions[selectedIndex];
+      const taskScore = Number(document.getElementById('scoreTask').value);
+      const vocabScore = Number(document.getElementById('scoreVocab').value);
+      const fluencyScore = Number(document.getElementById('scoreFluency').value);
+      const feedback = document.getElementById('teacherFeedback').value;
+
+      const totalScore = Math.round(((taskScore + vocabScore + fluencyScore) / 12) * 100);
+
+      const payload = {
+        action: "saveGrade",
+        studentId: item.studentId,
+        week: item.week,
+        scoreTask: taskScore,
+        scoreVocab: vocabScore,
+        scoreFluency: fluencyScore,
+        finalScore: totalScore,
+        feedback: feedback
+      };
+
+      try {
+        await fetch(GAS_ENDPOINT, {
+          method: "POST", mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        alert(`Penilaian untuk ${item.studentName} (W${item.week}) Berhasil Disimpan!\nNilai Akhir: ${totalScore}/100`);
+      } catch (err) {
+        alert("Gagal menyimpan nilai.");
       }
     }
   </script>
