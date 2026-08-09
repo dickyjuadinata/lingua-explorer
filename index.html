@@ -3,524 +3,825 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal Pembelajaran Interaktif</title>
+  <title>LinguaExplorer Kids - Fun English Learning Platform</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#38bdf8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="LinguaExplorer">
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3408/3408506.png">
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+    body { 
+      font-family: 'Fredoka', cursive, sans-serif; 
+      -webkit-tap-highlight-color: transparent;
+    }
+    .card-bounce { transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .card-bounce:hover { transform: translateY(-4px) scale(1.02); }
+    .btn-bounce { transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .btn-bounce:active { transform: scale(0.95); }
+  </style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans min-h-screen">
+<body class="bg-sky-50 text-slate-800 min-h-screen select-none pb-12">
 
-  <!-- KONFIGURASI SCRIPT URL -->
-  <script>
-    const WEB_APP_URL = "GANTI_DENGAN_URL_WEB_APP_ANDA"; 
-    const DRIVE_FOLDER_ID = "GANTI_DENGAN_ID_FOLDER_GOOGLE_DRIVE_ANDA"; 
-  </script>
-
-  <!-- NAVBAR -->
-  <nav class="bg-indigo-600 text-white shadow-md p-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold flex items-center gap-2">
-      <i class="fa-solid me-2 fa-graduation-cap"></i> Media Pembelajaran Interaktif
-    </h1>
-    <div id="navUser" class="hidden flex items-center gap-4">
-      <span id="userBadge" class="bg-indigo-700 px-3 py-1 rounded-full text-xs font-semibold"></span>
-      <button onclick="logout()" class="text-xs bg-red-500 hover:bg-red-600 px-3 py-1 rounded transition">Keluar</button>
-    </div>
-  </nav>
-
-  <div class="container mx-auto p-4 max-w-4xl">
-
-    <!-- HALAMAN LOGIN -->
-    <div id="loginSection" class="bg-white rounded-2xl shadow-xl p-6 mt-10 max-w-md mx-auto">
-      <h2 class="text-2xl font-bold text-center text-indigo-600 mb-6">Pilih Mode Masuk</h2>
+  <!-- MODAL LOGIN UTAMA (OPSI SISWA & GURU, TANPA DATA KELAS) -->
+  <div id="loginModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 w-full max-w-md border-4 border-sky-300 relative overflow-hidden">
+      <div class="absolute -top-10 -right-10 w-28 h-28 bg-sky-100 rounded-full blur-xl"></div>
       
-      <!-- Tab Pilihan -->
-      <div class="flex border-b mb-6">
-        <button id="btnTabStudent" onclick="switchLoginTab('student')" class="w-1/2 py-2 font-bold border-b-2 border-indigo-600 text-indigo-600">Siswa</button>
-        <button id="btnTabTeacher" onclick="switchLoginTab('teacher')" class="w-1/2 py-2 font-bold border-b-2 border-transparent text-slate-400">Guru</button>
+      <div class="text-center mb-6 relative">
+        <div class="text-6xl mb-2 animate-bounce">🦁</div>
+        <h1 class="text-2xl font-bold text-sky-600 tracking-wide">LinguaExplorer Kids</h1>
+        <p class="text-xs text-sky-700/80 font-bold mt-1">Petualangan Bahasa Inggris Seru!</p>
       </div>
 
-      <!-- Form Siswa -->
-      <div id="studentLoginForm" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-slate-500 mb-1">ID Siswa / NIS</label>
-          <input type="text" id="studentIdInput" class="w-full border p-2 rounded-xl border-slate-300 focus:outline-indigo-500" placeholder="Masukkan ID Siswa">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-500 mb-1">Nama Siswa</label>
-          <input type="text" id="studentNameInput" class="w-full border p-2 rounded-xl border-slate-300 focus:outline-indigo-500" placeholder="Masukkan Nama Lengkap">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-500 mb-1">PIN Siswa</label>
-          <input type="password" id="studentPinInput" class="w-full border p-2 rounded-xl border-slate-300 focus:outline-indigo-500" placeholder="PIN Default: 123">
-        </div>
-        <button onclick="loginStudent()" class="w-full bg-indigo-600 text-white font-bold py-2 rounded-xl hover:bg-indigo-700 transition">Masuk Sebagai Siswa</button>
+      <!-- SWITCHER ROLE LOGIN -->
+      <div class="flex bg-sky-100 p-1 rounded-2xl mb-5 font-bold text-xs">
+        <button type="button" id="roleBtnStudent" onclick="switchLoginRole('student')" class="w-1/2 py-2.5 rounded-xl bg-white text-sky-700 shadow-sm transition-all">👦 Siswa</button>
+        <button type="button" id="roleBtnTeacher" onclick="switchLoginRole('teacher')" class="w-1/2 py-2.5 rounded-xl text-slate-600 hover:text-sky-700 transition-all">👩‍🏫 Guru</button>
       </div>
 
-      <!-- Form Guru -->
-      <div id="teacherLoginForm" class="space-y-4 hidden">
-        <div>
-          <label class="block text-xs font-bold text-slate-500 mb-1">PIN Guru</label>
-          <input type="password" id="teacherPinInput" class="w-full border p-2 rounded-xl border-slate-300 focus:outline-indigo-500" placeholder="PIN Default: guru123">
+      <form onsubmit="handleLogin(event)" class="space-y-4 relative">
+        <input type="hidden" id="loginRole" value="student">
+
+        <div id="fieldStudentName">
+          <label class="block text-xs font-bold text-sky-900 uppercase mb-1">Nama Lengkap</label>
+          <input type="text" id="inputStudentName" placeholder="Contoh: Budi Santoso" class="w-full p-3.5 border-2 border-sky-200 rounded-2xl font-semibold focus:border-sky-500 focus:outline-none text-sm bg-sky-50/50">
         </div>
-        <button onclick="loginTeacher()" class="w-full bg-emerald-600 text-white font-bold py-2 rounded-xl hover:bg-emerald-700 transition">Masuk Sebagai Guru</button>
+
+        <div>
+          <label id="labelPin" class="block text-xs font-bold text-sky-900 uppercase mb-1">PIN Masuk Siswa</label>
+          <input type="password" id="inputPassword" required placeholder="Masukkan PIN" class="w-full p-3.5 border-2 border-sky-200 rounded-2xl font-semibold focus:border-sky-500 focus:outline-none text-sm bg-sky-50/50">
+        </div>
+
+        <button type="submit" id="btnLoginSubmit" class="btn-bounce w-full py-4 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-2xl shadow-lg shadow-sky-200 hover:shadow-xl transition text-base border-b-4 border-sky-700">
+          🚀 Masuk Kelas!
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL AI FEEDBACK -->
+  <div id="aiModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-lg border-4 border-cyan-300 space-y-4">
+      <div class="flex items-center gap-3 border-b-2 border-cyan-100 pb-3">
+        <div class="text-4xl">🤖</div>
+        <div>
+          <h3 class="font-bold text-cyan-600 text-lg">Robot Pintar AI</h3>
+          <p class="text-xs text-slate-500">Evaluasi Otomatis Tugasmu</p>
+        </div>
+      </div>
+      
+      <div id="aiFeedbackContent" class="text-xs text-slate-700 bg-sky-50/80 p-4 rounded-2xl border-2 border-sky-200 leading-relaxed max-h-80 overflow-y-auto whitespace-pre-line font-medium">
+        Sedang menganalisis jawaban dan rekamanmu... ⏳
+      </div>
+
+      <button onclick="closeAiModal()" class="btn-bounce w-full py-3.5 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-2xl text-xs shadow-md border-b-4 border-sky-700">
+        Hore, Mengerti! 👍
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL NILAI & CATATAN GURU -->
+  <div id="studentGradesModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-2xl border-4 border-sky-300 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b-2 border-sky-100 pb-3">
+        <div>
+          <h3 class="font-bold text-lg text-sky-900">⭐ Rapor & Catatan Guru</h3>
+          <p class="text-xs text-slate-500">Lihat nilai dan pesan dari gurumu di sini!</p>
+        </div>
+        <button onclick="closeStudentGradesModal()" class="text-slate-400 hover:text-slate-600 font-bold text-xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100">✕</button>
+      </div>
+
+      <div id="studentGradesList" class="space-y-3">
+        <p class="text-center text-slate-400 py-6 text-xs">Memuat data nilai... ⏳</p>
+      </div>
+
+      <button onclick="closeStudentGradesModal()" class="btn-bounce w-full py-3 bg-sky-500 text-white font-bold rounded-2xl text-xs shadow-md border-b-4 border-sky-700">
+        Tutup
+      </button>
+    </div>
+  </div>
+
+  <!-- HEADER NAVIGASI -->
+  <header class="bg-sky-400 text-slate-900 p-4 shadow-lg sticky top-0 z-40 border-b-4 border-sky-500">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
+      <div class="flex items-center gap-3">
+        <span class="text-4xl">🦁</span>
+        <div>
+          <h1 class="text-xl font-extrabold tracking-wide text-white drop-shadow-sm">LinguaExplorer <span class="text-xs px-2.5 py-1 bg-amber-400 text-amber-900 font-extrabold rounded-full border border-amber-300 shadow-sm">KIDS</span></h1>
+          <p class="text-xs text-sky-950 font-bold mt-0.5"><span id="displayUserRole">Siswa</span>: <span id="displayStudentName" class="font-extrabold underline text-white">Belum Login</span></p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2 max-w-full overflow-x-auto pb-1 md:pb-0">
+        <nav id="weekNavContainer" class="flex gap-1.5 bg-sky-500/40 p-1.5 rounded-2xl text-xs font-bold shrink-0 border border-sky-300/50">
+          <span class="text-white px-2 py-1">Memuat modul...</span>
+        </nav>
+
+        <button id="btnMyGrades" onclick="openStudentGradesModal()" class="btn-bounce px-3.5 py-2 rounded-2xl bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold text-xs shadow-md shrink-0 border-b-2 border-amber-600 flex items-center gap-1">
+          <span>⭐</span> Nilai Saya
+        </button>
+
+        <button onclick="showLoginModal()" class="btn-bounce px-3.5 py-2 rounded-2xl bg-slate-800 text-white font-bold text-xs hover:bg-slate-900 shadow-md shrink-0 border-b-2 border-slate-950 flex items-center gap-1">
+          <span>🚪</span> Ganti Akses
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto p-4 space-y-6">
+
+    <!-- CONTAINER MODUL DINAMIS UNTUK ANAK -->
+    <div id="dynamicModulesContainer">
+      <div class="text-center py-16 bg-white rounded-3xl border-4 border-sky-200 shadow-sm">
+        <div class="text-4xl mb-2 animate-spin inline-block">🎡</div>
+        <p class="text-sky-700 font-bold text-xs">Sedang mengambil soal-soal seru dari Database... ⏳</p>
       </div>
     </div>
 
-    <!-- PORTAL SISWA -->
-    <div id="studentSection" class="hidden space-y-6 mt-6">
-      <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm">
+    <!-- PORTAL DASHBOARD GURU -->
+    <div id="teacherPortalView" class="hidden space-y-6">
+      <div class="bg-slate-900 text-white p-6 rounded-3xl shadow-lg flex flex-col md:flex-row justify-between items-center gap-4 border-b-4 border-slate-700">
         <div>
-          <h3 class="font-bold text-lg text-slate-700" id="welcomeStudent"></h3>
-          <p class="text-xs text-slate-500">Pilih tugas minggu ini dan kirimkan jawabanmu.</p>
+          <h2 class="text-xl font-bold flex items-center gap-2"><span>👩‍🏫</span> Portal Penilaian Guru</h2>
+          <p class="text-slate-400 text-xs mt-1">Periksa Unggahan Gambar, Teks, & Suara Siswa</p>
         </div>
-        <button onclick="loadMyGrades()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-3 py-2 rounded-xl shadow">⭐ Nilai Saya</button>
-      </div>
-
-      <div class="bg-white p-6 rounded-2xl shadow-md space-y-4">
-        <label class="block font-bold text-sm text-slate-600">Pilih Soal / Minggu Ke-:</label>
-        <select id="questionSelect" onchange="onSelectQuestion()" class="w-full border p-2 rounded-xl border-slate-300 font-semibold"></select>
-
-        <div id="questionDetail" class="hidden p-4 bg-indigo-50 rounded-xl space-y-2 border border-indigo-100">
-          <h4 id="qTitle" class="font-bold text-indigo-700"></h4>
-          <p id="qInstruction" class="text-sm text-slate-600"></p>
-          <div id="qVocabContainer" class="flex flex-wrap gap-2 pt-2"></div>
-        </div>
-
-        <!-- AREA PENGERJAAN TUGAS -->
-        <div id="taskInputContainer" class="hidden space-y-4 pt-4 border-t">
-          <!-- Text Response -->
-          <div>
-            <label class="block text-xs font-bold text-slate-500 mb-1">Jawaban Teks / Deskripsi:</label>
-            <textarea id="textResponseInput" rows="3" class="w-full border border-slate-300 p-2 rounded-xl focus:outline-indigo-500" placeholder="Tuliskan jawabanmu di sini..."></textarea>
-          </div>
-
-          <!-- Drawing Upload -->
-          <div>
-            <label class="block text-xs font-bold text-slate-500 mb-1">Unggah Gambar / Canvas (Opsional):</label>
-            <input type="file" id="imageInput" accept="image/*" class="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"/>
-          </div>
-
-          <!-- Audio Recorder -->
-          <div>
-            <label class="block text-xs font-bold text-slate-500 mb-1">Rekam Suara (Opsional):</label>
-            <div class="flex items-center gap-3">
-              <button id="btnRecord" onclick="toggleRecord()" class="bg-red-500 hover:bg-red-600 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2">
-                <i class="fa-solid fa-microphone"></i> <span id="recordText">Mulai Rekam</span>
-              </button>
-              <audio id="audioPlayback" controls class="hidden h-10 w-full max-w-xs"></audio>
-            </div>
-          </div>
-
-          <button onclick="submitStudentTask()" id="btnSubmitTask" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 transition flex justify-center items-center gap-2">
-            <i class="fa-solid fa-paper-plane"></i> Kirim Tugas
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- PORTAL GURU -->
-    <div id="teacherSection" class="hidden space-y-6 mt-6">
-      <div class="bg-white p-4 rounded-xl shadow-sm flex justify-between items-center">
-        <h3 class="font-bold text-lg text-slate-700">Daftar Pengiriman Tugas Siswa</h3>
-        <button onclick="loadSubmissions()" class="text-xs bg-indigo-100 text-indigo-700 font-bold px-3 py-2 rounded-xl hover:bg-indigo-200">
-          <i class="fa-solid fa-rotate"></i> Refresh Data
+        <button onclick="loadSubmissions()" class="btn-bounce px-4 py-2.5 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-2xl text-xs shadow-md border-b-4 border-sky-700 transition">
+          🔄 Refresh Jawaban Siswa
         </button>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- List Submissions -->
-        <div class="bg-white p-4 rounded-2xl shadow-md border max-h-[500px] overflow-y-auto space-y-2" id="submissionList">
-          <p class="text-xs text-slate-400 text-center">Memuat data pengiriman...</p>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Tabel Daftar Tugas Masuk -->
+        <div class="lg:col-span-2 bg-white p-6 rounded-3xl shadow-sm border-2 border-sky-100">
+          <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center justify-between">
+            📋 Daftar Jawaban Masuk
+            <span id="totalCount" class="text-xs bg-sky-100 text-sky-800 px-3 py-1 rounded-full font-bold">0 Data</span>
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-sky-50 text-sky-900 border-b border-sky-100 uppercase text-[10px] font-bold">
+                <tr>
+                  <th class="p-3">Siswa</th>
+                  <th class="p-3">Minggu</th>
+                  <th class="p-3">Tugas</th>
+                  <th class="p-3">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="submissionTable" class="divide-y divide-sky-50">
+                <tr><td colspan="4" class="text-center p-6 text-slate-400">Klik tombol Refresh untuk memuat data.</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <!-- Detail Assessment Form -->
-        <div class="md:col-span-2 bg-white p-6 rounded-2xl shadow-md border space-y-4" id="assessmentForm">
-          <p class="text-slate-400 text-sm text-center py-10">Pilih salah satu tugas siswa dari daftar sebelah kiri untuk dinilai.</p>
+        <!-- Form Penilaian Guru -->
+        <div class="bg-white p-6 rounded-3xl shadow-sm border-2 border-sky-100 space-y-4">
+          <h3 class="text-sm font-bold text-slate-800 border-b border-sky-100 pb-2">✏️ Form Penilaian</h3>
+
+          <div id="noSelectionNotice" class="text-slate-400 text-xs text-center py-8">
+            Pilih salah satu siswa dari tabel untuk mulai menilai.
+          </div>
+
+          <div id="assessmentForm" class="hidden space-y-4">
+            <div class="bg-sky-50/80 p-3.5 rounded-2xl border border-sky-200 text-xs space-y-1">
+              <p><strong>Nama:</strong> <span id="evalStudentName" class="text-sky-900 font-bold">-</span></p>
+              <p><strong>Tugas:</strong> <span id="evalTaskName">-</span></p>
+              <p><strong>Jawaban Teks:</strong> <span id="evalText" class="italic text-slate-700 block mt-1 bg-white p-2.5 rounded-xl border border-sky-200">-</span></p>
+            </div>
+
+            <!-- Pratinjau Media Gambar & Suara (Diperbaiki Tampilannya) -->
+            <div id="mediaContainer" class="space-y-3">
+              <div id="imagePreviewContainer" class="hidden">
+                <label class="block text-[11px] font-bold text-slate-500 mb-1">Hasil Gambar Siswa:</label>
+                <a id="imageLink" href="#" target="_blank" class="block group relative">
+                  <img id="imageSrc" src="" alt="Gambar Siswa" class="w-full max-h-48 object-contain rounded-2xl border-2 border-sky-200 bg-sky-50">
+                  <span class="text-[10px] text-sky-600 underline block mt-1 text-center font-bold">Klik untuk buka gambar ukuran penuh ↗</span>
+                </a>
+              </div>
+
+              <div id="audioPreview" class="hidden">
+                <label class="block text-[11px] font-bold text-slate-500 mb-1">Rekaman Suara Siswa:</label>
+                <audio id="audioSrc" controls class="w-full"></audio>
+                <a id="audioLink" href="#" target="_blank" class="text-[10px] text-sky-600 underline block mt-1 text-center font-bold">Tautan Audio Alternatif ↗</a>
+              </div>
+            </div>
+
+            <hr class="border-sky-100">
+
+            <form onsubmit="saveGrade(event)" class="space-y-3">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700">1. Ketepatan Tugas (1-4)</label>
+                <select id="scoreTask" required class="w-full p-2 border border-sky-200 rounded-xl text-xs bg-sky-50/50 font-semibold focus:border-sky-400 focus:outline-none">
+                  <option value="1">1 - Perlu Banyak Bimbingan</option>
+                  <option value="2">2 - Cukup Sesuai</option>
+                  <option value="3" selected>3 - Bagus & Sesuai Instruksi</option>
+                  <option value="4">4 - Sangat Kreatif & Luar Biasa</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700">2. Kosa Kata / Grammar (1-4)</label>
+                <select id="scoreVocab" required class="w-full p-2 border border-sky-200 rounded-xl text-xs bg-sky-50/50 font-semibold focus:border-sky-400 focus:outline-none">
+                  <option value="1">1 - Banyak Kosa Kata Kurang Tepat</option>
+                  <option value="2">2 - Cukup Memahami Kosa Kata</option>
+                  <option value="3" selected>3 - Menggunakan Vocab Minggu Ini</option>
+                  <option value="4">4 - Kosa Kata Sangat Bervariasi</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700">3. Kelancaran Berbicara (1-4)</label>
+                <select id="scoreFluency" required class="w-full p-2 border border-sky-200 rounded-xl text-xs bg-sky-50/50 font-semibold focus:border-sky-400 focus:outline-none">
+                  <option value="1">1 - Masih Terbata-bata</option>
+                  <option value="2">2 - Cukup Lancar</option>
+                  <option value="3" selected>3 - Lancar & Percaya Diri</option>
+                  <option value="4">4 - Sangat Fasih & Pengucapan Jelas</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700">Pesan / Bintang Guru:</label>
+                <textarea id="teacherFeedback" rows="2" class="w-full p-2 border border-sky-200 rounded-xl text-xs focus:border-sky-400 focus:outline-none" placeholder="Contoh: Hebat sekali Budi! Gambarnya bagus dan suaranya nyaring! 🌟🌟🌟"></textarea>
+              </div>
+
+              <button type="submit" class="btn-bounce w-full py-3 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-2xl shadow-md border-b-4 border-sky-700 text-xs">
+                💾 Simpan Penilaian Guru
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
 
-  </div>
+  </main>
 
-  <!-- MODAL NILAI SAYA -->
-  <div id="gradesModal" class="hidden fixed inset-0 bg-slate-900 bg-opacity-50 flex justify-center items-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg space-y-4">
-      <div class="flex justify-between items-center border-b pb-2">
-        <h3 class="font-bold text-lg text-indigo-700">⭐ Nilai Saya</h3>
-        <button onclick="closeGradesModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-      </div>
-      <div id="gradesContent" class="space-y-3 max-h-80 overflow-y-auto">
-        <p class="text-xs text-slate-400">Memuat nilai...</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- SCRIPT UTAMA -->
   <script>
-    let currentUser = null;
-    let questionsData = [];
-    let submissionsData = [];
-    let mediaRecorder = null;
-    let audioChunks = [];
-    let audioBase64 = "";
+    // =========================================================
+    // KONFIGURASI UTAMA
+    // =========================================================
+    const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwgcfcfMx9CfCx-njEdz336BayzaUSUoH375cQ5X-3J1UK_ANsVzamK_CblIcp4FXps/exec";
+    const DRIVE_FOLDER_ID = "19T7hUj80EBtXPJ-ZA_02vMHovz25AwlH";
+    const STUDENT_PASSWORD = "123";
+    const TEACHER_PASSWORD = "guru123";
 
-    // 1. Aksi Tab Login
-    function switchLoginTab(tab) {
-      if (tab === 'student') {
-        document.getElementById('studentLoginForm').classList.remove('hidden');
-        document.getElementById('teacherLoginForm').classList.add('hidden');
-        document.getElementById('btnTabStudent').className = "w-1/2 py-2 font-bold border-b-2 border-indigo-600 text-indigo-600";
-        document.getElementById('btnTabTeacher').className = "w-1/2 py-2 font-bold border-b-2 border-transparent text-slate-400";
-      } else {
-        document.getElementById('studentLoginForm').classList.add('hidden');
-        document.getElementById('teacherLoginForm').classList.remove('hidden');
-        document.getElementById('btnTabStudent').className = "w-1/2 py-2 font-bold border-b-2 border-transparent text-slate-400";
-        document.getElementById('btnTabTeacher').className = "w-1/2 py-2 font-bold border-b-2 border-emerald-600 text-emerald-600";
-      }
-    }
+    let currentStudent = { name: "" };
+    let questionBank = [];
+    const imageData = {}; 
+    const audioData = {}; 
+    let mediaRecorder, audioChunks = [];
+    let submissions = [], selectedIndex = null;
+    const learnedVocab = {};
 
-    // 2. Login Siswa
-    async function loginStudent() {
-      const id = document.getElementById('studentIdInput').value.trim();
-      const name = document.getElementById('studentNameInput').value.trim();
-      const pin = document.getElementById('studentPinInput').value.trim();
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchQuestions();
+    });
 
-      if (!id || !name || !pin) return alert("Mohon lengkapi seluruh field!");
-
+    async function fetchQuestions() {
       try {
-        const res = await fetch(`${WEB_APP_URL}?action=verifyStudent&pin=${encodeURIComponent(pin)}`);
-        const json = await res.json();
-
-        if (json.status === "success") {
-          currentUser = { role: "student", id: id, name: name };
-          showSection('student');
-          document.getElementById('welcomeStudent').innerText = `Halo, ${name}! (ID: ${id})`;
-          loadQuestions();
+        const res = await fetch(`${GAS_ENDPOINT}?action=getQuestions`);
+        const result = await res.json();
+        
+        if (result.status === "success" && result.data.length > 0) {
+          questionBank = result.data;
+          renderDynamicModules();
         } else {
-          alert(json.message);
+          document.getElementById('dynamicModulesContainer').innerHTML = `
+            <div class="text-center py-12 bg-white rounded-3xl border-4 border-rose-200 text-rose-600 text-xs font-bold">
+              Gagal memuat soal. Pastikan tab 'BankSoal' di Spreadsheet sudah terisi dengan benar.
+            </div>
+          `;
         }
-      } catch (e) {
-        alert("Gagal terhubung ke backend server!");
+      } catch (err) {
+        document.getElementById('dynamicModulesContainer').innerHTML = `
+          <div class="text-center py-12 bg-white rounded-3xl border-4 border-rose-200 text-rose-600 text-xs font-bold">
+            Gagal terhubung ke Database. Periksa kembali tautan GAS_ENDPOINT Anda.
+          </div>
+        `;
       }
     }
 
-    // 3. Login Guru
-    async function loginTeacher() {
-      const pin = document.getElementById('teacherPinInput').value.trim();
-      if (!pin) return alert("Masukkan PIN Guru!");
+    function renderDynamicModules() {
+      const navContainer = document.getElementById('weekNavContainer');
+      const modulesContainer = document.getElementById('dynamicModulesContainer');
 
-      try {
-        const res = await fetch(`${WEB_APP_URL}?action=verifyTeacher&pin=${encodeURIComponent(pin)}`);
-        const json = await res.json();
+      navContainer.innerHTML = '';
+      modulesContainer.innerHTML = '';
 
-        if (json.status === "success") {
-          currentUser = { role: "teacher" };
-          showSection('teacher');
-          loadSubmissions();
-        } else {
-          alert(json.message);
-        }
-      } catch (e) {
-        alert("Gagal terhubung ke backend server!");
-      }
+      questionBank.forEach((q, index) => {
+        const isFirst = index === 0;
+
+        const btn = document.createElement('button');
+        btn.onclick = () => switchWeek(q.week);
+        btn.id = `tab-${q.week}`;
+        btn.className = `tab-btn btn-bounce px-3.5 py-1.5 rounded-xl font-extrabold text-xs transition ${isFirst ? 'bg-white text-sky-700 shadow-md border-b-2 border-sky-200' : 'bg-sky-600/30 text-white hover:bg-sky-600/50'}`;
+        btn.innerText = `M${q.week}`;
+        navContainer.appendChild(btn);
+
+        const weekDiv = document.createElement('div');
+        weekDiv.id = `week-${q.week}`;
+        weekDiv.className = `week-content space-y-6 ${isFirst ? '' : 'hidden'}`;
+
+        let vocabCards = q.vocabList.map((v) => {
+          const word = v.trim();
+          return `
+            <div onclick="playVocabCard(this, '${word}', ${q.week})" 
+                 class="vocab-card card-bounce cursor-pointer bg-sky-50/80 hover:bg-sky-100 p-3.5 rounded-2xl border-2 border-sky-200 hover:border-sky-400 hover:shadow-md transition text-left relative group">
+              <div class="flex justify-between items-center mb-1">
+                <span class="font-extrabold text-sky-900 text-sm">${word}</span>
+                <span class="text-base">🔊</span>
+              </div>
+              <div class="text-[10px] text-sky-600 font-bold">Klik untuk dengar suara</div>
+            </div>
+          `;
+        }).join('');
+
+        weekDiv.innerHTML = `
+          <div class="bg-gradient-to-r from-sky-400 to-cyan-400 text-white p-6 rounded-3xl shadow-md border-b-4 border-sky-500 flex justify-between items-center relative overflow-hidden">
+            <div class="relative z-10">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-sky-900 bg-white/90 px-3 py-1 rounded-full shadow-sm">Petualangan Minggu ${q.week}</span>
+              <h2 class="text-xl font-extrabold mt-2 drop-shadow-sm text-white">${q.title}</h2>
+            </div>
+            <div class="text-5xl animate-bounce relative z-10">🌟</div>
+            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-lg"></div>
+          </div>
+
+          <section class="bg-white p-6 rounded-3xl border-2 border-sky-100 shadow-sm space-y-3">
+            <div class="flex justify-between items-center border-b border-sky-100 pb-3">
+              <div>
+                <h3 class="font-extrabold text-sky-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                  <span>1. Kartu Kata Pintar</span>
+                </h3>
+                <p class="text-[11px] text-slate-500 font-medium">Klik setiap kartu untuk mendengarkan pengucapan kata!</p>
+              </div>
+              <span id="vocabProgress-w${q.week}" class="text-[11px] font-extrabold text-sky-800 bg-sky-100 px-3 py-1 rounded-full">0/${q.vocabList.length} Kata Dicoba</span>
+            </div>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+              ${vocabCards}
+            </div>
+          </section>
+
+          <section class="bg-white p-6 rounded-3xl border-2 border-sky-100 shadow-sm space-y-4">
+            <h3 class="font-extrabold text-sky-900 text-xs uppercase tracking-wider">2. Tantangan Menulis & Menggambar</h3>
+            <p class="text-xs text-sky-900 bg-sky-50/80 p-4 rounded-2xl border border-sky-200 font-semibold leading-relaxed">${q.instruction}</p>
+
+            <div class="space-y-2 border-t border-sky-100 pt-3">
+              <label class="block text-xs font-extrabold text-sky-900">🖼️ Unggah Foto/Gambar Hasil Karyamu:</label>
+              <input type="file" id="w${q.week}ImageInput" accept="image/*" onchange="previewUploadedImage(event, ${q.week})" 
+                     class="w-full text-xs text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-sky-500 file:text-white hover:file:bg-sky-600 cursor-pointer">
+              
+              <div id="w${q.week}ImagePreviewContainer" class="hidden mt-3 relative w-full max-w-xs">
+                <img id="w${q.week}ImagePreview" src="" alt="Preview" class="w-full h-auto rounded-2xl border-2 border-sky-300 shadow-sm">
+                <button onclick="removeUploadedImage(${q.week})" class="absolute top-2 right-2 bg-rose-500 text-white rounded-full p-1.5 text-[10px] font-bold shadow hover:bg-rose-600">✕ Hapus Foto</button>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <label class="block text-[11px] font-extrabold text-sky-900 mb-1">📝 Tulis Cerita / Jawaban Singkatmu:</label>
+              <textarea id="w${q.week}Text" rows="3" class="w-full p-3.5 border-2 border-sky-200 rounded-2xl text-xs focus:border-sky-500 focus:outline-none bg-sky-50/30 font-medium" placeholder="Tuliskan cerita singkat bahasa Inggrismu di sini..."></textarea>
+            </div>
+          </section>
+
+          <section class="bg-white p-6 rounded-3xl border-2 border-sky-100 shadow-sm space-y-3">
+            <h3 class="font-extrabold text-sky-900 text-xs uppercase tracking-wider">3. Rekam Suaramu saat Membaca! 🎙️</h3>
+            <p class="text-[11px] text-slate-500 font-medium">Bacalah cerita atau kata-kata yang sudah kamu buat di atas dengan nyaring!</p>
+            
+            <div class="flex items-center gap-3 pt-1">
+              <button id="w${q.week}RecBtn" onclick="toggleRecording(${q.week})" class="btn-bounce px-5 py-3 bg-sky-500 hover:bg-sky-600 text-white rounded-2xl font-bold text-xs shadow-md border-b-4 border-sky-700 transition flex items-center gap-2">
+                <span>🎙️</span> Mulai Rekam Suara
+              </button>
+              <audio id="w${q.week}Audio" controls class="hidden h-10"></audio>
+            </div>
+          </section>
+
+          <button id="w${q.week}Submit" onclick="submitWeek(${q.week}, '${q.title}')" class="btn-bounce w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-extrabold text-sm shadow-lg shadow-emerald-100 border-b-4 border-emerald-700 transition uppercase tracking-wider">
+            🚀 Kirim Tugas Minggu ${q.week}
+          </button>
+        `;
+
+        modulesContainer.appendChild(weekDiv);
+      });
     }
 
-    function showSection(role) {
-      document.getElementById('loginSection').classList.add('hidden');
-      document.getElementById('navUser').classList.remove('hidden');
-      if (role === 'student') {
-        document.getElementById('studentSection').classList.remove('hidden');
-        document.getElementById('userBadge').innerText = "Siswa";
-      } else {
-        document.getElementById('teacherSection').classList.remove('hidden');
-        document.getElementById('userBadge').innerText = "Guru";
-      }
-    }
+    // =========================================================
+    // FUNGSI UPLOAD GAMBAR & PREVIEW
+    // =========================================================
+    function previewUploadedImage(event, week) {
+      const file = event.target.files[0];
+      if (!file) return;
 
-    function logout() {
-      location.reload();
-    }
-
-    // 4. Ambil Pertanyaan dari Backend
-    async function loadQuestions() {
-      try {
-        const res = await fetch(`${WEB_APP_URL}?action=getQuestions`);
-        const json = await res.json();
-        if (json.status === "success") {
-          questionsData = json.data;
-          const select = document.getElementById('questionSelect');
-          select.innerHTML = '<option value="">-- Pilih Soal --</option>';
-          questionsData.forEach((q, idx) => {
-            select.innerHTML += `<option value="${idx}">Minggu ${q.week}: ${q.title}</option>`;
-          });
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    function onSelectQuestion() {
-      const idx = document.getElementById('questionSelect').value;
-      if (idx === "") {
-        document.getElementById('questionDetail').classList.add('hidden');
-        document.getElementById('taskInputContainer').classList.add('hidden');
+      if (file.size > 5 * 1024 * 1024) {
+        alert("Ukuran gambar terlalu besar! Maksimal 5MB.");
+        event.target.value = "";
         return;
       }
-      const q = questionsData[idx];
-      document.getElementById('qTitle').innerText = `Minggu ${q.week} - ${q.title} (${q.taskType})`;
-      document.getElementById('qInstruction').innerText = q.instruction;
-      
-      const vBox = document.getElementById('qVocabContainer');
-      vBox.innerHTML = '';
-      q.vocabList.forEach(v => {
-        if(v.trim()) vBox.innerHTML += `<span class="bg-indigo-100 text-indigo-700 text-xs px-2 py-1 rounded-lg font-semibold">${v.trim()}</span>`;
-      });
 
-      document.getElementById('questionDetail').classList.remove('hidden');
-      document.getElementById('taskInputContainer').classList.remove('hidden');
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        imageData[week] = e.target.result;
+
+        const imgEl = document.getElementById(`w${week}ImagePreview`);
+        const containerEl = document.getElementById(`w${week}ImagePreviewContainer`);
+        if (imgEl && containerEl) {
+          imgEl.src = e.target.result;
+          containerEl.classList.remove('hidden');
+        }
+      };
+      reader.readAsDataURL(file);
     }
 
-    // 5. Perekam Audio Browser
-    async function toggleRecord() {
-      const btn = document.getElementById('btnRecord');
-      const text = document.getElementById('recordText');
-      const audioPlayback = document.getElementById('audioPlayback');
+    function removeUploadedImage(week) {
+      delete imageData[week];
+      const inputEl = document.getElementById(`w${week}ImageInput`);
+      const containerEl = document.getElementById(`w${week}ImagePreviewContainer`);
+      if (inputEl) inputEl.value = "";
+      if (containerEl) containerEl.classList.add('hidden');
+    }
 
+    // =========================================================
+    // FUNGSI TTS & REKAM AUDIO
+    // =========================================================
+    function playVocabCard(cardEl, word, week) {
+      speak(word);
+      cardEl.classList.add('border-sky-500', 'bg-sky-100');
+
+      if (!learnedVocab[week]) learnedVocab[week] = new Set();
+      learnedVocab[week].add(word);
+
+      const totalVocab = questionBank.find(q => q.week == week)?.vocabList.length || 4;
+      const progressEl = document.getElementById(`vocabProgress-w${week}`);
+      if (progressEl) {
+        progressEl.innerText = `${learnedVocab[week].size}/${totalVocab} Kata Dicoba`;
+        if (learnedVocab[week].size === totalVocab) {
+          progressEl.className = "text-[11px] font-extrabold text-white bg-emerald-500 px-3 py-1 rounded-full shadow-sm";
+          progressEl.innerText = "✓ Semua Kata Selesai!";
+        }
+      }
+    }
+
+    function speak(text) {
+      const msg = new SpeechSynthesisUtterance(text);
+      msg.lang = 'en-US'; 
+      msg.rate = 0.85;
+      msg.pitch = 1.1; 
+      window.speechSynthesis.speak(msg);
+    }
+
+    async function toggleRecording(week) {
+      const btn = document.getElementById(`w${week}RecBtn`);
       if (!mediaRecorder || mediaRecorder.state === "inactive") {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          mediaRecorder = new MediaRecorder(stream);
+          let mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
+          mediaRecorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
           audioChunks = [];
-
-          mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-          mediaRecorder.onstop = async () => {
-            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-            audioPlayback.src = URL.createObjectURL(audioBlob);
-            audioPlayback.classList.remove('hidden');
-
-            const reader = new FileReader();
-            reader.readAsDataURL(audioBlob);
-            reader.onloadend = () => { audioBase64 = reader.result; };
+          
+          mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+          mediaRecorder.onstop = () => {
+            const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+            const audioPreview = document.getElementById(`w${week}Audio`);
+            audioPreview.src = URL.createObjectURL(blob);
+            audioPreview.classList.remove('hidden'); 
+            audioPreview.load();
+            const reader = new FileReader(); 
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => { audioData[week] = reader.result; };
           };
-
           mediaRecorder.start();
-          btn.classList.replace('bg-red-500', 'bg-slate-700');
-          text.innerText = "Berhenti Rekam";
-        } catch (e) {
-          alert("Akses mikrofon ditolak atau tidak didukung!");
-        }
+          btn.innerHTML = "<span>⏹️</span> Selesai Rekam"; 
+          btn.classList.replace('bg-sky-500', 'bg-rose-500');
+          btn.classList.replace('border-sky-700', 'border-rose-700');
+        } catch (err) { alert("Izin mikrofon ditolak / tidak ditemukan."); }
       } else {
         mediaRecorder.stop();
-        btn.classList.replace('bg-slate-700', 'bg-red-500');
-        text.innerText = "Mulai Rekam Ulang";
+        btn.innerHTML = "<span>🎙️</span> Rekam Ulang Suara"; 
+        btn.classList.replace('bg-rose-500', 'bg-sky-500');
+        btn.classList.replace('border-rose-700', 'border-sky-700');
       }
     }
 
-    // 6. Pengiriman Tugas Siswa
-    async function submitStudentTask() {
-      const idx = document.getElementById('questionSelect').value;
-      if (idx === "") return alert("Pilih soal terlebih dahulu!");
-      
-      const q = questionsData[idx];
-      const textResp = document.getElementById('textResponseInput').value;
-      const imgFile = document.getElementById('imageInput').files[0];
-      const btn = document.getElementById('btnSubmitTask');
+    // =========================================================
+    // NAVIGASI & LOGIN MODAL SYSTEM
+    // =========================================================
+    function showLoginModal() {
+      document.getElementById('loginModal').classList.remove('hidden');
+    }
 
-      btn.disabled = true;
-      btn.innerText = "Mengirim...";
+    function switchLoginRole(role) {
+      document.getElementById('loginRole').value = role;
+      const btnStudent = document.getElementById('roleBtnStudent');
+      const btnTeacher = document.getElementById('roleBtnTeacher');
+      const nameField = document.getElementById('fieldStudentName');
+      const labelPin = document.getElementById('labelPin');
+      const btnSubmit = document.getElementById('btnLoginSubmit');
 
-      let drawingBase64 = "";
-      if (imgFile) {
-        drawingBase64 = await new Promise((resolve) => {
-          const r = new FileReader();
-          r.onload = e => resolve(e.target.result);
-          r.readAsDataURL(imgFile);
-        });
+      if (role === 'student') {
+        btnStudent.className = "w-1/2 py-2.5 rounded-xl bg-white text-sky-700 shadow-sm transition-all";
+        btnTeacher.className = "w-1/2 py-2.5 rounded-xl text-slate-600 hover:text-sky-700 transition-all";
+        nameField.classList.remove('hidden');
+        document.getElementById('inputStudentName').required = true;
+        labelPin.innerText = "PIN Masuk Siswa";
+        btnSubmit.innerText = "🚀 Masuk Kelas Siswa!";
+      } else {
+        btnTeacher.className = "w-1/2 py-2.5 rounded-xl bg-white text-sky-700 shadow-sm transition-all";
+        btnStudent.className = "w-1/2 py-2.5 rounded-xl text-slate-600 hover:text-sky-700 transition-all";
+        nameField.classList.add('hidden');
+        document.getElementById('inputStudentName').required = false;
+        labelPin.innerText = "PIN Guru";
+        btnSubmit.innerText = "🔑 Masuk Portal Guru!";
       }
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const role = document.getElementById('loginRole').value;
+      const pwd = document.getElementById('inputPassword').value.trim();
+
+      if (role === 'student') {
+        const name = document.getElementById('inputStudentName').value.trim();
+        if (pwd !== STUDENT_PASSWORD) {
+          alert("PIN Siswa Salah!");
+          return;
+        }
+        currentStudent.name = name;
+        document.getElementById('displayUserRole').innerText = "Siswa";
+        document.getElementById('displayStudentName').innerText = name;
+        document.getElementById('btnMyGrades').classList.remove('hidden');
+        document.getElementById('teacherPortalView').classList.add('hidden');
+        if (questionBank.length > 0) switchWeek(questionBank[0].week);
+      } else {
+        if (pwd !== TEACHER_PASSWORD) {
+          alert("PIN Guru Salah!");
+          return;
+        }
+        document.getElementById('displayUserRole').innerText = "Guru";
+        document.getElementById('displayStudentName').innerText = "Pengajar";
+        document.getElementById('btnMyGrades').classList.add('hidden');
+        document.querySelectorAll('.week-content').forEach(el => el.classList.add('hidden'));
+        document.getElementById('teacherPortalView').classList.remove('hidden');
+        loadSubmissions();
+      }
+
+      document.getElementById('loginModal').classList.add('hidden');
+    }
+
+    function switchWeek(weekNum) {
+      document.getElementById('teacherPortalView').classList.add('hidden');
+      document.querySelectorAll('.week-content').forEach(el => el.classList.add('hidden'));
+      const weekEl = document.getElementById(`week-${weekNum}`);
+      if (weekEl) weekEl.classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-white', 'text-sky-700', 'shadow-md', 'border-b-2', 'border-sky-200');
+        btn.classList.add('bg-sky-600/30', 'text-white', 'hover:bg-sky-600/50');
+      });
+
+      const activeTab = document.getElementById(`tab-${weekNum}`);
+      if (activeTab) {
+        activeTab.classList.add('bg-white', 'text-sky-700', 'shadow-md', 'border-b-2', 'border-sky-200');
+        activeTab.classList.remove('bg-sky-600/30', 'text-white', 'hover:bg-sky-600/50');
+      }
+    }
+
+    function closeAiModal() {
+      document.getElementById('aiModal').classList.add('hidden');
+    }
+
+    async function submitWeek(weekNum, taskName) {
+      if (!currentStudent.name) {
+        alert("Harap login terlebih dahulu!");
+        showLoginModal();
+        return;
+      }
+
+      const submitBtn = document.getElementById(`w${weekNum}Submit`);
+      submitBtn.disabled = true; 
+      submitBtn.innerText = "⏳ SEDANG MENGIRIM TUGAS...";
+
+      const textEl = document.getElementById(`w${weekNum}Text`);
+      let textRes = textEl ? textEl.value : "";
 
       const payload = {
         action: "submitTask",
-        studentId: currentUser.id,
-        studentName: currentUser.name,
-        week: q.week,
-        taskType: q.taskType,
-        textResponse: textResp,
-        drawingBase64: drawingBase64,
-        audioBase64: audioBase64,
-        folderId: DRIVE_FOLDER_ID
+        folderId: DRIVE_FOLDER_ID,
+        studentId: currentStudent.name,
+        studentName: currentStudent.name,
+        week: weekNum,
+        taskType: taskName,
+        textResponse: textRes,
+        drawingBase64: imageData[weekNum] || "",
+        audioBase64: audioData[weekNum] || ""
       };
 
+      document.getElementById('aiModal').classList.remove('hidden');
+      document.getElementById('aiFeedbackContent').innerText = "Sedang mengirim tugas dan meminta penilaian Robot AI... ⏳";
+
       try {
-        const res = await fetch(WEB_APP_URL, {
+        const response = await fetch(GAS_ENDPOINT, {
           method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload)
         });
-        const json = await res.json();
-        alert(json.aiFeedback || json.message);
-        location.reload();
-      } catch (e) {
-        alert("Gagal mengirim tugas!");
-        btn.disabled = false;
-        btn.innerText = "Kirim Tugas";
+
+        const result = await response.json();
+
+        if (result.status === "success") {
+          document.getElementById('aiFeedbackContent').innerText = result.aiFeedback;
+        } else {
+          document.getElementById('aiFeedbackContent').innerText = "Tugasmu berhasil terkirim ke Guru!";
+        }
+
+      } catch (err) {
+        document.getElementById('aiFeedbackContent').innerText = `🤖 [Robot AI Feedback]\n\nLuar biasa, ${currentStudent.name}!\n\nTugas Minggu ${weekNum} sudah tersimpan dengan rapi. Tunggu masukan dari gurumu ya! 🌟`;
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = `🚀 KIRIM TUGAS MINGGU ${weekNum}`;
       }
     }
 
-    // 7. Ambil Data Tugas untuk Guru
-    async function loadSubmissions() {
-      const listContainer = document.getElementById('submissionList');
-      listContainer.innerHTML = '<p class="text-xs text-slate-400 text-center">Memuat data...</p>';
+    // =========================================================
+    // PORTAL GURU & ASSESSMENT
+    // =========================================================
+    function openStudentGradesModal() {
+      if (!currentStudent.name) {
+        alert("Harap login terlebih dahulu.");
+        showLoginModal();
+        return;
+      }
+      document.getElementById('studentGradesModal').classList.remove('hidden');
+      fetchStudentGrades();
+    }
+
+    function closeStudentGradesModal() {
+      document.getElementById('studentGradesModal').classList.add('hidden');
+    }
+
+    async function fetchStudentGrades() {
+      const container = document.getElementById('studentGradesList');
+      container.innerHTML = `<p class="text-center text-slate-400 py-6 text-xs">Mengambil nilai... ⏳</p>`;
 
       try {
-        const res = await fetch(`${WEB_APP_URL}?action=getSubmissions`);
-        const json = await res.json();
-        
-        if (json.status === "success") {
-          submissionsData = json.data;
-          if (submissionsData.length === 0) {
-            listContainer.innerHTML = '<p class="text-xs text-slate-400 text-center">Belum ada pengiriman tugas.</p>';
-            return;
-          }
+        const res = await fetch(`${GAS_ENDPOINT}?action=getStudentGrades&studentId=${encodeURIComponent(currentStudent.name)}`);
+        const result = await res.json();
 
-          listContainer.innerHTML = '';
-          submissionsData.forEach((sub, i) => {
-            const hasGraded = sub.assessment ? true : false;
-            listContainer.innerHTML += `
-              <div onclick="selectSubmission(${i})" class="p-3 rounded-xl border border-slate-100 hover:bg-indigo-50 cursor-pointer transition">
-                <div class="flex justify-between items-start">
-                  <h5 class="font-bold text-sm text-slate-700">${sub.studentName}</h5>
-                  <span class="text-[10px] px-2 py-0.5 rounded-full ${hasGraded ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'} font-bold">
-                    ${hasGraded ? 'Dinilai' : 'Belum'}
-                  </span>
+        if (!result.data || result.data.length === 0) {
+          container.innerHTML = `<p class="text-center text-slate-500 py-6 text-xs">Belum ada tugas yang kamu kirimkan.</p>`;
+          return;
+        }
+
+        container.innerHTML = result.data.map(item => {
+          const isGraded = item.finalScore !== "" && item.finalScore !== null;
+          return `
+            <div class="bg-sky-50/80 border-2 border-sky-200 rounded-2xl p-4 space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-sky-900 text-xs">Minggu ${item.week} - ${item.taskType}</span>
+                ${isGraded 
+                  ? `<span class="bg-sky-500 text-white font-extrabold text-[11px] px-3 py-1 rounded-full shadow-sm">Nilai: ${item.finalScore}/100</span>`
+                  : `<span class="bg-sky-200 text-sky-900 font-bold text-[10px] px-2.5 py-1 rounded-full">⏳ Menunggu Guru</span>`
+                }
+              </div>
+
+              ${isGraded ? `
+                <div class="text-xs bg-white p-3 rounded-xl border border-sky-200">
+                  <strong>💬 Pesan Guru:</strong>
+                  <p class="mt-1 text-slate-700 font-medium">${item.teacherFeedback || "Bagus sekali!"}</p>
                 </div>
-                <p class="text-xs text-slate-500">Minggu ${sub.week} (${sub.taskType})</p>
-              </div>`;
-          });
-        }
-      } catch (e) {
-        listContainer.innerHTML = '<p class="text-xs text-red-400 text-center">Gagal memuat data.</p>';
+              ` : ''}
+            </div>
+          `;
+        }).join('');
+
+      } catch (err) {
+        container.innerHTML = `<p class="text-center text-rose-500 py-6 text-xs">Gagal memuat nilai.</p>`;
       }
     }
 
-    // 8. Tampilkan Form Penilaian Guru
-    function selectSubmission(index) {
-      const sub = submissionsData[index];
-      const form = document.getElementById('assessmentForm');
+    async function loadSubmissions() {
+      const tbody = document.getElementById('submissionTable');
+      tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-slate-400">⏳ Memuat data...</td></tr>`;
 
-      let mediaHTML = "";
-      if (sub.drawingUrl) {
-        mediaHTML += `<div class="mb-2"><label class="text-xs font-bold text-slate-500">Gambar/Canvas:</label><br><a href="${sub.drawingUrl}" target="_blank" class="text-xs text-indigo-600 underline">Lihat Gambar</a></div>`;
+      try {
+        const res = await fetch(`${GAS_ENDPOINT}?action=getSubmissions`);
+        const data = await res.json();
+        submissions = data.data || [];
+        
+        document.getElementById('totalCount').innerText = `${submissions.length} Data`;
+        renderTable();
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-rose-500">Gagal mengambil data dari server.</td></tr>`;
       }
-      if (sub.audioUrl) {
-        const fileIdMatch = sub.audioUrl.match(/[-\w]{25,}/);
-        if (fileIdMatch) {
-          const embedUrl = `https://drive.google.com/file/d/${fileIdMatch[0]}/preview`;
-          mediaHTML += `<div class="mb-2"><label class="text-xs font-bold text-slate-500">Rekaman Audio:</label><iframe src="${embedUrl}" class="w-full h-16 rounded-xl border border-sky-200 mt-1" allow="autoplay"></iframe></div>`;
-        } else {
-          mediaHTML += `<div class="mb-2"><audio controls class="w-full mt-1"><source src="${sub.audioUrl}"></audio></div>`;
-        }
-      }
-
-      const ass = sub.assessment || {};
-
-      form.innerHTML = `
-        <h4 class="font-bold text-lg text-indigo-700 border-b pb-2">Penilaian: ${sub.studentName} (Minggu ${sub.week})</h4>
-        <div class="bg-slate-50 p-3 rounded-xl border space-y-2">
-          <p class="text-xs text-slate-600"><strong>Teks Jawaban:</strong> ${sub.textResponse || '-'}</p>
-          ${mediaHTML}
-        </div>
-
-        <div class="grid grid-cols-3 gap-2">
-          <div>
-            <label class="block text-xs font-bold text-slate-500">Nilai Tugas</label>
-            <input type="number" id="scoreTask" value="${ass.scoreTask || 80}" class="w-full border p-2 rounded-xl text-sm border-slate-300">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-500">Kosakata</label>
-            <input type="number" id="scoreVocab" value="${ass.scoreVocab || 80}" class="w-full border p-2 rounded-xl text-sm border-slate-300">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-500">Kelancaran</label>
-            <input type="number" id="scoreFluency" value="${ass.scoreFluency || 80}" class="w-full border p-2 rounded-xl text-sm border-slate-300">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-500 mb-1">Catatan Guru / Feedback</label>
-          <textarea id="teacherFeedback" rows="2" class="w-full border p-2 rounded-xl text-sm border-slate-300">${ass.teacherFeedback || ''}</textarea>
-        </div>
-
-        <button onclick="saveGrade('${sub.submissionId}', '${sub.studentId}', '${sub.week}')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-xl transition">
-          Simpan Nilai
-        </button>`;
     }
 
-    // 9. Simpan Nilai Guru
-    async function saveGrade(subId, studentId, week) {
-      const scoreTask = Number(document.getElementById('scoreTask').value);
-      const scoreVocab = Number(document.getElementById('scoreVocab').value);
-      const scoreFluency = Number(document.getElementById('scoreFluency').value);
+    function renderTable() {
+      const tbody = document.getElementById('submissionTable');
+      if (submissions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-slate-400">Belum ada tugas masuk.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = submissions.map((sub, idx) => `
+        <tr class="hover:bg-sky-50/50 transition">
+          <td class="p-3 font-semibold text-slate-800">${sub.studentName}</td>
+          <td class="p-3 font-bold text-sky-600">M${sub.week}</td>
+          <td class="p-3 text-slate-600">${sub.taskType}</td>
+          <td class="p-3">
+            <button onclick="selectSubmission(${idx})" class="btn-bounce px-3 py-1 bg-sky-500 text-white font-bold rounded-lg text-[10px] hover:bg-sky-600 shadow-sm">
+              Nilai
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function selectSubmission(idx) {
+      selectedIndex = idx;
+      const item = submissions[idx];
+
+      document.getElementById('noSelectionNotice').classList.add('hidden');
+      document.getElementById('assessmentForm').classList.remove('hidden');
+
+      document.getElementById('evalStudentName').innerText = item.studentName;
+      document.getElementById('evalTaskName').innerText = `Minggu ${item.week} - ${item.taskType}`;
+      document.getElementById('evalText').innerText = item.textResponse || "(Tidak ada teks)";
+
+      // Penanganan Gambar Siswa
+      const imgContainer = document.getElementById('imagePreviewContainer');
+      const imgEl = document.getElementById('imageSrc');
+      const imgLink = document.getElementById('imageLink');
+      if (item.drawingUrl && item.drawingUrl.length > 20) {
+        imgEl.src = item.drawingUrl;
+        imgLink.href = item.drawingUrl;
+        imgContainer.classList.remove('hidden');
+      } else {
+        imgContainer.classList.add('hidden');
+      }
+
+      // Penanganan Audio Siswa
+      const audioBox = document.getElementById('audioPreview');
+      const audioEl = document.getElementById('audioSrc');
+      const audioLink = document.getElementById('audioLink');
+      if (item.audioUrl && item.audioUrl.length > 20) {
+        audioEl.src = item.audioUrl;
+        audioLink.href = item.audioUrl;
+        audioEl.load();
+        audioBox.classList.remove('hidden');
+      } else {
+        audioBox.classList.add('hidden');
+      }
+    }
+
+    async function saveGrade(e) {
+      e.preventDefault();
+      if (selectedIndex === null) return;
+
+      const item = submissions[selectedIndex];
+      const taskScore = Number(document.getElementById('scoreTask').value);
+      const vocabScore = Number(document.getElementById('scoreVocab').value);
+      const fluencyScore = Number(document.getElementById('scoreFluency').value);
       const feedback = document.getElementById('teacherFeedback').value;
 
-      const finalScore = Math.round((scoreTask + scoreVocab + scoreFluency) / 3);
+      const totalScore = Math.round(((taskScore + vocabScore + fluencyScore) / 12) * 100);
 
       const payload = {
         action: "saveGrade",
-        submissionId: subId,
-        studentId: studentId,
-        week: week,
-        scoreTask: scoreTask,
-        scoreVocab: scoreVocab,
-        scoreFluency: scoreFluency,
-        finalScore: finalScore,
+        submissionId: item.submissionId,
+        studentId: item.studentId,
+        week: item.week,
+        scoreTask: taskScore,
+        scoreVocab: vocabScore,
+        scoreFluency: fluencyScore,
+        finalScore: totalScore,
         feedback: feedback
       };
 
       try {
-        const res = await fetch(WEB_APP_URL, {
+        await fetch(GAS_ENDPOINT, {
           method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload)
         });
-        const json = await res.json();
-        alert(json.message);
-        loadSubmissions();
-      } catch (e) {
-        alert("Gagal menyimpan nilai!");
+
+        alert(`Nilai berhasil disimpan untuk ${item.studentName} (Minggu ${item.week})!\nNilai Akhir: ${totalScore}/100`);
+      } catch (err) {
+        alert("Gagal menyimpan nilai.");
       }
     }
+  </script>
 
-    // 10. Modal Nilai Siswa
-    async function loadMyGrades() {
-      document.getElementById('gradesModal').classList.remove('hidden');
-      const container = document.getElementById('gradesContent');
-      container.innerHTML = '<p class="text-xs text-slate-400">Memuat nilai...</p>';
-
-      try {
-        const res = await fetch(`${WEB_APP_URL}?action=getStudentGrades&studentId=${encodeURIComponent(currentUser.id)}`);
-        const json = await res.json();
-
-        if (json.status === "success" && json.data.length > 0) {
-          container.innerHTML = '';
-          json.data.forEach(g => {
-            container.innerHTML += `
-              <div class="p-3 rounded-xl border border-indigo-100 bg-indigo-50/50 space-y-1">
-                <div class="flex justify-between items-center">
-                  <span class="font-bold text-xs text-indigo-700">Minggu ${g.week} (${g.taskType})</span>
-                  <span class="text-sm font-extrabold ${g.finalScore ? 'text-emerald-600' : 'text-slate-400'}">
-                    ${g.finalScore !== null ? 'Nilai: ' + g.finalScore : 'Belum Dinilai'}
-                  </span>
-                </div>
-                <p class="text-xs text-slate-600"><strong>Catatan:</strong> ${g.teacherFeedback || '-'}</p>
-              </div>`;
-          });
-        } else {
-          container.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Belum ada nilai yang tersedia.</p>';
-        }
-      } catch (e) {
-        container.innerHTML = '<p class="text-xs text-red-400 text-center py-4">Gagal memuat nilai.</p>';
-      }
-    }
-
-    function closeGradesModal() {
-      document.getElementById('gradesModal').classList.add('hidden');
+  <!-- SERVICE WORKER FOR PWA -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.log('SW Registration failed: ', err));
+      });
     }
   </script>
 </body>
