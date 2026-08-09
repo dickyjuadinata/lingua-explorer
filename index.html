@@ -739,35 +739,43 @@
         imgContainer.classList.add('hidden');
       }
 
-      // 2. PENANGANAN AUDIO
-      const audioBox = document.getElementById('audioPreview');
-      const audioEl = document.getElementById('audioSrc');
+      // 2. PENANGANAN AUDIO (DIPERBARUI)
+const audioBox = document.getElementById('audioPreview');
+const mediaContainer = document.getElementById('mediaContainer');
 
-      if (item.audioUrl && item.audioUrl.length > 10) {
-        let audioUrl = item.audioUrl;
+if (item.audioUrl && item.audioUrl.length > 10) {
+  let audioUrl = item.audioUrl;
 
-        // Tautan Base64
-        if (audioUrl.startsWith('data:audio')) {
-          audioEl.src = audioUrl;
-        } 
-        // Konversi Tautan Google Drive ke Export/Stream Link
-        else if (audioUrl.includes('drive.google.com')) {
-          const fileIdMatch = audioUrl.match(/[-\w]{25,}/);
-          if (fileIdMatch) {
-            audioEl.src = `https://drive.google.com/uc?export=download&id=${fileIdMatch[0]}`;
-          } else {
-            audioEl.src = audioUrl;
-          }
-        } else {
-          audioEl.src = audioUrl;
-        }
-
-        audioEl.load();
-        audioBox.classList.remove('hidden');
-      } else {
-        audioBox.classList.add('hidden');
-      }
+  // Jika berupa Tautan Base64
+  if (audioUrl.startsWith('data:audio')) {
+    audioBox.innerHTML = `
+      <label class="block text-[11px] font-bold text-slate-500 mb-1">Rekaman Suara Siswa:</label>
+      <audio controls class="w-full">
+        <source src="${audioUrl}">
+      </audio>`;
+  } 
+  // Jika berupa Tautan Google Drive
+  else if (audioUrl.includes('drive.google.com')) {
+    const fileIdMatch = audioUrl.match(/[-\w]{25,}/);
+    if (fileIdMatch) {
+      // Menggunakan iframe preview bawaan Google Drive agar aman dari pemblokiran CORS
+      const embedUrl = `https://drive.google.com/file/d/${fileIdMatch[0]}/preview`;
+      audioBox.innerHTML = `
+        <label class="block text-[11px] font-bold text-slate-500 mb-1">Rekaman Suara Siswa (Google Drive):</label>
+        <iframe src="${embedUrl}" class="w-full h-16 rounded-xl border border-sky-200" allow="autoplay"></iframe>`;
     }
+  } else {
+    audioBox.innerHTML = `
+      <label class="block text-[11px] font-bold text-slate-500 mb-1">Rekaman Suara Siswa:</label>
+      <audio controls class="w-full">
+        <source src="${audioUrl}">
+      </audio>`;
+  }
+
+  audioBox.classList.remove('hidden');
+} else {
+  audioBox.classList.add('hidden');
+}
 
     async function saveGrade(e) {
       e.preventDefault();
