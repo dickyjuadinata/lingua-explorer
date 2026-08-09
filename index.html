@@ -52,11 +52,11 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-sky-900 uppercase mb-1">PIN Masuk</label>
+          <label class="block text-xs font-bold text-sky-900 uppercase mb-1">PIN Masuk Siswa</label>
           <input type="password" id="inputPassword" required placeholder="Masukkan PIN" class="w-full p-3.5 border-2 border-sky-200 rounded-2xl font-semibold focus:border-sky-500 focus:outline-none text-sm bg-sky-50/50">
         </div>
 
-        <button type="submit" class="btn-bounce w-full py-4 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-2xl shadow-lg shadow-sky-200 hover:shadow-xl transition text-base border-b-4 border-sky-700">
+        <button type="submit" id="loginBtn" class="btn-bounce w-full py-4 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-2xl shadow-lg shadow-sky-200 hover:shadow-xl transition text-base border-b-4 border-sky-700">
           🚀 Masuk Kelas!
         </button>
       </form>
@@ -149,7 +149,7 @@
           <h2 class="text-xl font-bold flex items-center gap-2"><span>👩‍🏫</span> Portal Penilaian Guru (SD)</h2>
           <p class="text-slate-400 text-xs mt-1">Periksa Unggahan Gambar, Teks, & Suara Siswa</p>
         </div>
-        <button onclick="loadSubmissions()" class="btn-bounce px-4 py-2.5 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-2xl text-xs shadow-md border-b-4 border-sky-700 transition">
+        <button onclick="reloadSubmissions()" class="btn-bounce px-4 py-2.5 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-2xl text-xs shadow-md border-b-4 border-sky-700 transition">
           🔄 Refresh Jawaban Siswa
         </button>
       </div>
@@ -171,7 +171,7 @@
                 </tr>
               </thead>
               <tbody id="submissionTable" class="divide-y divide-sky-50">
-                <tr><td colspan="4" class="text-center p-6 text-slate-400">Klik tombol Refresh untuk memuat data.</td></tr>
+                <tr><td colspan="4" class="text-center p-6 text-slate-400">Verifikasi PIN berhasil. Klik Refresh jika data belum muncul.</td></tr>
               </tbody>
             </table>
           </div>
@@ -191,7 +191,6 @@
               <p><strong>Jawaban Teks:</strong> <span id="evalText" class="italic text-slate-700 block mt-1 bg-white p-2.5 rounded-xl border border-sky-200">-</span></p>
             </div>
 
-            <!-- PRATINJAU MEDIA -->
             <div id="mediaContainer" class="space-y-3">
               <div id="imagePreviewContainer" class="hidden">
                 <label class="block text-[11px] font-bold text-slate-500 mb-1">Hasil Gambar Siswa (Upload):</label>
@@ -255,15 +254,14 @@
 
   <script>
     // =========================================================
-    // KONFIGURASI UTAMA
+    // KONFIGURASI UTAMA FRONTEND (BEBAS PIN HARDCODED)
     // =========================================================
     const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwgcfcfMx9CfCx-njEdz336BayzaUSUoH375cQ5X-3J1UK_ANsVzamK_CblIcp4FXps/exec";
     const DRIVE_FOLDER_ID = "19T7hUj80EBtXPJ-ZA_02vMHovz25AwlH";
-    const STUDENT_PASSWORD = "123";
-    const TEACHER_PASSWORD = "guru123";
 
     let currentStudent = { name: "", classId: "" };
     let questionBank = [];
+    let activeTeacherPin = ""; 
     const imageData = {}; 
     const audioData = {}; 
     let mediaRecorder, audioChunks = [];
@@ -292,7 +290,7 @@
       } catch (err) {
         document.getElementById('dynamicModulesContainer').innerHTML = `
           <div class="text-center py-12 bg-white rounded-3xl border-4 border-rose-200 text-rose-600 text-xs font-bold">
-            Gagal terhubung ke Database. Periksa kembali tautan GAS_ENDPOINT Anda.
+            Gagal terhubung ke Database. Periksa koneksi internet Anda.
           </div>
         `;
       }
@@ -401,9 +399,50 @@
       });
     }
 
-    // =========================================================
-    // FUNGSI UPLOAD GAMBAR & PREVIEW
-    // =========================================================
+    async function toggleRecording(week) {
+      const btn = document.getElementById(`w${week}RecBtn`);
+      if (!mediaRecorder || mediaRecorder.state === "inactive") {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          
+          let mimeType = '';
+          if (MediaRecorder.isTypeSupported('audio/mp4')) {
+            mimeType = 'audio/mp4';
+          } else if (MediaRecorder.isTypeSupported('audio/aac')) {
+            mimeType = 'audio/aac';
+          } else if (MediaRecorder.isTypeSupported('audio/webm')) {
+            mimeType = 'audio/webm';
+          }
+
+          mediaRecorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+          audioChunks = [];
+          
+          mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+          mediaRecorder.onstop = () => {
+            const type = mediaRecorder.mimeType || 'audio/mp4';
+            const blob = new Blob(audioChunks, { type });
+            const audioPreview = document.getElementById(`w${week}Audio`);
+            audioPreview.src = URL.createObjectURL(blob);
+            audioPreview.classList.remove('hidden'); 
+            audioPreview.load();
+            const reader = new FileReader(); 
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => { audioData[week] = reader.result; };
+          };
+          
+          mediaRecorder.start();
+          btn.innerHTML = "<span>⏹️</span> Selesai Rekam"; 
+          btn.classList.replace('bg-sky-500', 'bg-rose-500');
+          btn.classList.replace('border-sky-700', 'border-rose-700');
+        } catch (err) { alert("Izin mikrofon ditolak / tidak ditemukan."); }
+      } else {
+        mediaRecorder.stop();
+        btn.innerHTML = "<span>🎙️</span> Rekam Ulang Suara"; 
+        btn.classList.replace('bg-rose-500', 'bg-sky-500');
+        btn.classList.replace('border-rose-700', 'border-sky-700');
+      }
+    }
+
     function previewUploadedImage(event, week) {
       const file = event.target.files[0];
       if (!file) return;
@@ -417,7 +456,6 @@
       const reader = new FileReader();
       reader.onload = function(e) {
         imageData[week] = e.target.result;
-
         const imgEl = document.getElementById(`w${week}ImagePreview`);
         const containerEl = document.getElementById(`w${week}ImagePreviewContainer`);
         if (imgEl && containerEl) {
@@ -436,9 +474,6 @@
       if (containerEl) containerEl.classList.add('hidden');
     }
 
-    // =========================================================
-    // FUNGSI TTS & REKAM AUDIO
-    // =========================================================
     function playVocabCard(cardEl, word, week) {
       speak(word);
       cardEl.classList.add('border-sky-500', 'bg-sky-100');
@@ -465,58 +500,38 @@
       window.speechSynthesis.speak(msg);
     }
 
-    async function toggleRecording(week) {
-      const btn = document.getElementById(`w${week}RecBtn`);
-      if (!mediaRecorder || mediaRecorder.state === "inactive") {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          let mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
-          mediaRecorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
-          audioChunks = [];
-          
-          mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
-          mediaRecorder.onstop = () => {
-            const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
-            const audioPreview = document.getElementById(`w${week}Audio`);
-            audioPreview.src = URL.createObjectURL(blob);
-            audioPreview.classList.remove('hidden'); 
-            audioPreview.load();
-            const reader = new FileReader(); 
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => { audioData[week] = reader.result; };
-          };
-          mediaRecorder.start();
-          btn.innerHTML = "<span>⏹️</span> Selesai Rekam"; 
-          btn.classList.replace('bg-sky-500', 'bg-rose-500');
-          btn.classList.replace('border-sky-700', 'border-rose-700');
-        } catch (err) { alert("Izin mikrofon ditolak / tidak ditemukan."); }
-      } else {
-        mediaRecorder.stop();
-        btn.innerHTML = "<span>🎙️</span> Rekam Ulang Suara"; 
-        btn.classList.replace('bg-rose-500', 'bg-sky-500');
-        btn.classList.replace('border-rose-700', 'border-sky-700');
-      }
-    }
-
     // =========================================================
-    // NAVIGASI & SUBMIT TUGAS
+    // LOGIN SISWA (VERIFIKASI SERVER KE GAS)
     // =========================================================
-    function handleLogin(e) {
+    async function handleLogin(e) {
       e.preventDefault();
       const name = document.getElementById('inputStudentName').value.trim();
       const classId = document.getElementById('inputStudentClass').value.trim();
       const pwd = document.getElementById('inputPassword').value.trim();
+      const loginBtn = document.getElementById('loginBtn');
 
-      if (pwd !== STUDENT_PASSWORD) {
-        alert("PIN Masuk Salah!");
-        return;
+      loginBtn.disabled = true;
+      loginBtn.innerText = "⏳ Memeriksa PIN...";
+
+      try {
+        const res = await fetch(`${GAS_ENDPOINT}?action=verifyStudent&pin=${encodeURIComponent(pwd)}`);
+        const data = await res.json();
+
+        if (data.status === "success") {
+          currentStudent.name = name;
+          currentStudent.classId = classId;
+
+          document.getElementById('displayStudentName').innerText = `${name} (${classId})`;
+          document.getElementById('loginModal').classList.add('hidden');
+        } else {
+          alert(data.message || "PIN Siswa Salah!");
+        }
+      } catch (err) {
+        alert("Gagal melakukan login. Periksa koneksi internet.");
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.innerText = "🚀 Masuk Kelas!";
       }
-
-      currentStudent.name = name;
-      currentStudent.classId = classId;
-
-      document.getElementById('displayStudentName').innerText = `${name} (${classId})`;
-      document.getElementById('loginModal').classList.add('hidden');
     }
 
     function switchWeek(weekNum) {
@@ -593,85 +608,47 @@
     }
 
     // =========================================================
-    // PORTAL GURU & ASSESSMENT
+    // PORTAL GURU DENGAN VERIFIKASI SERVER BACKEND
     // =========================================================
     function openTeacherPortal() {
       const pwd = prompt("Masukkan PIN Guru:");
-      if (pwd === TEACHER_PASSWORD) {
-        document.querySelectorAll('.week-content').forEach(el => el.classList.add('hidden'));
-        document.getElementById('teacherPortalView').classList.remove('hidden');
-        loadSubmissions();
-      } else if (pwd !== null) {
-        alert("PIN Guru Salah!");
+      if (!pwd) return;
+
+      activeTeacherPin = pwd;
+      loadSubmissions(pwd);
+    }
+
+    function reloadSubmissions() {
+      if (!activeTeacherPin) {
+        openTeacherPortal();
+      } else {
+        loadSubmissions(activeTeacherPin);
       }
     }
 
-    function openStudentGradesModal() {
-      if (!currentStudent.classId) {
-        alert("Harap login terlebih dahulu.");
-        return;
-      }
-      document.getElementById('studentGradesModal').classList.remove('hidden');
-      fetchStudentGrades();
-    }
-
-    function closeStudentGradesModal() {
-      document.getElementById('studentGradesModal').classList.add('hidden');
-    }
-
-    async function fetchStudentGrades() {
-      const container = document.getElementById('studentGradesList');
-      container.innerHTML = `<p class="text-center text-slate-400 py-6 text-xs">Mengambil nilai... ⏳</p>`;
+    async function loadSubmissions(pin) {
+      const tbody = document.getElementById('submissionTable');
+      tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-slate-400">⏳ Memverifikasi PIN & Memuat data...</td></tr>`;
 
       try {
-        const res = await fetch(`${GAS_ENDPOINT}?action=getStudentGrades&studentId=${encodeURIComponent(currentStudent.classId)}`);
-        const result = await res.json();
+        const res = await fetch(`${GAS_ENDPOINT}?action=getSubmissions&pin=${encodeURIComponent(pin)}`);
+        const data = await res.json();
 
-        if (!result.data || result.data.length === 0) {
-          container.innerHTML = `<p class="text-center text-slate-500 py-6 text-xs">Belum ada tugas yang kamu kirimkan.</p>`;
+        if (data.status === "error") {
+          alert(data.message);
+          activeTeacherPin = "";
           return;
         }
 
-        container.innerHTML = result.data.map(item => {
-          const isGraded = item.finalScore !== "" && item.finalScore !== null;
-          return `
-            <div class="bg-sky-50/80 border-2 border-sky-200 rounded-2xl p-4 space-y-2">
-              <div class="flex justify-between items-center">
-                <span class="font-bold text-sky-900 text-xs">Minggu ${item.week} - ${item.taskType}</span>
-                ${isGraded 
-                  ? `<span class="bg-sky-500 text-white font-extrabold text-[11px] px-3 py-1 rounded-full shadow-sm">Nilai: ${item.finalScore}/100</span>`
-                  : `<span class="bg-sky-200 text-sky-900 font-bold text-[10px] px-2.5 py-1 rounded-full">⏳ Menunggu Guru</span>`
-                }
-              </div>
+        document.querySelectorAll('.week-content').forEach(el => el.classList.add('hidden'));
+        document.getElementById('teacherPortalView').classList.remove('hidden');
 
-              ${isGraded ? `
-                <div class="text-xs bg-white p-3 rounded-xl border border-sky-200">
-                  <strong>💬 Pesan Guru:</strong>
-                  <p class="mt-1 text-slate-700 font-medium">${item.teacherFeedback || "Bagus sekali!"}</p>
-                </div>
-              ` : ''}
-            </div>
-          `;
-        }).join('');
-
-      } catch (err) {
-        container.innerHTML = `<p class="text-center text-rose-500 py-6 text-xs">Gagal memuat nilai.</p>`;
-      }
-    }
-
-    async function loadSubmissions() {
-      const tbody = document.getElementById('submissionTable');
-      tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-slate-400">⏳ Memuat data...</td></tr>`;
-
-      try {
-        const res = await fetch(`${GAS_ENDPOINT}?action=getSubmissions`);
-        const data = await res.json();
         submissions = data.data || [];
-        
         document.getElementById('totalCount').innerText = `${submissions.length} Data`;
         renderTable();
+
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-rose-500">Gagal mengambil data dari server.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-rose-500">Gagal terhubung ke server.</td></tr>`;
       }
     }
 
@@ -741,6 +718,7 @@
 
       const payload = {
         action: "saveGrade",
+        teacherPin: activeTeacherPin,
         studentId: item.studentId,
         week: item.week,
         scoreTask: taskScore,
@@ -751,15 +729,73 @@
       };
 
       try {
-        await fetch(GAS_ENDPOINT, {
+        const res = await fetch(GAS_ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload)
         });
+        const result = await res.json();
 
-        alert(`Nilai berhasil disimpan untuk ${item.studentName} (Minggu ${item.week})!\nNilai Akhir: ${totalScore}/100`);
+        if (result.status === "success") {
+          alert(`Nilai berhasil disimpan untuk ${item.studentName} (Minggu ${item.week})!\nNilai Akhir: ${totalScore}/100`);
+        } else {
+          alert(result.message || "Gagal menyimpan nilai.");
+        }
       } catch (err) {
         alert("Gagal menyimpan nilai.");
+      }
+    }
+
+    function openStudentGradesModal() {
+      if (!currentStudent.classId) {
+        alert("Harap login terlebih dahulu.");
+        return;
+      }
+      document.getElementById('studentGradesModal').classList.remove('hidden');
+      fetchStudentGrades();
+    }
+
+    function closeStudentGradesModal() {
+      document.getElementById('studentGradesModal').classList.add('hidden');
+    }
+
+    async function fetchStudentGrades() {
+      const container = document.getElementById('studentGradesList');
+      container.innerHTML = `<p class="text-center text-slate-400 py-6 text-xs">Mengambil nilai... ⏳</p>`;
+
+      try {
+        const res = await fetch(`${GAS_ENDPOINT}?action=getStudentGrades&studentId=${encodeURIComponent(currentStudent.classId)}`);
+        const result = await res.json();
+
+        if (!result.data || result.data.length === 0) {
+          container.innerHTML = `<p class="text-center text-slate-500 py-6 text-xs">Belum ada tugas yang kamu kirimkan.</p>`;
+          return;
+        }
+
+        container.innerHTML = result.data.map(item => {
+          const isGraded = item.finalScore !== "" && item.finalScore !== null;
+          return `
+            <div class="bg-sky-50/80 border-2 border-sky-200 rounded-2xl p-4 space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-sky-900 text-xs">Minggu ${item.week} - ${item.taskType}</span>
+                ${isGraded 
+                  ? `<span class="bg-sky-500 text-white font-extrabold text-[11px] px-3 py-1 rounded-full shadow-sm">Nilai: ${item.finalScore}/100</span>`
+                  : `<span class="bg-sky-200 text-sky-900 font-bold text-[10px] px-2.5 py-1 rounded-full">⏳ Menunggu Guru</span>`
+                }
+              </div>
+
+              ${isGraded ? `
+                <div class="text-xs bg-white p-3 rounded-xl border border-sky-200">
+                  <strong>💬 Pesan Guru:</strong>
+                  <p class="mt-1 text-slate-700 font-medium">${item.teacherFeedback || "Bagus sekali!"}</p>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }).join('');
+
+      } catch (err) {
+        container.innerHTML = `<p class="text-center text-rose-500 py-6 text-xs">Gagal memuat nilai.</p>`;
       }
     }
   </script>
