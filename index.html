@@ -202,15 +202,17 @@
               <div id="imagePreviewContainer" class="hidden">
                 <label class="block text-[11px] font-bold text-slate-500 mb-1">Hasil Gambar Siswa:</label>
                 <a id="imageLink" href="#" target="_blank" class="block group relative">
-                  <img id="imageSrc" src="" alt="Gambar Siswa" class="w-full max-h-48 object-contain rounded-2xl border-2 border-sky-200 bg-sky-50">
+                  <img id="imageSrc" src="" alt="Gambar Siswa" class="w-full max-h-48 object-contain rounded-2xl border-2 border-sky-200 bg-sky-50" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300?text=Gagal+Memuat+Gambar';">
                   <span class="text-[10px] text-sky-600 underline block mt-1 text-center font-bold">Klik untuk buka gambar ukuran penuh ↗</span>
                 </a>
               </div>
 
               <div id="audioPreview" class="hidden">
                 <label class="block text-[11px] font-bold text-slate-500 mb-1">Rekaman Suara Siswa:</label>
-                <audio id="audioSrc" controls class="w-full"></audio>
-                <a id="audioLink" href="#" target="_blank" class="text-[10px] text-sky-600 underline block mt-1 text-center font-bold">Tautan Audio Alternatif ↗</a>
+                <div class="rounded-2xl border-2 border-sky-200 overflow-hidden bg-slate-900">
+                  <iframe id="audioFrame" src="" class="w-full h-16 border-0" allow="autoplay"></iframe>
+                </div>
+                <a id="audioLink" href="#" target="_blank" class="text-[10px] text-sky-600 underline block mt-1 text-center font-bold">Buka Suara di Tab Baru ↗</a>
               </div>
             </div>
 
@@ -764,14 +766,13 @@
         imgContainer.classList.add('hidden');
       }
 
-      // Penanganan Audio Siswa
+      // Penanganan Audio Siswa (Menggunakan iframe preview agar dapat dimainkan langsung dari Google Drive)
       const audioBox = document.getElementById('audioPreview');
-      const audioEl = document.getElementById('audioSrc');
+      const audioFrame = document.getElementById('audioFrame');
       const audioLink = document.getElementById('audioLink');
       if (item.audioUrl && item.audioUrl.length > 20) {
-        audioEl.src = item.audioUrl;
-        audioLink.href = item.audioUrl;
-        audioEl.load();
+        audioFrame.src = item.audioUrl;
+        audioLink.href = item.audioUrl.replace('/preview', '/view');
         audioBox.classList.remove('hidden');
       } else {
         audioBox.classList.add('hidden');
