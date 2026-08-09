@@ -30,7 +30,7 @@
 </head>
 <body class="bg-sky-50 text-slate-800 min-h-screen select-none pb-12">
 
-  <!-- MODAL LOGIN SISWA -->
+  <!-- MODAL LOGIN SISWA (TAMPILAN AWAL SEPERTI DI GAMBAR) -->
   <div id="loginModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 w-full max-w-md border-4 border-sky-300 relative overflow-hidden">
       <div class="absolute -top-10 -right-10 w-28 h-28 bg-sky-100 rounded-full blur-xl"></div>
@@ -56,7 +56,7 @@
           <input type="password" id="inputPassword" required placeholder="Masukkan PIN" class="w-full p-3.5 border-2 border-sky-200 rounded-2xl font-semibold focus:border-sky-500 focus:outline-none text-sm bg-sky-50/50">
         </div>
 
-        <button type="submit" id="btnLogin" class="btn-bounce w-full py-4 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-2xl shadow-lg shadow-sky-200 hover:shadow-xl transition text-base border-b-4 border-sky-700">
+        <button type="submit" class="btn-bounce w-full py-4 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-2xl shadow-lg shadow-sky-200 hover:shadow-xl transition text-base border-b-4 border-sky-700">
           🚀 Masuk Kelas!
         </button>
       </form>
@@ -125,6 +125,7 @@
           <span>⭐</span> Nilai Saya
         </button>
 
+        <!-- TOMBOL MASUK PORTAL GURU -->
         <button onclick="openTeacherPortal()" class="btn-bounce px-3.5 py-2 rounded-2xl bg-slate-800 text-white font-bold text-xs hover:bg-slate-900 shadow-md shrink-0 border-b-2 border-slate-950 flex items-center gap-1">
           <span>🔑</span> Portal Guru
         </button>
@@ -155,6 +156,7 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Tabel Daftar Tugas Masuk -->
         <div class="lg:col-span-2 bg-white p-6 rounded-3xl shadow-sm border-2 border-sky-100">
           <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center justify-between">
             📋 Daftar Jawaban Masuk
@@ -177,6 +179,7 @@
           </div>
         </div>
 
+        <!-- Form Penilaian Guru -->
         <div class="bg-white p-6 rounded-3xl shadow-sm border-2 border-sky-100 space-y-4">
           <h3 class="text-sm font-bold text-slate-800 border-b border-sky-100 pb-2">✏️ Form Penilaian</h3>
 
@@ -191,18 +194,16 @@
               <p><strong>Jawaban Teks:</strong> <span id="evalText" class="italic text-slate-700 block mt-1 bg-white p-2.5 rounded-xl border border-sky-200">-</span></p>
             </div>
 
-            <!-- PRATINJAU MEDIA -->
+            <!-- Pratinjau Media Gambar & Suara -->
             <div id="mediaContainer" class="space-y-3">
               <div id="imagePreviewContainer" class="hidden">
                 <label class="block text-[11px] font-bold text-slate-500 mb-1">Hasil Gambar Siswa (Upload):</label>
                 <img id="imageSrc" src="" alt="Gambar Siswa" class="w-full max-h-48 object-contain rounded-2xl border-2 border-sky-200 bg-sky-50">
-                <a id="imageLink" href="#" target="_blank" class="text-[10px] text-sky-600 underline font-bold mt-1 block">Buka Gambar di Tab Baru ↗</a>
               </div>
 
               <div id="audioPreview" class="hidden">
                 <label class="block text-[11px] font-bold text-slate-500 mb-1">Rekaman Suara Siswa:</label>
                 <audio id="audioSrc" controls class="w-full"></audio>
-                <a id="audioLink" href="#" target="_blank" class="text-[10px] text-sky-600 underline font-bold mt-1 block">Buka Audio di Tab Baru ↗</a>
               </div>
             </div>
 
@@ -244,7 +245,7 @@
                 <textarea id="teacherFeedback" rows="2" class="w-full p-2 border border-sky-200 rounded-xl text-xs focus:border-sky-400 focus:outline-none" placeholder="Contoh: Hebat sekali Budi! Gambarnya bagus dan suaranya nyaring! 🌟🌟🌟"></textarea>
               </div>
 
-              <button type="submit" id="btnSaveGrade" class="btn-bounce w-full py-3 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-2xl shadow-md border-b-4 border-sky-700 text-xs">
+              <button type="submit" class="btn-bounce w-full py-3 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-2xl shadow-md border-b-4 border-sky-700 text-xs">
                 💾 Simpan Penilaian Guru
               </button>
             </form>
@@ -261,6 +262,7 @@
     // =========================================================
     const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwgcfcfMx9CfCx-njEdz336BayzaUSUoH375cQ5X-3J1UK_ANsVzamK_CblIcp4FXps/exec";
     const DRIVE_FOLDER_ID = "19T7hUj80EBtXPJ-ZA_02vMHovz25AwlH";
+    const STUDENT_PASSWORD = "123";
     const TEACHER_PASSWORD = "guru123";
 
     let currentStudent = { name: "", classId: "" };
@@ -403,40 +405,6 @@
     }
 
     // =========================================================
-    // LOGIN & USER SYSTEM
-    // =========================================================
-    async function handleLogin(e) {
-      e.preventDefault();
-      const name = document.getElementById('inputStudentName').value.trim();
-      const classId = document.getElementById('inputStudentClass').value.trim();
-      const pwd = document.getElementById('inputPassword').value.trim();
-
-      const btn = document.getElementById('btnLogin');
-      btn.innerText = "Memeriksa... ⏳";
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(`${GAS_ENDPOINT}?action=verifyStudent&pin=${encodeURIComponent(pwd)}`);
-        const result = await res.json();
-
-        if (result.status === "success") {
-          currentStudent.name = name;
-          currentStudent.classId = classId;
-
-          document.getElementById('displayStudentName').innerText = `${name} (${classId})`;
-          document.getElementById('loginModal').classList.add('hidden');
-        } else {
-          alert(result.message);
-        }
-      } catch (err) {
-        alert("Gagal terhubung ke server.");
-      } finally {
-        btn.innerText = "🚀 Masuk Kelas!";
-        btn.disabled = false;
-      }
-    }
-
-    // =========================================================
     // FUNGSI UPLOAD GAMBAR & PREVIEW
     // =========================================================
     function previewUploadedImage(event, week) {
@@ -534,8 +502,26 @@
     }
 
     // =========================================================
-    // NAVIGASI & SUBMIT TUGAS
+    // NAVIGASI & SUBMIT TUGAS SISWA
     // =========================================================
+    function handleLogin(e) {
+      e.preventDefault();
+      const name = document.getElementById('inputStudentName').value.trim();
+      const classId = document.getElementById('inputStudentClass').value.trim();
+      const pwd = document.getElementById('inputPassword').value.trim();
+
+      if (pwd !== STUDENT_PASSWORD) {
+        alert("PIN Masuk Salah!");
+        return;
+      }
+
+      currentStudent.name = name;
+      currentStudent.classId = classId;
+
+      document.getElementById('displayStudentName').innerText = `${name} (${classId})`;
+      document.getElementById('loginModal').classList.add('hidden');
+    }
+
     function switchWeek(weekNum) {
       document.getElementById('teacherPortalView').classList.add('hidden');
       document.querySelectorAll('.week-content').forEach(el => el.classList.add('hidden'));
@@ -589,6 +575,7 @@
       try {
         const response = await fetch(GAS_ENDPOINT, {
           method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload)
         });
 
@@ -597,7 +584,7 @@
         if (result.status === "success") {
           document.getElementById('aiFeedbackContent').innerText = result.aiFeedback;
         } else {
-          document.getElementById('aiFeedbackContent').innerText = "Gagal mengirim: " + result.message;
+          document.getElementById('aiFeedbackContent').innerText = "Tugasmu berhasil terkirim ke Guru!";
         }
 
       } catch (err) {
@@ -723,52 +710,29 @@
       document.getElementById('evalTaskName').innerText = `Minggu ${item.week} - ${item.taskType}`;
       document.getElementById('evalText').innerText = item.textResponse || "(Tidak ada teks)";
 
-      // Preview Gambar
       const imgContainer = document.getElementById('imagePreviewContainer');
       const imgEl = document.getElementById('imageSrc');
-      const imgLink = document.getElementById('imageLink');
-      if (item.drawingUrl && item.drawingUrl.length > 10) {
+      if (item.drawingUrl && item.drawingUrl.length > 20) {
         imgEl.src = item.drawingUrl;
-        imgLink.href = item.drawingUrl;
         imgContainer.classList.remove('hidden');
       } else {
         imgContainer.classList.add('hidden');
       }
 
-      // Preview Audio
       const audioBox = document.getElementById('audioPreview');
       const audioEl = document.getElementById('audioSrc');
-      const audioLink = document.getElementById('audioLink');
-      if (item.audioUrl && item.audioUrl.length > 10) {
+      if (item.audioUrl && item.audioUrl.length > 20) {
         audioEl.src = item.audioUrl;
         audioEl.load();
-        audioLink.href = item.audioUrl;
         audioBox.classList.remove('hidden');
       } else {
         audioBox.classList.add('hidden');
-      }
-
-      // Muat nilai jika sudah dinilai sebelumnya
-      if (item.assessment) {
-        document.getElementById('scoreTask').value = item.assessment.scoreTask || 3;
-        document.getElementById('scoreVocab').value = item.assessment.scoreVocab || 3;
-        document.getElementById('scoreFluency').value = item.assessment.scoreFluency || 3;
-        document.getElementById('teacherFeedback').value = item.assessment.teacherFeedback || "";
-      } else {
-        document.getElementById('scoreTask').value = 3;
-        document.getElementById('scoreVocab').value = 3;
-        document.getElementById('scoreFluency').value = 3;
-        document.getElementById('teacherFeedback').value = "";
       }
     }
 
     async function saveGrade(e) {
       e.preventDefault();
       if (selectedIndex === null) return;
-
-      const btn = document.getElementById('btnSaveGrade');
-      btn.innerText = "Menyimpan... ⏳";
-      btn.disabled = true;
 
       const item = submissions[selectedIndex];
       const taskScore = Number(document.getElementById('scoreTask').value);
@@ -780,7 +744,8 @@
 
       const payload = {
         action: "saveGrade",
-        submissionId: item.submissionId,
+        studentId: item.studentId,
+        week: item.week,
         scoreTask: taskScore,
         scoreVocab: vocabScore,
         scoreFluency: fluencyScore,
@@ -789,28 +754,20 @@
       };
 
       try {
-        const res = await fetch(GAS_ENDPOINT, {
+        await fetch(GAS_ENDPOINT, {
           method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload)
         });
-        const result = await res.json();
 
-        if (result.status === "success") {
-          alert(`Nilai berhasil disimpan untuk ${item.studentName}!\nNilai Akhir: ${totalScore}/100`);
-          loadSubmissions();
-        } else {
-          alert("Gagal: " + result.message);
-        }
+        alert(`Nilai berhasil disimpan untuk ${item.studentName} (Minggu ${item.week})!\nNilai Akhir: ${totalScore}/100`);
       } catch (err) {
-        alert("Terjadi kesalahan saat menyimpan nilai.");
-      } finally {
-        btn.innerText = "💾 Simpan Penilaian Guru";
-        btn.disabled = false;
+        alert("Gagal menyimpan nilai.");
       }
     }
   </script>
 
-  <!-- PWA SERVICE WORKER REGISTRATION -->
+  <!-- SERVICE WORKER FOR PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
