@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LinguaExplorer Kids - Fun English Learning Platform</title>
   
-  <!-- PWA Meta Tags -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#38bdf8">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,7 +12,6 @@
   <meta name="apple-mobile-web-app-title" content="LinguaExplorer">
   <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3408/3408506.png">
 
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -53,7 +51,7 @@
 
         <div>
           <label class="block text-xs font-bold text-sky-900 uppercase mb-1">PIN Masuk Siswa</label>
-          <input type="password" id="inputPassword" required placeholder="Masukkan PIN" class="w-full p-3.5 border-2 border-sky-200 rounded-2xl font-semibold focus:border-sky-500 focus:outline-none text-sm bg-sky-50/50">
+          <input type="password" id="inputPassword" required placeholder="Masukkan PIN Siswa" class="w-full p-3.5 border-2 border-sky-200 rounded-2xl font-semibold focus:border-sky-500 focus:outline-none text-sm bg-sky-50/50">
         </div>
 
         <button type="submit" id="loginBtn" class="btn-bounce w-full py-4 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-2xl shadow-lg shadow-sky-200 hover:shadow-xl transition text-base border-b-4 border-sky-700">
@@ -84,7 +82,7 @@
     </div>
   </div>
 
-  <!-- MODAL NILAI & CATATAN GURU -->
+  <!-- MODAL NILAI SISWA -->
   <div id="studentGradesModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-2xl border-4 border-sky-300 space-y-4 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b-2 border-sky-100 pb-3">
@@ -193,7 +191,7 @@
 
             <div id="mediaContainer" class="space-y-3">
               <div id="imagePreviewContainer" class="hidden">
-                <label class="block text-[11px] font-bold text-slate-500 mb-1">Hasil Gambar Siswa (Upload):</label>
+                <label class="block text-[11px] font-bold text-slate-500 mb-1">Hasil Gambar Siswa:</label>
                 <img id="imageSrc" src="" alt="Gambar Siswa" class="w-full max-h-48 object-contain rounded-2xl border-2 border-sky-200 bg-sky-50">
               </div>
 
@@ -209,39 +207,39 @@
               <div>
                 <label class="block text-[11px] font-bold text-slate-700">1. Ketepatan Tugas (1-4)</label>
                 <select id="scoreTask" required class="w-full p-2 border border-sky-200 rounded-xl text-xs bg-sky-50/50 font-semibold focus:border-sky-400 focus:outline-none">
-                  <option value="1">1 - Perlu Banyak Bimbingan</option>
+                  <option value="1">1 - Perlu Bimbingan</option>
                   <option value="2">2 - Cukup Sesuai</option>
-                  <option value="3" selected>3 - Bagus & Sesuai Instruksi</option>
-                  <option value="4">4 - Sangat Kreatif & Luar Biasa</option>
+                  <option value="3" selected>3 - Bagus & Sesuai</option>
+                  <option value="4">4 - Sangat Bagus</option>
                 </select>
               </div>
 
               <div>
-                <label class="block text-[11px] font-bold text-slate-700">2. Kosa Kata / Grammar SD (1-4)</label>
+                <label class="block text-[11px] font-bold text-slate-700">2. Kosa Kata / Vocab (1-4)</label>
                 <select id="scoreVocab" required class="w-full p-2 border border-sky-200 rounded-xl text-xs bg-sky-50/50 font-semibold focus:border-sky-400 focus:outline-none">
-                  <option value="1">1 - Banyak Kosa Kata Kurang Tepat</option>
-                  <option value="2">2 - Cukup Memahami Kosa Kata</option>
-                  <option value="3" selected>3 - Menggunakan Vocab Minggu Ini</option>
-                  <option value="4">4 - Kosa Kata Sangat Bervariasi</option>
+                  <option value="1">1 - Banyak Kurang Tepat</option>
+                  <option value="2">2 - Cukup Memahami</option>
+                  <option value="3" selected>3 - Menggunakan Vocab Target</option>
+                  <option value="4">4 - Vocab Bervariasi</option>
                 </select>
               </div>
 
               <div>
-                <label class="block text-[11px] font-bold text-slate-700">3. Kelancaran Berbicara (1-4)</label>
+                <label class="block text-[11px] font-bold text-slate-700">3. Kelancaran Suara (1-4)</label>
                 <select id="scoreFluency" required class="w-full p-2 border border-sky-200 rounded-xl text-xs bg-sky-50/50 font-semibold focus:border-sky-400 focus:outline-none">
-                  <option value="1">1 - Masih Terbata-bata</option>
+                  <option value="1">1 - Terbata-bata</option>
                   <option value="2">2 - Cukup Lancar</option>
-                  <option value="3" selected>3 - Lancar & Percaya Diri</option>
-                  <option value="4">4 - Sangat Fasih & Pengucapan Jelas</option>
+                  <option value="3" selected>3 - Lancar & Jelas</option>
+                  <option value="4">4 - Sangat Fasih</option>
                 </select>
               </div>
 
               <div>
-                <label class="block text-[11px] font-bold text-slate-700">Pesan / Bintang Guru:</label>
-                <textarea id="teacherFeedback" rows="2" class="w-full p-2 border border-sky-200 rounded-xl text-xs focus:border-sky-400 focus:outline-none" placeholder="Contoh: Hebat sekali Budi! Gambarnya bagus dan suaranya nyaring! 🌟🌟🌟"></textarea>
+                <label class="block text-[11px] font-bold text-slate-700">Pesan Guru:</label>
+                <textarea id="teacherFeedback" rows="2" class="w-full p-2 border border-sky-200 rounded-xl text-xs focus:border-sky-400 focus:outline-none" placeholder="Contoh: Bagus sekali! Gambarnya kreatif! 🌟"></textarea>
               </div>
 
-              <button type="submit" class="btn-bounce w-full py-3 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-2xl shadow-md border-b-4 border-sky-700 text-xs">
+              <button type="submit" id="btnSaveGrade" class="btn-bounce w-full py-3 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-2xl shadow-md border-b-4 border-sky-700 text-xs">
                 💾 Simpan Penilaian Guru
               </button>
             </form>
@@ -253,9 +251,6 @@
   </main>
 
   <script>
-    // =========================================================
-    // KONFIGURASI UTAMA FRONTEND (BEBAS PIN HARDCODED)
-    // =========================================================
     const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwgcfcfMx9CfCx-njEdz336BayzaUSUoH375cQ5X-3J1UK_ANsVzamK_CblIcp4FXps/exec";
     const DRIVE_FOLDER_ID = "19T7hUj80EBtXPJ-ZA_02vMHovz25AwlH";
 
@@ -283,14 +278,14 @@
         } else {
           document.getElementById('dynamicModulesContainer').innerHTML = `
             <div class="text-center py-12 bg-white rounded-3xl border-4 border-rose-200 text-rose-600 text-xs font-bold">
-              Gagal memuat soal. Pastikan tab 'BankSoal' di Spreadsheet sudah terisi dengan benar.
+              Gagal memuat soal. Pastikan sheet 'BankSoal' di Spreadsheet sudah diisi.
             </div>
           `;
         }
       } catch (err) {
         document.getElementById('dynamicModulesContainer').innerHTML = `
           <div class="text-center py-12 bg-white rounded-3xl border-4 border-rose-200 text-rose-600 text-xs font-bold">
-            Gagal terhubung ke Database. Periksa koneksi internet Anda.
+            Gagal terhubung ke Database Apps Script.
           </div>
         `;
       }
@@ -326,7 +321,7 @@
                 <span class="font-extrabold text-sky-900 text-sm">${word}</span>
                 <span class="text-base">🔊</span>
               </div>
-              <div class="text-[10px] text-sky-600 font-bold">Klik untuk dengar suara</div>
+              <div class="text-[10px] text-sky-600 font-bold">Klik dengar suara</div>
             </div>
           `;
         }).join('');
@@ -338,16 +333,13 @@
               <h2 class="text-xl font-extrabold mt-2 drop-shadow-sm text-white">${q.title}</h2>
             </div>
             <div class="text-5xl animate-bounce relative z-10">🌟</div>
-            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-lg"></div>
           </div>
 
           <section class="bg-white p-6 rounded-3xl border-2 border-sky-100 shadow-sm space-y-3">
             <div class="flex justify-between items-center border-b border-sky-100 pb-3">
               <div>
-                <h3 class="font-extrabold text-sky-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
-                  <span>1. Kartu Kata Pintar</span>
-                </h3>
-                <p class="text-[11px] text-slate-500 font-medium">Klik setiap kartu untuk mendengarkan pengucapan kata!</p>
+                <h3 class="font-extrabold text-sky-900 text-xs uppercase tracking-wider">1. Kartu Kata Pintar</h3>
+                <p class="text-[11px] text-slate-500 font-medium">Klik setiap kartu untuk dengar suaranya!</p>
               </div>
               <span id="vocabProgress-w${q.week}" class="text-[11px] font-extrabold text-sky-800 bg-sky-100 px-3 py-1 rounded-full">0/${q.vocabList.length} Kata Dicoba</span>
             </div>
@@ -373,14 +365,13 @@
             </div>
 
             <div class="pt-2">
-              <label class="block text-[11px] font-extrabold text-sky-900 mb-1">📝 Tulis Cerita / Jawaban Singkatmu:</label>
-              <textarea id="w${q.week}Text" rows="3" class="w-full p-3.5 border-2 border-sky-200 rounded-2xl text-xs focus:border-sky-500 focus:outline-none bg-sky-50/30 font-medium" placeholder="Tuliskan cerita singkat bahasa Inggrismu di sini..."></textarea>
+              <label class="block text-[11px] font-extrabold text-sky-900 mb-1">📝 Tulis Cerita Singkatmu:</label>
+              <textarea id="w${q.week}Text" rows="3" class="w-full p-3.5 border-2 border-sky-200 rounded-2xl text-xs focus:border-sky-500 focus:outline-none bg-sky-50/30 font-medium" placeholder="Tuliskan jawaban bahasa Inggrismu di sini..."></textarea>
             </div>
           </section>
 
           <section class="bg-white p-6 rounded-3xl border-2 border-sky-100 shadow-sm space-y-3">
             <h3 class="font-extrabold text-sky-900 text-xs uppercase tracking-wider">3. Rekam Suaramu saat Membaca! 🎙️</h3>
-            <p class="text-[11px] text-slate-500 font-medium">Bacalah cerita atau kata-kata yang sudah kamu buat di atas dengan nyaring!</p>
             
             <div class="flex items-center gap-3 pt-1">
               <button id="w${q.week}RecBtn" onclick="toggleRecording(${q.week})" class="btn-bounce px-5 py-3 bg-sky-500 hover:bg-sky-600 text-white rounded-2xl font-bold text-xs shadow-md border-b-4 border-sky-700 transition flex items-center gap-2">
@@ -404,23 +395,12 @@
       if (!mediaRecorder || mediaRecorder.state === "inactive") {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          
-          let mimeType = '';
-          if (MediaRecorder.isTypeSupported('audio/mp4')) {
-            mimeType = 'audio/mp4';
-          } else if (MediaRecorder.isTypeSupported('audio/aac')) {
-            mimeType = 'audio/aac';
-          } else if (MediaRecorder.isTypeSupported('audio/webm')) {
-            mimeType = 'audio/webm';
-          }
-
-          mediaRecorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+          mediaRecorder = new MediaRecorder(stream);
           audioChunks = [];
           
           mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
           mediaRecorder.onstop = () => {
-            const type = mediaRecorder.mimeType || 'audio/mp4';
-            const blob = new Blob(audioChunks, { type });
+            const blob = new Blob(audioChunks, { type: 'audio/mp4' });
             const audioPreview = document.getElementById(`w${week}Audio`);
             audioPreview.src = URL.createObjectURL(blob);
             audioPreview.classList.remove('hidden'); 
@@ -433,13 +413,11 @@
           mediaRecorder.start();
           btn.innerHTML = "<span>⏹️</span> Selesai Rekam"; 
           btn.classList.replace('bg-sky-500', 'bg-rose-500');
-          btn.classList.replace('border-sky-700', 'border-rose-700');
-        } catch (err) { alert("Izin mikrofon ditolak / tidak ditemukan."); }
+        } catch (err) { alert("Izin mikrofon tidak diizinkan."); }
       } else {
         mediaRecorder.stop();
-        btn.innerHTML = "<span>🎙️</span> Rekam Ulang Suara"; 
+        btn.innerHTML = "<span>🎙️</span> Rekam Ulang"; 
         btn.classList.replace('bg-rose-500', 'bg-sky-500');
-        btn.classList.replace('border-rose-700', 'border-sky-700');
       }
     }
 
@@ -447,37 +425,23 @@
       const file = event.target.files[0];
       if (!file) return;
 
-      if (file.size > 5 * 1024 * 1024) {
-        alert("Ukuran gambar terlalu besar! Maksimal 5MB.");
-        event.target.value = "";
-        return;
-      }
-
       const reader = new FileReader();
       reader.onload = function(e) {
         imageData[week] = e.target.result;
-        const imgEl = document.getElementById(`w${week}ImagePreview`);
-        const containerEl = document.getElementById(`w${week}ImagePreviewContainer`);
-        if (imgEl && containerEl) {
-          imgEl.src = e.target.result;
-          containerEl.classList.remove('hidden');
-        }
+        document.getElementById(`w${week}ImagePreview`).src = e.target.result;
+        document.getElementById(`w${week}ImagePreviewContainer`).classList.remove('hidden');
       };
       reader.readAsDataURL(file);
     }
 
     function removeUploadedImage(week) {
       delete imageData[week];
-      const inputEl = document.getElementById(`w${week}ImageInput`);
-      const containerEl = document.getElementById(`w${week}ImagePreviewContainer`);
-      if (inputEl) inputEl.value = "";
-      if (containerEl) containerEl.classList.add('hidden');
+      document.getElementById(`w${week}ImageInput`).value = "";
+      document.getElementById(`w${week}ImagePreviewContainer`).classList.add('hidden');
     }
 
     function playVocabCard(cardEl, word, week) {
       speak(word);
-      cardEl.classList.add('border-sky-500', 'bg-sky-100');
-
       if (!learnedVocab[week]) learnedVocab[week] = new Set();
       learnedVocab[week].add(word);
 
@@ -485,10 +449,6 @@
       const progressEl = document.getElementById(`vocabProgress-w${week}`);
       if (progressEl) {
         progressEl.innerText = `${learnedVocab[week].size}/${totalVocab} Kata Dicoba`;
-        if (learnedVocab[week].size === totalVocab) {
-          progressEl.className = "text-[11px] font-extrabold text-white bg-emerald-500 px-3 py-1 rounded-full shadow-sm";
-          progressEl.innerText = "✓ Semua Kata Selesai!";
-        }
       }
     }
 
@@ -496,13 +456,10 @@
       const msg = new SpeechSynthesisUtterance(text);
       msg.lang = 'en-US'; 
       msg.rate = 0.85;
-      msg.pitch = 1.1; 
       window.speechSynthesis.speak(msg);
     }
 
-    // =========================================================
-    // LOGIN SISWA (VERIFIKASI SERVER KE GAS)
-    // =========================================================
+    // LOGIN SISWA
     async function handleLogin(e) {
       e.preventDefault();
       const name = document.getElementById('inputStudentName').value.trim();
@@ -527,7 +484,7 @@
           alert(data.message || "PIN Siswa Salah!");
         }
       } catch (err) {
-        alert("Gagal melakukan login. Periksa koneksi internet.");
+        alert("Gagal terhubung ke server.");
       } finally {
         loginBtn.disabled = false;
         loginBtn.innerText = "🚀 Masuk Kelas!";
@@ -537,8 +494,7 @@
     function switchWeek(weekNum) {
       document.getElementById('teacherPortalView').classList.add('hidden');
       document.querySelectorAll('.week-content').forEach(el => el.classList.add('hidden'));
-      const weekEl = document.getElementById(`week-${weekNum}`);
-      if (weekEl) weekEl.classList.remove('hidden');
+      document.getElementById(`week-${weekNum}`)?.classList.remove('hidden');
 
       document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('bg-white', 'text-sky-700', 'shadow-md', 'border-b-2', 'border-sky-200');
@@ -552,9 +508,7 @@
       }
     }
 
-    function closeAiModal() {
-      document.getElementById('aiModal').classList.add('hidden');
-    }
+    function closeAiModal() { document.getElementById('aiModal').classList.add('hidden'); }
 
     async function submitWeek(weekNum, taskName) {
       if (!currentStudent.name) {
@@ -582,7 +536,7 @@
       };
 
       document.getElementById('aiModal').classList.remove('hidden');
-      document.getElementById('aiFeedbackContent').innerText = "Sedang mengirim tugas dan meminta penilaian Robot AI... ⏳";
+      document.getElementById('aiFeedbackContent').innerText = "Sedang mengirim tugas dan meminta feedback AI... ⏳";
 
       try {
         const response = await fetch(GAS_ENDPOINT, {
@@ -592,15 +546,13 @@
         });
 
         const result = await response.json();
-
         if (result.status === "success") {
           document.getElementById('aiFeedbackContent').innerText = result.aiFeedback;
         } else {
-          document.getElementById('aiFeedbackContent').innerText = "Tugasmu berhasil terkirim ke Guru!";
+          document.getElementById('aiFeedbackContent').innerText = "Tugasmu berhasil terkirim!";
         }
-
       } catch (err) {
-        document.getElementById('aiFeedbackContent').innerText = `🤖 [Robot AI Feedback]\n\nLuar biasa, ${currentStudent.name}!\n\nTugas Minggu ${weekNum} sudah tersimpan dengan rapi. Tunggu masukan dari gurumu ya! 🌟`;
+        document.getElementById('aiFeedbackContent').innerText = `Tugas Minggu ${weekNum} berhasil terkirim! 🌟`;
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerText = `🚀 KIRIM TUGAS MINGGU ${weekNum}`;
@@ -608,7 +560,7 @@
     }
 
     // =========================================================
-    // PORTAL GURU DENGAN VERIFIKASI SERVER BACKEND
+    // PORTAL GURU & PENILAIAN
     // =========================================================
     function openTeacherPortal() {
       const pwd = prompt("Masukkan PIN Guru:");
@@ -628,15 +580,16 @@
 
     async function loadSubmissions(pin) {
       const tbody = document.getElementById('submissionTable');
-      tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-slate-400">⏳ Memverifikasi PIN & Memuat data...</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-slate-400">⏳ Memverifikasi PIN Guru...</td></tr>`;
 
       try {
         const res = await fetch(`${GAS_ENDPOINT}?action=getSubmissions&pin=${encodeURIComponent(pin)}`);
         const data = await res.json();
 
         if (data.status === "error") {
-          alert(data.message);
+          alert(data.message || "PIN Guru Salah!");
           activeTeacherPin = "";
+          tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-rose-500">PIN Guru Salah. Silakan coba lagi.</td></tr>`;
           return;
         }
 
@@ -648,7 +601,7 @@
         renderTable();
 
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-rose-500">Gagal terhubung ke server.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-rose-500">Gagal terhubung ke server Google.</td></tr>`;
       }
     }
 
@@ -708,6 +661,10 @@
       e.preventDefault();
       if (selectedIndex === null) return;
 
+      const btnSave = document.getElementById('btnSaveGrade');
+      btnSave.disabled = true;
+      btnSave.innerText = "⏳ Menyimpan Nilai...";
+
       const item = submissions[selectedIndex];
       const taskScore = Number(document.getElementById('scoreTask').value);
       const vocabScore = Number(document.getElementById('scoreVocab').value);
@@ -737,18 +694,23 @@
         const result = await res.json();
 
         if (result.status === "success") {
-          alert(`Nilai berhasil disimpan untuk ${item.studentName} (Minggu ${item.week})!\nNilai Akhir: ${totalScore}/100`);
+          alert(`Nilai berhasil disimpan!\nSiswa: ${item.studentName}\nNilai: ${totalScore}/100`);
+          reloadSubmissions();
         } else {
           alert(result.message || "Gagal menyimpan nilai.");
         }
       } catch (err) {
-        alert("Gagal menyimpan nilai.");
+        alert("Gagal menyimpan nilai. Periksa koneksi internet.");
+      } finally {
+        btnSave.disabled = false;
+        btnSave.innerText = "💾 Simpan Penilaian Guru";
       }
     }
 
+    // MEMUAT NILAI SAYA
     function openStudentGradesModal() {
       if (!currentStudent.classId) {
-        alert("Harap login terlebih dahulu.");
+        alert("Harap login siswa terlebih dahulu!");
         return;
       }
       document.getElementById('studentGradesModal').classList.remove('hidden');
@@ -761,51 +723,41 @@
 
     async function fetchStudentGrades() {
       const container = document.getElementById('studentGradesList');
-      container.innerHTML = `<p class="text-center text-slate-400 py-6 text-xs">Mengambil nilai... ⏳</p>`;
+      container.innerHTML = `<p class="text-center text-slate-400 py-6 text-xs">Mengambil nilai dari server... ⏳</p>`;
 
       try {
         const res = await fetch(`${GAS_ENDPOINT}?action=getStudentGrades&studentId=${encodeURIComponent(currentStudent.classId)}`);
         const result = await res.json();
 
-        if (!result.data || result.data.length === 0) {
-          container.innerHTML = `<p class="text-center text-slate-500 py-6 text-xs">Belum ada tugas yang kamu kirimkan.</p>`;
-          return;
+        if (result.status === "success" && result.data && result.data.length > 0) {
+          container.innerHTML = result.data.map(item => {
+            const isGraded = item.finalScore !== "" && item.finalScore !== null;
+            return `
+              <div class="bg-sky-50/80 border-2 border-sky-200 rounded-2xl p-4 space-y-2">
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-sky-900 text-xs">Minggu ${item.week} - ${item.taskType}</span>
+                  ${isGraded 
+                    ? `<span class="bg-sky-500 text-white font-extrabold text-[11px] px-3 py-1 rounded-full shadow-sm">Nilai: ${item.finalScore}/100</span>`
+                    : `<span class="bg-sky-200 text-sky-900 font-bold text-[10px] px-2.5 py-1 rounded-full">⏳ Menunggu Penilaian</span>`
+                  }
+                </div>
+
+                ${isGraded ? `
+                  <div class="text-xs bg-white p-3 rounded-xl border border-sky-200">
+                    <strong>💬 Pesan Guru:</strong>
+                    <p class="mt-1 text-slate-700 font-medium">${item.teacherFeedback || "Bagus sekali!"}</p>
+                  </div>
+                ` : ''}
+              </div>
+            `;
+          }).join('');
+        } else {
+          container.innerHTML = `<p class="text-center text-slate-500 py-6 text-xs">Belum ada tugas yang kamu kirimkan atau dinilai.</p>`;
         }
 
-        container.innerHTML = result.data.map(item => {
-          const isGraded = item.finalScore !== "" && item.finalScore !== null;
-          return `
-            <div class="bg-sky-50/80 border-2 border-sky-200 rounded-2xl p-4 space-y-2">
-              <div class="flex justify-between items-center">
-                <span class="font-bold text-sky-900 text-xs">Minggu ${item.week} - ${item.taskType}</span>
-                ${isGraded 
-                  ? `<span class="bg-sky-500 text-white font-extrabold text-[11px] px-3 py-1 rounded-full shadow-sm">Nilai: ${item.finalScore}/100</span>`
-                  : `<span class="bg-sky-200 text-sky-900 font-bold text-[10px] px-2.5 py-1 rounded-full">⏳ Menunggu Guru</span>`
-                }
-              </div>
-
-              ${isGraded ? `
-                <div class="text-xs bg-white p-3 rounded-xl border border-sky-200">
-                  <strong>💬 Pesan Guru:</strong>
-                  <p class="mt-1 text-slate-700 font-medium">${item.teacherFeedback || "Bagus sekali!"}</p>
-                </div>
-              ` : ''}
-            </div>
-          `;
-        }).join('');
-
       } catch (err) {
-        container.innerHTML = `<p class="text-center text-rose-500 py-6 text-xs">Gagal memuat nilai.</p>`;
+        container.innerHTML = `<p class="text-center text-rose-500 py-6 text-xs">Gagal mengambil data nilai.</p>`;
       }
-    }
-  </script>
-
-  <!-- PWA SERVICE WORKER REGISTRATION -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(err => console.log('SW Registration failed: ', err));
-      });
     }
   </script>
 </body>
