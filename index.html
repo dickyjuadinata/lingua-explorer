@@ -51,7 +51,7 @@
       </div>
       
       <div id="aiFeedbackContent" class="text-sm text-slate-700 bg-emerald-50 p-4 rounded-2xl border border-emerald-200 leading-relaxed max-h-80 overflow-y-auto whitespace-pre-line">
-        Sedang menganalisis jawabanmu... ⏳
+        Sedang menganalisis jawaban & rekaman suaramu... ⏳
       </div>
 
       <button onclick="closeAiModal()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow">
@@ -378,10 +378,11 @@
               <p><strong>Jawaban Teks:</strong> <span id="evalText" class="italic text-slate-600">-</span></p>
             </div>
 
-            <div id="mediaContainer" class="space-y-2">
+            <div id="mediaContainer" class="space-y-3">
               <div id="imagePreview" class="hidden">
                 <label class="block text-xs font-bold text-slate-500 mb-1">Hasil Gambar/Foto:</label>
-                <img id="imgSrc" src="" class="w-full h-40 object-cover rounded-xl border">
+                <!-- Tambahkan referrerpolicy no-referrer agar gambar Google Drive tidak terblokir -->
+                <img id="imgSrc" src="" referrerpolicy="no-referrer" class="w-full h-44 object-contain bg-slate-100 rounded-xl border p-1">
               </div>
               <div id="audioPreview" class="hidden">
                 <label class="block text-xs font-bold text-slate-500 mb-1">Rekaman Suara Siswa:</label>
@@ -637,9 +638,8 @@
         audioBase64: audioData[weekNum]
       };
 
-      // Tampilkan Modal AI lebih awal dengan status loading
       document.getElementById('aiModal').classList.remove('hidden');
-      document.getElementById('aiFeedbackContent').innerText = "Sedang mengirim tugas & Agent AI sedang menyusun umpan balik... ⏳";
+      document.getElementById('aiFeedbackContent').innerText = "Sedang mengirim tugas & Agent AI sedang menganalisis rekaman/jawabanmu... ⏳";
 
       try {
         const response = await fetch(GAS_ENDPOINT, {
@@ -713,17 +713,22 @@
       document.getElementById('evalTaskName').innerText = `Minggu ${item.week} - ${item.taskType}`;
       document.getElementById('evalText').innerText = item.textResponse || "(Tidak ada teks)";
 
+      // Render Gambar Direct Link
       const imgBox = document.getElementById('imagePreview');
-      if (item.drawingUrl) {
-        document.getElementById('imgSrc').src = item.drawingUrl;
+      const imgEl = document.getElementById('imgSrc');
+      if (item.drawingUrl && item.drawingUrl.trim() !== "") {
+        imgEl.src = item.drawingUrl;
         imgBox.classList.remove('hidden');
       } else {
         imgBox.classList.add('hidden');
       }
 
+      // Render Audio Stream Direct Link
       const audioBox = document.getElementById('audioPreview');
-      if (item.audioUrl) {
-        document.getElementById('audioSrc').src = item.audioUrl;
+      const audioEl = document.getElementById('audioSrc');
+      if (item.audioUrl && item.audioUrl.trim() !== "") {
+        audioEl.src = item.audioUrl;
+        audioEl.load();
         audioBox.classList.remove('hidden');
       } else {
         audioBox.classList.add('hidden');
