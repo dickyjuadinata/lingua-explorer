@@ -4,10 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LinguaExplorer Kids - Fun English Learning Platform</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#38bdf8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="LinguaExplorer">
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3408/3408506.png">
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
-    body { font-family: 'Fredoka', cursive, sans-serif; }
+    body { 
+      font-family: 'Fredoka', cursive, sans-serif; 
+      -webkit-tap-highlight-color: transparent;
+    }
     .card-bounce { transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
     .card-bounce:hover { transform: translateY(-4px) scale(1.02); }
     .btn-bounce { transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1); }
@@ -177,7 +191,7 @@
               <p><strong>Jawaban Teks:</strong> <span id="evalText" class="italic text-slate-700 block mt-1 bg-white p-2.5 rounded-xl border border-sky-200">-</span></p>
             </div>
 
-            <!-- PRATINJAU MEDIA (GAMBAR UPLOAD & AUDIO) -->
+            <!-- PRATINJAU MEDIA -->
             <div id="mediaContainer" class="space-y-3">
               <div id="imagePreviewContainer" class="hidden">
                 <label class="block text-[11px] font-bold text-slate-500 mb-1">Hasil Gambar Siswa (Upload):</label>
@@ -294,7 +308,6 @@
       questionBank.forEach((q, index) => {
         const isFirst = index === 0;
 
-        // Navigasi Tombol Minggu
         const btn = document.createElement('button');
         btn.onclick = () => switchWeek(q.week);
         btn.id = `tab-${q.week}`;
@@ -302,7 +315,6 @@
         btn.innerText = `M${q.week}`;
         navContainer.appendChild(btn);
 
-        // Konten Modul per Minggu
         const weekDiv = document.createElement('div');
         weekDiv.id = `week-${q.week}`;
         weekDiv.className = `week-content space-y-6 ${isFirst ? '' : 'hidden'}`;
@@ -331,7 +343,6 @@
             <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-lg"></div>
           </div>
 
-          <!-- BAGIAN 1: KOSA KATA -->
           <section class="bg-white p-6 rounded-3xl border-2 border-sky-100 shadow-sm space-y-3">
             <div class="flex justify-between items-center border-b border-sky-100 pb-3">
               <div>
@@ -348,18 +359,15 @@
             </div>
           </section>
 
-          <!-- BAGIAN 2: TUGAS GAMBAR (UPLOAD FILE) & TEKS -->
           <section class="bg-white p-6 rounded-3xl border-2 border-sky-100 shadow-sm space-y-4">
             <h3 class="font-extrabold text-sky-900 text-xs uppercase tracking-wider">2. Tantangan Menulis & Menggambar</h3>
             <p class="text-xs text-sky-900 bg-sky-50/80 p-4 rounded-2xl border border-sky-200 font-semibold leading-relaxed">${q.instruction}</p>
 
-            <!-- KOMPONEN UPLOAD GAMBAR -->
             <div class="space-y-2 border-t border-sky-100 pt-3">
               <label class="block text-xs font-extrabold text-sky-900">🖼️ Unggah Foto/Gambar Hasil Karyamu:</label>
               <input type="file" id="w${q.week}ImageInput" accept="image/*" onchange="previewUploadedImage(event, ${q.week})" 
                      class="w-full text-xs text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-sky-500 file:text-white hover:file:bg-sky-600 cursor-pointer">
               
-              <!-- PRATINJAU GAMBAR -->
               <div id="w${q.week}ImagePreviewContainer" class="hidden mt-3 relative w-full max-w-xs">
                 <img id="w${q.week}ImagePreview" src="" alt="Preview" class="w-full h-auto rounded-2xl border-2 border-sky-300 shadow-sm">
                 <button onclick="removeUploadedImage(${q.week})" class="absolute top-2 right-2 bg-rose-500 text-white rounded-full p-1.5 text-[10px] font-bold shadow hover:bg-rose-600">✕ Hapus Foto</button>
@@ -372,7 +380,6 @@
             </div>
           </section>
 
-          <!-- BAGIAN 3: SUARA -->
           <section class="bg-white p-6 rounded-3xl border-2 border-sky-100 shadow-sm space-y-3">
             <h3 class="font-extrabold text-sky-900 text-xs uppercase tracking-wider">3. Rekam Suaramu saat Membaca! 🎙️</h3>
             <p class="text-[11px] text-slate-500 font-medium">Bacalah cerita atau kata-kata yang sudah kamu buat di atas dengan nyaring!</p>
@@ -385,7 +392,6 @@
             </div>
           </section>
 
-          <!-- TOMBOL SUBMIT -->
           <button id="w${q.week}Submit" onclick="submitWeek(${q.week}, '${q.title}')" class="btn-bounce w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-extrabold text-sm shadow-lg shadow-emerald-100 border-b-4 border-emerald-700 transition uppercase tracking-wider">
             🚀 Kirim Tugas Minggu ${q.week}
           </button>
@@ -396,7 +402,7 @@
     }
 
     // =========================================================
-    // FUNGSI MANAJEMEN UPLOAD GAMBAR & PREVIEW
+    // FUNGSI UPLOAD GAMBAR & PREVIEW
     // =========================================================
     function previewUploadedImage(event, week) {
       const file = event.target.files[0];
@@ -431,7 +437,7 @@
     }
 
     // =========================================================
-    // FUNGSI SUARA TTS & REKAM AUDIO
+    // FUNGSI TTS & REKAM AUDIO
     // =========================================================
     function playVocabCard(cardEl, word, week) {
       speak(word);
@@ -701,7 +707,6 @@
       document.getElementById('evalTaskName').innerText = `Minggu ${item.week} - ${item.taskType}`;
       document.getElementById('evalText').innerText = item.textResponse || "(Tidak ada teks)";
 
-      // Pratinjau Gambar yang Diunggah
       const imgContainer = document.getElementById('imagePreviewContainer');
       const imgEl = document.getElementById('imageSrc');
       if (item.drawingUrl && item.drawingUrl.length > 20) {
@@ -711,7 +716,6 @@
         imgContainer.classList.add('hidden');
       }
 
-      // Pratinjau Rekaman Audio
       const audioBox = document.getElementById('audioPreview');
       const audioEl = document.getElementById('audioSrc');
       if (item.audioUrl && item.audioUrl.length > 20) {
@@ -757,6 +761,15 @@
       } catch (err) {
         alert("Gagal menyimpan nilai.");
       }
+    }
+  </script>
+
+  <!-- PWA SERVICE WORKER REGISTRATION -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.log('SW Registration failed: ', err));
+      });
     }
   </script>
 </body>
