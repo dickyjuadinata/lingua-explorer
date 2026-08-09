@@ -60,6 +60,27 @@
     </div>
   </div>
 
+  <!-- MODAL LIHAT NILAI SISWA -->
+  <div id="studentGradesModal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-2xl border-4 border-emerald-500 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b pb-3">
+        <div>
+          <h3 class="font-extrabold text-xl text-emerald-800">📊 Raport & Umpan Balik Guru</h3>
+          <p class="text-xs text-slate-500">Nilai & Umpan Balik Portofolio TBLT-CLIL Anda</p>
+        </div>
+        <button onclick="closeStudentGradesModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+      </div>
+
+      <div id="studentGradesList" class="space-y-3">
+        <p class="text-center text-slate-400 py-6">Sedang mengambil data nilai... ⏳</p>
+      </div>
+
+      <button onclick="closeStudentGradesModal()" class="w-full py-3 bg-emerald-600 text-white font-bold rounded-xl shadow">
+        Tutup
+      </button>
+    </div>
+  </div>
+
   <!-- HEADER NAVIGASI -->
   <header class="bg-emerald-600 text-white p-4 shadow-lg sticky top-0 z-40">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
@@ -84,7 +105,11 @@
           <button onclick="switchWeek(12)" id="tab-12" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W12</button>
         </nav>
 
-        <button onclick="openTeacherPortal()" class="px-3 py-1.5 rounded-xl bg-amber-400 text-amber-950 font-bold text-xs hover:bg-amber-300 shadow shrink-0">
+        <button onclick="openStudentGradesModal()" class="px-3 py-1.5 rounded-xl bg-amber-300 text-amber-950 font-bold text-xs hover:bg-amber-200 shadow shrink-0">
+          📊 Lihat Nilai Saya
+        </button>
+
+        <button onclick="openTeacherPortal()" class="px-3 py-1.5 rounded-xl bg-amber-500 text-white font-bold text-xs hover:bg-amber-400 shadow shrink-0">
           🔑 Portal Guru
         </button>
       </div>
@@ -117,7 +142,7 @@
       <button id="w1Submit" onclick="submitWeek(1, 'Super Animal Studio')" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W1</button>
     </div>
 
-    <!-- WEEK 2 HINGGA 12 (SINGKAT) -->
+    <!-- WEEK 2 -->
     <div id="week-2" class="week-content hidden space-y-6">
       <div class="bg-emerald-100 p-4 rounded-xl border-l-4 border-emerald-600"><h2 class="font-bold text-emerald-900">Module 1 - Week 2: Food Chains</h2></div>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
@@ -280,6 +305,64 @@
         loadSubmissions();
       } else if (pwd !== null) {
         alert("PIN Guru Salah!");
+      }
+    }
+
+    function openStudentGradesModal() {
+      if (!currentStudent.classId) {
+        alert("Harap login terlebih dahulu.");
+        return;
+      }
+      document.getElementById('studentGradesModal').classList.remove('hidden');
+      fetchStudentGrades();
+    }
+
+    function closeStudentGradesModal() {
+      document.getElementById('studentGradesModal').classList.add('hidden');
+    }
+
+    async function fetchStudentGrades() {
+      const container = document.getElementById('studentGradesList');
+      container.innerHTML = `<p class="text-center text-slate-400 py-6">Sedang mengambil data nilai... ⏳</p>`;
+
+      try {
+        const res = await fetch(`${GAS_ENDPOINT}?action=getStudentGrades&studentId=${encodeURIComponent(currentStudent.classId)}`);
+        const result = await res.json();
+
+        if (!result.data || result.data.length === 0) {
+          container.innerHTML = `<p class="text-center text-slate-500 py-6">Belum ada tugas yang dikirim atau dinilai.</p>`;
+          return;
+        }
+
+        container.innerHTML = result.data.map(item => {
+          const isGraded = item.finalScore !== "" && item.finalScore !== null;
+          return `
+            <div class="bg-slate-50 border rounded-2xl p-4 space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-emerald-800 text-sm">Minggu ${item.week} - ${item.taskType}</span>
+                ${isGraded 
+                  ? `<span class="bg-emerald-100 text-emerald-800 font-extrabold text-xs px-2.5 py-1 rounded-full">Nilai: ${item.finalScore}/100</span>`
+                  : `<span class="bg-amber-100 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-full">⏳ Belum Dinilai Guru</span>`
+                }
+              </div>
+
+              ${isGraded ? `
+                <div class="grid grid-cols-3 gap-2 text-xs bg-white p-2 rounded-xl border text-center font-semibold text-slate-600">
+                  <div>Komunikasi: <span class="text-emerald-700 font-bold">${item.scoreTask}/4</span></div>
+                  <div>Kosa Kata: <span class="text-emerald-700 font-bold">${item.scoreVocab}/4</span></div>
+                  <div>Kelancaran: <span class="text-emerald-700 font-bold">${item.scoreFluency}/4</span></div>
+                </div>
+                <div class="text-xs bg-emerald-50 text-emerald-900 p-3 rounded-xl border border-emerald-200">
+                  <strong>💬 Umpan Balik Guru:</strong>
+                  <p class="mt-1 text-slate-700">${item.teacherFeedback || "Tidak ada catatan khusus."}</p>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }).join('');
+
+      } catch (err) {
+        container.innerHTML = `<p class="text-center text-rose-500 py-6">Gagal memuat data nilai.</p>`;
       }
     }
 
@@ -463,7 +546,6 @@
       `).join('');
     }
 
-    // --- CARA RENDER MEDIA TANPA ERROR MEMORIKAN BASE64 & DIRECT LINK ---
     function selectSubmission(idx) {
       selectedIndex = idx;
       const item = submissions[idx];
