@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinguaExplorer - Teacher Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen p-4 md:p-8">
+
+  <header class="max-w-6xl mx-auto bg-emerald-700 text-white p-6 rounded-2xl shadow-lg mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+    <div>
+      <h1 class="text-2xl font-bold">👩‍🏫 Teacher Assessment Dashboard</h1>
+      <p class="text-emerald-200 text-xs mt-1">Sistem Evaluasi Portofolio & Rubrik Penilaian TBLT-CLIL (12 Minggu)</p>
+    </div>
+    <button onclick="loadSubmissions()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm shadow transition">
+      🔄 Muat Data Terbaru
+    </button>
+  </header>
+
+  <main class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <!-- TABEL DAFTAR TUGAS MASUK -->
+    <section class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-md border border-slate-200">
+      <h2 class="text-lg font-bold text-slate-700 mb-4 flex items-center justify-between">
+        📋 Daftar Tugas Siswa
+        <span id="totalCount" class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-bold">0 Data</span>
+      </h2>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-slate-50 text-slate-500 border-b border-slate-200 uppercase text-xs">
+            <tr>
+              <th class="p-3">Siswa</th>
+              <th class="p-3">Minggu</th>
+              <th class="p-3">Modul & Tugas</th>
+              <th class="p-3">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="submissionTable" class="divide-y divide-slate-100">
+            <tr>
+              <td colspan="4" class="text-center p-6 text-slate-400">Klik "Muat Data Terbaru" untuk mengambil data siswa dari Google Sheets.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PANEL PENILAIAN & RUBRIK (SKALA 1-4) -->
+    <section class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 space-y-4">
+      <h2 class="text-lg font-bold text-slate-700 border-b pb-2">✏️ Form & Rubrik Penilaian</h2>
+
+      <div id="noSelectionNotice" class="text-slate-400 text-sm text-center py-8">
+        Pilih salah satu tugas siswa di tabel untuk mulai menilai.
+      </div>
+
+      <div id="assessmentForm" class="hidden space-y-4">
+        <!-- Detail Tugas Siswa -->
+        <div class="bg-slate-50 p-3 rounded-xl border text-xs space-y-1">
+          <p><strong>Nama:</strong> <span id="evalStudentName" class="text-emerald-700 font-bold">-</span></p>
+          <p><strong>Tugas:</strong> <span id="evalTaskName">-</span></p>
+          <p><strong>Jawaban Teks:</strong> <span id="evalText" class="italic text-slate-600">-</span></p>
+        </div>
+
+        <!-- Media Display (Gambar/Audio) -->
+        <div id="mediaContainer" class="space-y-2">
+          <div id="imagePreview" class="hidden">
+            <label class="block text-xs font-bold text-slate-500 mb-1">Hasil Karya Gambar/Foto:</label>
+            <img id="imgSrc" src="" class="w-full h-40 object-cover rounded-xl border">
+          </div>
+          <div id="audioPreview" class="hidden">
+            <label class="block text-xs font-bold text-slate-500 mb-1">Rekaman Suara Siswa:</label>
+            <audio id="audioSrc" controls class="w-full"></audio>
+          </div>
+        </div>
+
+        <hr>
+
+        <!-- INPUT RUBRIK SESUAI SILABUS (SKALA 1-4) -->
+        <form onsubmit="saveGrade(event)" class="space-y-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-600">1. Komunikasi Tugas (Task Completion)</label>
+            <select id="scoreTask" required class="w-full p-2 border rounded-lg text-sm bg-slate-50">
+              <option value="1">Skor 1: Pesan sulit dipahami</option>
+              <option value="2">Skor 2: Pesan tersampaikan parsial</option>
+              <option value="3" selected>Skor 3: Tugas selesai & jelas</option>
+              <option value="4">Skor 4: Sangat lancar & kaya detail</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-600">2. Kosa Kata CLIL (Academic Vocab)</label>
+            <select id="scoreVocab" required class="w-full p-2 border rounded-lg text-sm bg-slate-50">
+              <option value="1">Skor 1: &lt; 2 kosa kata ilmiah</option>
+              <option value="2">Skor 2: 2–3 kosa kata ilmiah</option>
+              <option value="3" selected>Skor 3: 4–5 kosa kata ilmiah tepat</option>
+              <option value="4">Skor 4: Kosa kata bervariasi & akurat</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-600">3. Akurasi & Kelancaran (Fluency)</label>
+            <select id="scoreFluency" required class="w-full p-2 border rounded-lg text-sm bg-slate-50">
+              <option value="1">Skor 1: Banyak terhenti / terputus</option>
+              <option value="2">Skor 2: Kelancaran sedang</option>
+              <option value="3" selected>Skor 3: Jeda wajar & struktur benar</option>
+              <option value="4">Skor 4: Sangat lancar & self-correction</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-600">Catatan/Umpan Balik Guru:</label>
+            <textarea id="teacherFeedback" rows="2" class="w-full p-2 border rounded-lg text-xs" placeholder="Great job! Pronunciation was very clear..."></textarea>
+          </div>
+
+          <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow text-sm">
+            💾 Simpan Penilaian
+          </button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // URL Web App Google Apps Script
+    const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwgcfcfMx9CfCx-njEdz336BayzaUSUoH375cQ5X-3J1UK_ANsVzamK_CblIcp4FXps/exec";
+    
+    let submissions = [];
+    let selectedIndex = null;
+
+    // --- FETCH DATA DARI GOOGLE SHEETS ---
+    async function loadSubmissions() {
+      const tbody = document.getElementById('submissionTable');
+      tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-slate-400">⏳ Mengambil data...</td></tr>`;
+
+      try {
+        const res = await fetch(`${GAS_ENDPOINT}?action=getSubmissions`);
+        const data = await res.json();
+        submissions = data.data || [];
+        
+        document.getElementById('totalCount').innerText = `${submissions.length} Data`;
+        renderTable();
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-rose-500">Gagal memuat data. Pastikan Google Apps Script sudah di-deploy dengan benar.</td></tr>`;
+      }
+    }
+
+    // --- RENDER TABLE ---
+    function renderTable() {
+      const tbody = document.getElementById('submissionTable');
+      if (submissions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center p-6 text-slate-400">Belum ada tugas siswa yang dikirim.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = submissions.map((sub, idx) => `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="p-3 font-semibold text-slate-800">${sub.studentName}<br><span class="text-xs text-slate-400 font-normal">${sub.studentId}</span></td>
+          <td class="p-3 font-bold text-emerald-700">W${sub.week}</td>
+          <td class="p-3 text-slate-600">${sub.taskType}</td>
+          <td class="p-3">
+            <button onclick="selectSubmission(${idx})" class="px-3 py-1 bg-emerald-100 text-emerald-800 font-bold rounded-lg text-xs hover:bg-emerald-200">
+              Periksa & Nilai
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // --- PILIH TUGAS SISWA UNTUK DINILAI ---
+    function selectSubmission(idx) {
+      selectedIndex = idx;
+      const item = submissions[idx];
+
+      document.getElementById('noSelectionNotice').classList.add('hidden');
+      document.getElementById('assessmentForm').classList.remove('hidden');
+
+      document.getElementById('evalStudentName').innerText = `${item.studentName} (${item.studentId})`;
+      document.getElementById('evalTaskName').innerText = `Minggu ${item.week} - ${item.taskType}`;
+      document.getElementById('evalText').innerText = item.textResponse || "(Tidak ada teks)";
+
+      // Preview Gambar/Canvas
+      const imgBox = document.getElementById('imagePreview');
+      if (item.drawingUrl || item.drawingBase64) {
+        document.getElementById('imgSrc').src = item.drawingUrl || item.drawingBase64;
+        imgBox.classList.remove('hidden');
+      } else {
+        imgBox.classList.add('hidden');
+      }
+
+      // Preview Audio
+      const audioBox = document.getElementById('audioPreview');
+      if (item.audioUrl || item.audioBase64) {
+        document.getElementById('audioSrc').src = item.audioUrl || item.audioBase64;
+        audioBox.classList.remove('hidden');
+      } else {
+        audioBox.classList.add('hidden');
+      }
+    }
+
+    // --- SIMPAN PENILAIAN KE SHEETS ---
+    async function saveGrade(e) {
+      e.preventDefault();
+      if (selectedIndex === null) return;
+
+      const item = submissions[selectedIndex];
+      const taskScore = Number(document.getElementById('scoreTask').value);
+      const vocabScore = Number(document.getElementById('scoreVocab').value);
+      const fluencyScore = Number(document.getElementById('scoreFluency').value);
+      const feedback = document.getElementById('teacherFeedback').value;
+
+      // Kalkulasi Nilai Akhir Skala 100
+      const totalScore = Math.round(((taskScore + vocabScore + fluencyScore) / 12) * 100);
+
+      const payload = {
+        action: "saveGrade",
+        studentId: item.studentId,
+        week: item.week,
+        scoreTask: taskScore,
+        scoreVocab: vocabScore,
+        scoreFluency: fluencyScore,
+        finalScore: totalScore,
+        feedback: feedback
+      };
+
+      try {
+        await fetch(GAS_ENDPOINT, {
+          method: "POST", mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        alert(`Penilaian untuk ${item.studentName} (Minggu ${item.week}) Berhasil Disimpan!\nNilai Akhir: ${totalScore}/100`);
+      } catch (err) {
+        alert("Gagal menyimpan nilai.");
+      }
+    }
+  </script>
+</body>
+</html>
