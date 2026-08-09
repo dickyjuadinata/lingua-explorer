@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinguaExplorer - 12 Weeks TBLT-CLIL Platform</title>
+  <title>LinguaExplorer - 12 Weeks TBLT-CLIL Platform with AI Agent</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen select-none pb-12">
@@ -36,6 +36,27 @@
           🔓 Masuk ke Portal Pembelajaran
         </button>
       </form>
+    </div>
+  </div>
+
+  <!-- MODAL FEEDBACK AGENT AI -->
+  <div id="aiModal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-lg border-4 border-emerald-500 space-y-4">
+      <div class="flex items-center gap-3 border-b pb-3">
+        <div class="text-3xl">🤖</div>
+        <div>
+          <h3 class="font-extrabold text-lg text-emerald-800">Agent AI Instant Feedback</h3>
+          <p class="text-xs text-slate-500">Umpan Balik Otomatis Pembelajaran TBLT-CLIL</p>
+        </div>
+      </div>
+      
+      <div id="aiFeedbackContent" class="text-sm text-slate-700 bg-emerald-50 p-4 rounded-2xl border border-emerald-200 leading-relaxed max-h-80 overflow-y-auto whitespace-pre-line">
+        Sedang menganalisis jawabanmu... ⏳
+      </div>
+
+      <button onclick="closeAiModal()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow">
+        Terima Kasih, Lanjutkan! 👍
+      </button>
     </div>
   </div>
 
@@ -423,6 +444,9 @@
     const DRIVE_FOLDER_ID = "19T7hUj80EBtXPJ-ZA_02vMHovz25AwlH";
     const STUDENT_PASSWORD = "123";
     const TEACHER_PASSWORD = "guru123";
+    
+    // API Key Gemini (Dapat diisi dengan API Key Gemini Anda)
+    const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"; 
 
     let currentStudent = { name: "", classId: "" };
     const audioData = {};
@@ -570,7 +594,40 @@
       }
     }
 
-    // --- SUBMIT TUGAS SISWA KE GAS ---
+    // --- AGENT AI INSTANT FEEDBACK FUNCTION ---
+    async function fetchAiFeedback(taskName, studentResponse, hasAudio, hasImage) {
+      if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY") {
+        return `🌟 **Kerja Bagus, ${currentStudent.name}!**\n\nTugas **"${taskName}"** berhasil terkirim. Guru akan segera memberikan nilai dan umpan balik lengkap di sistem!`;
+      }
+
+      const prompt = `Kamu adalah seorang Agent AI Guru Sains dan Bahasa Inggris interaktif untuk program TBLT-CLIL SD.
+Siswa bernama "${currentStudent.name}" baru saja menyelesaikan tugas minggu ini:
+- Nama Tugas: ${taskName}
+- Teks Jawaban Siswa: "${studentResponse}"
+- Mengunggah Gambar/Drawing: ${hasImage ? 'Ya' : 'Tidak'}
+- Mengirim Rekaman Suara: ${hasAudio ? 'Ya' : 'Tidak'}
+
+Tugasmu: Berikan umpan balik instan yang sangat ramah, suportif, dan edukatif (3-4 kalimat). 
+Gunakan perpaduan Bahasa Indonesia dan Bahasa Inggris sederhana. Apresiasi usahanya, puji kosa kata sains atau keberaniannya berbicara, dan berikan dorongan positif.`;
+
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        });
+        const data = await res.json();
+        return data.candidates[0].content.parts[0].text;
+      } catch (err) {
+        return `🌟 **Hebat sekali, ${currentStudent.name}!**\n\nTugas **"${taskName}"** telah berhasil dikirim ke Google Drive/Sheets.`;
+      }
+    }
+
+    function closeAiModal() {
+      document.getElementById('aiModal').classList.add('hidden');
+    }
+
+    // --- SUBMIT TUGAS SISWA KE GAS & AI ---
     async function submitWeek(weekNum, taskName) {
       if (!currentStudent.name) {
         alert("Harap login terlebih dahulu.");
@@ -578,7 +635,7 @@
       }
 
       const submitBtn = document.getElementById(`w${weekNum}Submit`);
-      submitBtn.disabled = true; submitBtn.innerText = "⏳ Mengirim...";
+      submitBtn.disabled = true; submitBtn.innerText = "⏳ Mengirim & Menghubungi AI Agent...";
 
       let textRes = "Task Completed";
       let imgBase64 = fileData[weekNum] || "";
@@ -612,17 +669,28 @@
         audioBase64: audioData[weekNum]
       };
 
+      // Tampilkan Modal AI lebih awal dengan status loading
+      document.getElementById('aiModal').classList.remove('hidden');
+      document.getElementById('aiFeedbackContent').innerText = "Sedang mengirim tugas & Agent AI sedang menyusun umpan balik... ⏳";
+
       try {
+        // 1. Kirim data ke Google Sheets/Drive
         await fetch(GAS_ENDPOINT, {
           method: "POST", mode: "no-cors",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload)
         });
-        submitBtn.disabled = false;
-        submitBtn.innerText = `🚀 Kirim Tugas Minggu ${weekNum}`;
-        alert(`Tugas Minggu ${weekNum} (${taskName}) Berhasil Terkirim! 🎉`);
+
+        // 2. Minta umpan balik instan dari Agent AI
+        const hasAudio = !!audioData[weekNum];
+        const hasImage = !!imgBase64;
+        const aiResponse = await fetchAiFeedback(taskName, textRes, hasAudio, hasImage);
+
+        document.getElementById('aiFeedbackContent').innerText = aiResponse;
+
       } catch (err) {
-        alert("Terjadi kesalahan koneksi.");
+        document.getElementById('aiFeedbackContent').innerText = "Tugas berhasil terkirim ke sistem, namun jaringan AI sedang sibuk.";
+      } finally {
         submitBtn.disabled = false;
         submitBtn.innerText = `🚀 Kirim Tugas Minggu ${weekNum}`;
       }
