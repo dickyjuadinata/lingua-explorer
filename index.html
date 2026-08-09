@@ -6,7 +6,7 @@
   <title>LinguaExplorer - Learning App</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-amber-50 text-slate-800 font-sans min-h-screen">
+<body class="bg-amber-50 text-slate-800 font-sans min-h-screen select-none">
 
   <!-- Header / Navigation -->
   <header class="bg-emerald-600 text-white p-4 shadow-lg flex justify-between items-center">
@@ -24,16 +24,16 @@
       <p class="text-sm text-slate-600 mb-4">Klik kata untuk mendengarkan pengucapan:</p>
       
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <button onclick="speak('Habitat')" class="p-3 bg-amber-100 hover:bg-amber-200 rounded-xl font-bold text-amber-900 shadow-sm transition">
+        <button onclick="speak('Habitat')" class="p-3 bg-amber-100 hover:bg-amber-200 active:bg-amber-300 rounded-xl font-bold text-amber-900 shadow-sm transition">
           🔊 Habitat
         </button>
-        <button onclick="speak('Camouflage')" class="p-3 bg-amber-100 hover:bg-amber-200 rounded-xl font-bold text-amber-900 shadow-sm transition">
+        <button onclick="speak('Camouflage')" class="p-3 bg-amber-100 hover:bg-amber-200 active:bg-amber-300 rounded-xl font-bold text-amber-900 shadow-sm transition">
           🔊 Camouflage
         </button>
-        <button onclick="speak('Predator')" class="p-3 bg-amber-100 hover:bg-amber-200 rounded-xl font-bold text-amber-900 shadow-sm transition">
+        <button onclick="speak('Predator')" class="p-3 bg-amber-100 hover:bg-amber-200 active:bg-amber-300 rounded-xl font-bold text-amber-900 shadow-sm transition">
           🔊 Predator
         </button>
-        <button onclick="speak('Desert')" class="p-3 bg-amber-100 hover:bg-amber-200 rounded-xl font-bold text-amber-900 shadow-sm transition">
+        <button onclick="speak('Desert')" class="p-3 bg-amber-100 hover:bg-amber-200 active:bg-amber-300 rounded-xl font-bold text-amber-900 shadow-sm transition">
           🔊 Desert
         </button>
       </div>
@@ -46,7 +46,7 @@
       <!-- Studio Canvas -->
       <div class="mb-4">
         <label class="block text-sm font-medium mb-1">Gambar Hewan Super Kamu:</label>
-        <canvas id="drawCanvas" width="400" height="250" class="border-2 border-dashed border-slate-300 rounded-xl bg-slate-50 w-full touch-none"></canvas>
+        <canvas id="drawCanvas" width="400" height="250" class="border-2 border-dashed border-slate-300 rounded-xl bg-slate-50 w-full touch-none cursor-crosshair"></canvas>
         <button onclick="clearCanvas()" class="mt-2 px-3 py-1 bg-slate-200 text-xs rounded-lg hover:bg-slate-300">Bersihkan Gambar</button>
       </div>
 
@@ -81,43 +81,70 @@
     </section>
 
     <!-- Submit Button -->
-    <button onclick="submitAll()" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-emerald-700 transition">
+    <button id="submitBtn" onclick="submitAll()" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-emerald-700 transition">
       🚀 Kirim Tugas ke Guru
     </button>
   </main>
 
   <script>
-    // masukkan Web App URL dari deployment Apps Script Anda
-    const GAS_ENDPOINT = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+    // Integration Credentials
+    const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwgcfcfMx9CfCx-njEdz336BayzaUSUoH375cQ5X-3J1UK_ANsVzamK_CblIcp4FXps/exec";
+    const DRIVE_FOLDER_ID = "19T7hUj80EBtXPJ-ZA_02vMHovz25AwlH";
 
     // Text-to-Speech Engine
     function speak(text) {
       const msg = new SpeechSynthesisUtterance(text);
       msg.lang = 'en-US';
-      msg.rate = 0.8; // Diperlambat untuk anak-anak
+      msg.rate = 0.8;
       window.speechSynthesis.speak(msg);
     }
 
-    // Drawing Canvas
+    // Drawing Canvas Engine (Mouse & Touch Support)
     const canvas = document.getElementById('drawCanvas');
     const ctx = canvas.getContext('2d');
     let drawing = false;
 
-    canvas.addEventListener('mousedown', () => drawing = true);
-    canvas.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
-    canvas.addEventListener('mousemove', draw);
+    function getPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: (clientX - rect.left) * (canvas.width / rect.width),
+        y: (clientY - rect.top) * (canvas.height / rect.height)
+      };
+    }
+
+    function startDraw(e) {
+      drawing = true;
+      const pos = getPos(e);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+    }
 
     function draw(e) {
       if (!drawing) return;
-      const rect = canvas.getBoundingClientRect();
+      e.preventDefault();
+      const pos = getPos(e);
       ctx.lineWidth = 3;
       ctx.lineCap = 'round';
       ctx.strokeStyle = '#059669';
-      ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+      ctx.lineTo(pos.x, pos.y);
       ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
     }
+
+    function stopDraw() {
+      drawing = false;
+      ctx.beginPath();
+    }
+
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDraw);
+    canvas.addEventListener('mouseleave', stopDraw);
+
+    canvas.addEventListener('touchstart', startDraw);
+    canvas.addEventListener('touchmove', draw);
+    canvas.addEventListener('touchend', stopDraw);
 
     function clearCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -129,25 +156,28 @@
     async function toggleRecording() {
       const btn = document.getElementById('recBtn');
       if (!mediaRecorder || mediaRecorder.state === "inactive") {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorder = new MediaRecorder(stream);
-        audioChunks = [];
-        
-        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-        mediaRecorder.onstop = async () => {
-          const blob = new Blob(audioChunks, { type: 'audio/webm' });
-          document.getElementById('audioPreview').src = URL.createObjectURL(blob);
-          document.getElementById('audioPreview').classList.remove('hidden');
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
           
-          // Convert to Base64
-          const reader = new FileReader();
-          reader.readAsDataURL(blob);
-          reader.onloadend = () => { audioBase64 = reader.result; };
-        };
+          mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+          mediaRecorder.onstop = async () => {
+            const blob = new Blob(audioChunks, { type: 'audio/webm' });
+            document.getElementById('audioPreview').src = URL.createObjectURL(blob);
+            document.getElementById('audioPreview').classList.remove('hidden');
+            
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => { audioBase64 = reader.result; };
+          };
 
-        mediaRecorder.start();
-        btn.innerText = "⏹️ Hentikan Rekaman";
-        btn.classList.replace('bg-rose-500', 'bg-slate-700');
+          mediaRecorder.start();
+          btn.innerText = "⏹️ Hentikan Rekaman";
+          btn.classList.replace('bg-rose-500', 'bg-slate-700');
+        } catch (err) {
+          alert("Izin akses mikrofon ditolak atau tidak didukung di perangkat ini.");
+        }
       } else {
         mediaRecorder.stop();
         btn.innerText = "🎙️ Rekam Ulang";
@@ -173,38 +203,47 @@
     async function submitAll() {
       const imageBase64 = canvas.toDataURL('image/png');
       const sentenceText = Array.from(document.getElementById('sentence-target').children)
-                                .map(c => c.innerText).join(' ');
+                                 .map(c => c.innerText).join(' ');
 
-      if(!sentenceText) {
+      if (!sentenceText) {
         alert("Silakan susun kalimat terlebih dahulu!");
         return;
       }
 
-      alert("Mengirim tugas, mohon tunggu...");
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.innerText = "⏳ Mengirim Tugas...";
 
       const payload = {
         action: "submitTask",
+        folderId: DRIVE_FOLDER_ID,
         studentId: "STD-001",
+        studentName: "Budi (Kelas 3)",
         week: 1,
         taskType: "Super Animal Task",
         textResponse: sentenceText,
-        fileBase64: audioBase64 || imageBase64,
-        fileName: audioBase64 ? "recording_week1.webm" : "drawing_week1.png"
+        drawingBase64: imageBase64,
+        audioBase64: audioBase64
       };
 
       try {
         const response = await fetch(GAS_ENDPOINT, {
           method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload)
         });
+        
         const res = await response.json();
-        if(res.status === "success") {
+        if (res.status === "success") {
           alert("Tugas Berhasil Terkirim! 🎉");
         } else {
-          alert("Gagal mengirim: " + res.message);
+          alert("Gagal mengirim: " + (res.message || "Terjadi kesalahan sistem."));
         }
       } catch (err) {
-        alert("Terjadi kesalahan pengiriman koneksi.");
+        alert("Terjadi kesalahan koneksi saat mengirim tugas.");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "🚀 Kirim Tugas ke Guru";
       }
     }
   </script>
