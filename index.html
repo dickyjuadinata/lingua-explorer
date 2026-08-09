@@ -30,7 +30,7 @@
 </head>
 <body class="bg-sky-50 text-slate-800 min-h-screen select-none pb-12">
 
-  <!-- MODAL LOGIN SISWA (TAMPILAN AWAL SEPERTI DI GAMBAR) -->
+  <!-- MODAL LOGIN SISWA -->
   <div id="loginModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 w-full max-w-md border-4 border-sky-300 relative overflow-hidden">
       <div class="absolute -top-10 -right-10 w-28 h-28 bg-sky-100 rounded-full blur-xl"></div>
@@ -596,7 +596,7 @@
     }
 
     // =========================================================
-    // PORTAL GURU & ASSESSMENT
+    // PORTAL GURU & ASSESSMENT (PERBAIKAN MEDIA PREVIEW)
     // =========================================================
     function openTeacherPortal() {
       const pwd = prompt("Masukkan PIN Guru:");
@@ -699,6 +699,7 @@
       `).join('');
     }
 
+    // FUNGSI PERBAIKAN MEDIA GAMBAR & REKAMAN AUDIO
     function selectSubmission(idx) {
       selectedIndex = idx;
       const item = submissions[idx];
@@ -710,19 +711,57 @@
       document.getElementById('evalTaskName').innerText = `Minggu ${item.week} - ${item.taskType}`;
       document.getElementById('evalText').innerText = item.textResponse || "(Tidak ada teks)";
 
+      // 1. PENANGANAN GAMBAR
       const imgContainer = document.getElementById('imagePreviewContainer');
       const imgEl = document.getElementById('imageSrc');
-      if (item.drawingUrl && item.drawingUrl.length > 20) {
-        imgEl.src = item.drawingUrl;
+
+      if (item.drawingUrl && item.drawingUrl.length > 10) {
+        let imgUrl = item.drawingUrl;
+
+        // Tautan Base64
+        if (imgUrl.startsWith('data:image')) {
+          imgEl.src = imgUrl;
+        } 
+        // Konversi Tautan Google Drive ke Direct Image API
+        else if (imgUrl.includes('drive.google.com')) {
+          const fileIdMatch = imgUrl.match(/[-\w]{25,}/);
+          if (fileIdMatch) {
+            imgEl.src = `https://lh3.googleusercontent.com/d/${fileIdMatch[0]}`;
+          } else {
+            imgEl.src = imgUrl;
+          }
+        } else {
+          imgEl.src = imgUrl;
+        }
+
         imgContainer.classList.remove('hidden');
       } else {
         imgContainer.classList.add('hidden');
       }
 
+      // 2. PENANGANAN AUDIO
       const audioBox = document.getElementById('audioPreview');
       const audioEl = document.getElementById('audioSrc');
-      if (item.audioUrl && item.audioUrl.length > 20) {
-        audioEl.src = item.audioUrl;
+
+      if (item.audioUrl && item.audioUrl.length > 10) {
+        let audioUrl = item.audioUrl;
+
+        // Tautan Base64
+        if (audioUrl.startsWith('data:audio')) {
+          audioEl.src = audioUrl;
+        } 
+        // Konversi Tautan Google Drive ke Export/Stream Link
+        else if (audioUrl.includes('drive.google.com')) {
+          const fileIdMatch = audioUrl.match(/[-\w]{25,}/);
+          if (fileIdMatch) {
+            audioEl.src = `https://drive.google.com/uc?export=download&id=${fileIdMatch[0]}`;
+          } else {
+            audioEl.src = audioUrl;
+          }
+        } else {
+          audioEl.src = audioUrl;
+        }
+
         audioEl.load();
         audioBox.classList.remove('hidden');
       } else {
