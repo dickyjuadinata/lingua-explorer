@@ -3,270 +3,340 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinguaExplorer - Learning App</title>
+  <title>LinguaExplorer - Full Program (W1-W6)</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-amber-50 text-slate-800 font-sans min-h-screen select-none">
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen select-none pb-10">
 
-  <!-- Header / Navigation -->
-  <header class="bg-emerald-600 text-white p-4 shadow-lg flex justify-between items-center">
-    <h1 class="text-2xl font-bold tracking-wide">🌿 LinguaExplorer</h1>
-    <div class="bg-emerald-700 px-3 py-1 rounded-full text-sm">
-      Siswa: <span id="student-name" class="font-semibold">Budi (Kelas 3)</span>
+  <!-- Header Navigasi Program -->
+  <header class="bg-emerald-600 text-white p-4 shadow-lg sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div>
+        <h1 class="text-2xl font-bold tracking-wide">🌿 LinguaExplorer</h1>
+        <p class="text-xs text-emerald-100">Siswa: <span class="font-semibold">Budi (Kelas 3)</span></p>
+      </div>
+      
+      <!-- Tab Menu Navigasi Minggu -->
+      <nav class="flex gap-1 bg-emerald-800/60 p-1.5 rounded-xl text-xs sm:text-sm font-semibold">
+        <button onclick="switchWeek(1)" id="tab-1" class="tab-btn px-3 py-1.5 rounded-lg bg-white text-emerald-800 shadow">W1</button>
+        <button onclick="switchWeek(2)" id="tab-2" class="tab-btn px-3 py-1.5 rounded-lg hover:bg-emerald-700">W2</button>
+        <button onclick="switchWeek(3)" id="tab-3" class="tab-btn px-3 py-1.5 rounded-lg hover:bg-emerald-700">W3</button>
+        <button onclick="switchWeek(4)" id="tab-4" class="tab-btn px-3 py-1.5 rounded-lg hover:bg-emerald-700">W4</button>
+        <button onclick="switchWeek(5)" id="tab-5" class="tab-btn px-3 py-1.5 rounded-lg hover:bg-emerald-700">W5</button>
+        <button onclick="switchWeek(6)" id="tab-6" class="tab-btn px-3 py-1.5 rounded-lg hover:bg-emerald-700">W6</button>
+      </nav>
     </div>
   </header>
 
   <main class="max-w-4xl mx-auto p-4 space-y-6">
 
-    <!-- Pre-Task: Vocab Cards -->
-    <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
-      <h2 class="text-xl font-bold text-emerald-800 mb-2">1. Pre-Task: Vocab Builder (Week 1)</h2>
-      <p class="text-sm text-slate-600 mb-4">Klik kata untuk mendengarkan pengucapan:</p>
-      
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <button onclick="speak('Habitat')" class="p-3 bg-amber-100 hover:bg-amber-200 active:bg-amber-300 rounded-xl font-bold text-amber-900 shadow-sm transition">
-          🔊 Habitat
-        </button>
-        <button onclick="speak('Camouflage')" class="p-3 bg-amber-100 hover:bg-amber-200 active:bg-amber-300 rounded-xl font-bold text-amber-900 shadow-sm transition">
-          🔊 Camouflage
-        </button>
-        <button onclick="speak('Predator')" class="p-3 bg-amber-100 hover:bg-amber-200 active:bg-amber-300 rounded-xl font-bold text-amber-900 shadow-sm transition">
-          🔊 Predator
-        </button>
-        <button onclick="speak('Desert')" class="p-3 bg-amber-100 hover:bg-amber-200 active:bg-amber-300 rounded-xl font-bold text-amber-900 shadow-sm transition">
-          🔊 Desert
-        </button>
-      </div>
-    </section>
-
-    <!-- Main Task: Draw & Record Studio -->
-    <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
-      <h2 class="text-xl font-bold text-emerald-800 mb-2">2. Main Task: Studio "Super Animal"</h2>
-      
-      <!-- Studio Canvas -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-1">Gambar Hewan Super Kamu:</label>
-        <canvas id="drawCanvas" width="400" height="250" class="border-2 border-dashed border-slate-300 rounded-xl bg-slate-50 w-full touch-none cursor-crosshair"></canvas>
-        <button onclick="clearCanvas()" class="mt-2 px-3 py-1 bg-slate-200 text-xs rounded-lg hover:bg-slate-300">Bersihkan Gambar</button>
-      </div>
-
-      <!-- Audio Recorder -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-1">Rekam Deskripsi Lisan (Maks 1 Menit):</label>
-        <div class="flex items-center gap-3">
-          <button id="recBtn" onclick="toggleRecording()" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold hover:bg-rose-600 shadow">
-            🎙️ Mulai Rekam
-          </button>
-          <audio id="audioPreview" controls class="hidden h-10"></audio>
+    <!-- ==================== WEEK 1 ==================== -->
+    <div id="week-1" class="week-content space-y-6">
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
+        <h2 class="text-xl font-bold text-emerald-800 mb-2">1. Pre-Task: Animal Sounds & Names</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <button onclick="speak('Lion')" class="p-3 bg-emerald-50 rounded-xl font-bold text-emerald-900 border border-emerald-200">🔊 Lion</button>
+          <button onclick="speak('Elephant')" class="p-3 bg-emerald-50 rounded-xl font-bold text-emerald-900 border border-emerald-200">🔊 Elephant</button>
+          <button onclick="speak('Monkey')" class="p-3 bg-emerald-50 rounded-xl font-bold text-emerald-900 border border-emerald-200">🔊 Monkey</button>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Form-Focus: Sentence Builder -->
-    <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
-      <h2 class="text-xl font-bold text-emerald-800 mb-2">3. Form-Focus: Sentence Builder</h2>
-      <p class="text-sm text-slate-600 mb-3">Susun kalimat deskripsi habitat hewanmu:</p>
-      
-      <div id="sentence-target" class="p-3 min-h-[50px] bg-slate-100 border-2 border-emerald-300 rounded-xl flex flex-wrap gap-2 mb-3">
-        <!-- Word blocks will drop here -->
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
+        <h2 class="text-xl font-bold text-emerald-800 mb-2">2. Main Task: Draw Your Favorite Animal</h2>
+        <canvas id="w1Canvas" width="400" height="200" class="border-2 border-dashed border-emerald-300 rounded-xl bg-amber-50/20 w-full cursor-crosshair touch-none"></canvas>
+        <button onclick="clearCanvas('w1Canvas')" class="mt-2 px-3 py-1 bg-slate-200 text-xs rounded-lg">Bersihkan Canvas</button>
+      </section>
+
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
+        <h2 class="text-xl font-bold text-emerald-800 mb-2">3. Oral Task: Describe Your Animal</h2>
+        <div class="flex items-center gap-3">
+          <button id="w1RecBtn" onclick="toggleRecording(1)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
+          <audio id="w1Audio" controls class="hidden h-10"></audio>
+        </div>
+      </section>
+
+      <button id="w1Submit" onclick="submitWeek(1, 'Super Animal Studio')" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-emerald-700">🚀 Kirim Tugas Minggu 1</button>
+    </div>
+
+    <!-- ==================== WEEK 2 ==================== -->
+    <div id="week-2" class="week-content hidden space-y-6">
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-teal-100">
+        <h2 class="text-xl font-bold text-teal-800 mb-2">1. Pre-Task: Food Chain Vocab</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <button onclick="speak('Producer')" class="p-3 bg-teal-50 rounded-xl font-bold text-teal-900 border border-teal-200">🔊 Producer</button>
+          <button onclick="speak('Herbivore')" class="p-3 bg-teal-50 rounded-xl font-bold text-teal-900 border border-teal-200">🔊 Herbivore</button>
+          <button onclick="speak('Carnivore')" class="p-3 bg-teal-50 rounded-xl font-bold text-teal-900 border border-teal-200">🔊 Carnivore</button>
+        </div>
+      </section>
+
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-teal-100">
+        <h2 class="text-xl font-bold text-teal-800 mb-2">2. Main Task: Food Chain Order</h2>
+        <p class="text-sm text-slate-600 mb-3">Tuliskan urutan rantai makanan (misal: Grass -> Zebra -> Lion):</p>
+        <input type="text" id="w2Text" class="w-full p-3 border-2 border-teal-200 rounded-xl font-bold text-teal-900" placeholder="Ketik urutan di sini...">
+      </section>
+
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-teal-100">
+        <h2 class="text-xl font-bold text-teal-800 mb-2">3. Oral Task: Explain Food Chain</h2>
+        <div class="flex items-center gap-3">
+          <button id="w2RecBtn" onclick="toggleRecording(2)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
+          <audio id="w2Audio" controls class="hidden h-10"></audio>
+        </div>
+      </section>
+
+      <button id="w2Submit" onclick="submitWeek(2, 'Food Chain Puzzle')" class="w-full py-4 bg-teal-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-teal-700">🚀 Kirim Tugas Minggu 2</button>
+    </div>
+
+    <!-- ==================== WEEK 3 ==================== -->
+    <div id="week-3" class="week-content hidden space-y-6">
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
+        <h2 class="text-xl font-bold text-sky-800 mb-2">1. Pre-Task: Water Cycle Words</h2>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="speak('Evaporation')" class="p-3 bg-sky-50 rounded-xl font-bold text-sky-900 border border-sky-200">🔊 Evaporation</button>
+          <button onclick="speak('Condensation')" class="p-3 bg-sky-50 rounded-xl font-bold text-sky-900 border border-sky-200">🔊 Condensation</button>
+          <button onclick="speak('Precipitation')" class="p-3 bg-sky-50 rounded-xl font-bold text-sky-900 border border-sky-200">🔊 Precipitation</button>
+        </div>
+      </section>
+
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
+        <h2 class="text-xl font-bold text-sky-800 mb-2">2. Main Task: Simulator Siklus Air</h2>
+        <div class="bg-sky-100 p-4 rounded-xl text-center mb-3">
+          <p id="w3State" class="font-bold text-sky-900">Klik tombol untuk memulai siklus air!</p>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="triggerW3(1)" class="p-2 bg-sky-500 text-white rounded-lg font-bold">1. Evap</button>
+          <button onclick="triggerW3(2)" class="p-2 bg-sky-600 text-white rounded-lg font-bold">2. Cond</button>
+          <button onclick="triggerW3(3)" class="p-2 bg-sky-700 text-white rounded-lg font-bold">3. Precip</button>
+        </div>
+      </section>
+
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
+        <h2 class="text-xl font-bold text-sky-800 mb-2">3. Oral Task: Explain Water Cycle</h2>
+        <div class="flex items-center gap-3">
+          <button id="w3RecBtn" onclick="toggleRecording(3)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
+          <audio id="w3Audio" controls class="hidden h-10"></audio>
+        </div>
+      </section>
+
+      <button id="w3Submit" onclick="submitWeek(3, 'Water Cycle Simulator')" class="w-full py-4 bg-sky-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-sky-700">🚀 Kirim Tugas Minggu 3</button>
+    </div>
+
+    <!-- ==================== WEEK 4 ==================== -->
+    <div id="week-4" class="week-content hidden space-y-6">
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-lime-100">
+        <h2 class="text-xl font-bold text-lime-800 mb-2">1. Pre-Task: Plant Vocab</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <button onclick="speak('Roots')" class="p-2 bg-lime-50 font-bold text-lime-900 border border-lime-200 rounded-xl">🔊 Roots</button>
+          <button onclick="speak('Stem')" class="p-2 bg-lime-50 font-bold text-lime-900 border border-lime-200 rounded-xl">🔊 Stem</button>
+          <button onclick="speak('Leaves')" class="p-2 bg-lime-50 font-bold text-lime-900 border border-lime-200 rounded-xl">🔊 Leaves</button>
+          <button onclick="speak('Sunlight')" class="p-2 bg-lime-50 font-bold text-lime-900 border border-lime-200 rounded-xl">🔊 Sunlight</button>
+        </div>
+      </section>
+
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-lime-100">
+        <h2 class="text-xl font-bold text-lime-800 mb-2">2. Main Task: Gambar Fotosintesis</h2>
+        <canvas id="w4Canvas" width="400" height="200" class="border-2 border-dashed border-lime-300 rounded-xl bg-lime-50/30 w-full cursor-crosshair touch-none"></canvas>
+        <button onclick="clearCanvas('w4Canvas')" class="mt-2 px-3 py-1 bg-slate-200 text-xs rounded-lg">Bersihkan Canvas</button>
+      </section>
+
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-lime-100">
+        <h2 class="text-xl font-bold text-lime-800 mb-2">3. Oral Task: Photosynthesis Speech</h2>
+        <div class="flex items-center gap-3">
+          <button id="w4RecBtn" onclick="toggleRecording(4)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
+          <audio id="w4Audio" controls class="hidden h-10"></audio>
+        </div>
+      </section>
+
+      <button id="w4Submit" onclick="submitWeek(4, 'Plant & Photosynthesis')" class="w-full py-4 bg-lime-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-lime-700">🚀 Kirim Tugas Minggu 4</button>
+    </div>
+
+    <!-- ==================== WEEK 5 ==================== -->
+    <div id="week-5" class="week-content hidden space-y-6">
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
+        <h2 class="text-xl font-bold text-emerald-800 mb-2">1. Main Task: Desain Eco Poster</h2>
+        <select id="w5Slogan" class="w-full p-3 mb-3 border-2 border-emerald-200 rounded-xl font-bold text-emerald-800">
+          <option value="Save Our Planet!">🌍 Save Our Planet!</option>
+          <option value="Plant More Trees!">🌱 Plant More Trees!</option>
+          <option value="Keep Clean!">🌊 Keep Ocean Clean!</option>
+        </select>
+        <canvas id="w5Canvas" width="400" height="200" class="border-2 border-dashed border-emerald-300 rounded-xl bg-amber-50/20 w-full cursor-crosshair touch-none"></canvas>
+        <button onclick="clearCanvas('w5Canvas')" class="mt-2 px-3 py-1 bg-slate-200 text-xs rounded-lg">Bersihkan Canvas</button>
+      </section>
+
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
+        <h2 class="text-xl font-bold text-emerald-800 mb-2">2. Oral Task: Eco Speech</h2>
+        <div class="flex items-center gap-3">
+          <button id="w5RecBtn" onclick="toggleRecording(5)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
+          <audio id="w5Audio" controls class="hidden h-10"></audio>
+        </div>
+      </section>
+
+      <button id="w5Submit" onclick="submitWeek(5, 'Eco Poster Studio')" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-emerald-700">🚀 Kirim Tugas Minggu 5</button>
+    </div>
+
+    <!-- ==================== WEEK 6 ==================== -->
+    <div id="week-6" class="week-content hidden space-y-6">
+      <div class="bg-gradient-to-r from-amber-400 to-amber-500 text-white p-6 rounded-2xl text-center shadow-md">
+        <h2 class="text-3xl font-extrabold mb-1">🎉 Final Grand Showcase</h2>
+        <p class="text-amber-100 text-sm">Selamat telah menyelesaikan seluruh modul pembelajaran!</p>
       </div>
 
-      <div id="word-bank" class="flex flex-wrap gap-2">
-        <span onclick="addWord(this)" class="px-3 py-1.5 bg-emerald-100 text-emerald-900 rounded-lg font-medium cursor-pointer hover:bg-emerald-200">It lives in</span>
-        <span onclick="addWord(this)" class="px-3 py-1.5 bg-emerald-100 text-emerald-900 rounded-lg font-medium cursor-pointer hover:bg-emerald-200">the desert</span>
-        <span onclick="addWord(this)" class="px-3 py-1.5 bg-emerald-100 text-emerald-900 rounded-lg font-medium cursor-pointer hover:bg-emerald-200">and uses</span>
-        <span onclick="addWord(this)" class="px-3 py-1.5 bg-emerald-100 text-emerald-900 rounded-lg font-medium cursor-pointer hover:bg-emerald-200">camouflage</span>
-      </div>
-      <button onclick="resetSentence()" class="mt-3 text-xs text-rose-600 underline block">Reset Kalimat</button>
-    </section>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-amber-200">
+        <h2 class="text-xl font-bold text-amber-900 mb-2">Final Speech & Reflection</h2>
+        <textarea id="w6Notes" rows="3" class="w-full p-3 border-2 border-amber-200 rounded-xl text-sm mb-3" placeholder="Pesan dan kesan kamu..."></textarea>
+        
+        <div class="flex items-center gap-3">
+          <button id="w6RecBtn" onclick="toggleRecording(6)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Pidato Akhir</button>
+          <audio id="w6Audio" controls class="hidden h-10"></audio>
+        </div>
+      </section>
 
-    <!-- Submit Button -->
-    <button id="submitBtn" onclick="submitAll()" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-emerald-700 transition">
-      🚀 Kirim Tugas ke Guru
-    </button>
+      <button id="w6Submit" onclick="submitWeek(6, 'Grand Showcase Portfolio')" class="w-full py-4 bg-amber-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-amber-700">🏆 Submit Portofolio Akhir Program</button>
+    </div>
+
   </main>
 
   <script>
-    // Integration Credentials
     const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwgcfcfMx9CfCx-njEdz336BayzaUSUoH375cQ5X-3J1UK_ANsVzamK_CblIcp4FXps/exec";
     const DRIVE_FOLDER_ID = "19T7hUj80EBtXPJ-ZA_02vMHovz25AwlH";
 
-    // Text-to-Speech Engine
+    // Audio Engine Store per Week
+    const audioData = { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null };
+    let mediaRecorder, audioChunks = [], currentRecordingWeek = null;
+
+    // --- NAVIGASI MINGGU ---
+    function switchWeek(weekNum) {
+      document.querySelectorAll('.week-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`week-${weekNum}`).classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-white', 'text-emerald-800', 'shadow');
+        btn.classList.add('hover:bg-emerald-700');
+      });
+
+      const activeTab = document.getElementById(`tab-${weekNum}`);
+      activeTab.classList.add('bg-white', 'text-emerald-800', 'shadow');
+      activeTab.classList.remove('hover:bg-emerald-700');
+    }
+
+    // --- TTS (Text to Speech) ---
     function speak(text) {
       const msg = new SpeechSynthesisUtterance(text);
-      msg.lang = 'en-US';
-      msg.rate = 0.8;
+      msg.lang = 'en-US'; msg.rate = 0.8;
       window.speechSynthesis.speak(msg);
     }
 
-    // Drawing Canvas Engine (Mouse & Touch Support)
-    const canvas = document.getElementById('drawCanvas');
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
-
-    function getPos(e) {
-      const rect = canvas.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      return {
-        x: (clientX - rect.left) * (canvas.width / rect.width),
-        y: (clientY - rect.top) * (canvas.height / rect.height)
-      };
+    // --- SIMULATOR W3 ---
+    function triggerW3(step) {
+      const state = document.getElementById('w3State');
+      if (step === 1) { state.innerText = "💨 Step 1: Evaporation - Air menguap!"; speak("Evaporation"); }
+      if (step === 2) { state.innerText = "☁️ Step 2: Condensation - Awan terbentuk!"; speak("Condensation"); }
+      if (step === 3) { state.innerText = "🌧️ Step 3: Precipitation - Hujan turun!"; speak("Precipitation"); }
     }
 
-    function startDraw(e) {
-      drawing = true;
-      const pos = getPos(e);
-      ctx.beginPath();
-      ctx.moveTo(pos.x, pos.y);
+    // --- CANVAS ENGINE (W1, W4, W5) ---
+    function initCanvas(id) {
+      const c = document.getElementById(id);
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      let drawing = false;
+
+      function getPos(e) {
+        const rect = c.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: (clientX - rect.left) * (c.width / rect.width), y: (clientY - rect.top) * (c.height / rect.height) };
+      }
+      function startDraw(e) { drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }
+      function draw(e) {
+        if (!drawing) return; e.preventDefault();
+        const p = getPos(e); ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#059669';
+        ctx.lineTo(p.x, p.y); ctx.stroke();
+      }
+      function stopDraw() { drawing = false; ctx.beginPath(); }
+
+      c.addEventListener('mousedown', startDraw); c.addEventListener('mousemove', draw);
+      c.addEventListener('mouseup', stopDraw); c.addEventListener('mouseleave', stopDraw);
+      c.addEventListener('touchstart', startDraw); c.addEventListener('touchmove', draw); c.addEventListener('touchend', stopDraw);
     }
 
-    function draw(e) {
-      if (!drawing) return;
-      e.preventDefault();
-      const pos = getPos(e);
-      ctx.lineWidth = 3;
-      ctx.lineCap = 'round';
-      ctx.strokeStyle = '#059669';
-      ctx.lineTo(pos.x, pos.y);
-      ctx.stroke();
+    function clearCanvas(id) {
+      const c = document.getElementById(id);
+      if (c) c.getContext('2d').clearRect(0, 0, c.width, c.height);
     }
 
-    function stopDraw() {
-      drawing = false;
-      ctx.beginPath();
-    }
+    // Initialize all canvases
+    ['w1Canvas', 'w4Canvas', 'w5Canvas'].forEach(initCanvas);
 
-    canvas.addEventListener('mousedown', startDraw);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', stopDraw);
-    canvas.addEventListener('mouseleave', stopDraw);
-
-    canvas.addEventListener('touchstart', startDraw);
-    canvas.addEventListener('touchmove', draw);
-    canvas.addEventListener('touchend', stopDraw);
-
-    function clearCanvas() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    // Audio Recorder Engine (Fix Format & MimeType)
-    let mediaRecorder, audioChunks = [], audioBase64 = null;
-    
-    async function toggleRecording() {
-      const btn = document.getElementById('recBtn');
-
+    // --- AUDIO RECORDER ---
+    async function toggleRecording(week) {
+      const btn = document.getElementById(`w${week}RecBtn`);
       if (!mediaRecorder || mediaRecorder.state === "inactive") {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
-          // Pilih MIME type yang didukung oleh browser (termasuk Safari/Chrome)
-          let mimeType = 'audio/webm';
-          if (!MediaRecorder.isTypeSupported(mimeType)) {
-            if (MediaRecorder.isTypeSupported('audio/mp4')) {
-              mimeType = 'audio/mp4';
-            } else if (MediaRecorder.isTypeSupported('audio/ogg')) {
-              mimeType = 'audio/ogg';
-            } else {
-              mimeType = '';
-            }
-          }
-
+          let mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
           mediaRecorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
-          audioChunks = [];
-
-          mediaRecorder.ondataavailable = e => {
-            if (e.data.size > 0) audioChunks.push(e.data);
-          };
-
-          mediaRecorder.onstop = async () => {
-            const actualType = mediaRecorder.mimeType || 'audio/webm';
-            const blob = new Blob(audioChunks, { type: actualType });
-
-            // Set sumber audio preview
-            const audioPreview = document.getElementById('audioPreview');
+          audioChunks = []; currentRecordingWeek = week;
+          
+          mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+          mediaRecorder.onstop = () => {
+            const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+            const audioPreview = document.getElementById(`w${week}Audio`);
             audioPreview.src = URL.createObjectURL(blob);
-            audioPreview.classList.remove('hidden');
-            audioPreview.load();
-
-            // Convert ke Base64
-            const reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => {
-              audioBase64 = reader.result;
-            };
+            audioPreview.classList.remove('hidden'); audioPreview.load();
+            const reader = new FileReader(); reader.readAsDataURL(blob);
+            reader.onloadend = () => { audioData[week] = reader.result; };
           };
-
           mediaRecorder.start();
-          btn.innerText = "⏹️ Hentikan Rekaman";
-          btn.classList.replace('bg-rose-500', 'bg-slate-700');
-        } catch (err) {
-          alert("Izin akses mikrofon ditolak atau tidak didukung di perangkat ini.");
-        }
+          btn.innerText = "⏹️ Hentikan Rekaman"; btn.classList.replace('bg-rose-500', 'bg-slate-700');
+        } catch (err) { alert("Mikrofon tidak dapat diakses."); }
       } else {
         mediaRecorder.stop();
-        btn.innerText = "🎙️ Rekam Ulang";
-        btn.classList.replace('bg-slate-700', 'bg-rose-500');
+        btn.innerText = "🎙️ Rekam Ulang"; btn.classList.replace('bg-slate-700', 'bg-rose-500');
       }
     }
 
-    // Sentence Builder Engine
-    function addWord(el) {
-      const target = document.getElementById('sentence-target');
-      target.appendChild(el);
-    }
+    // --- SUBMISSION TO GAS ---
+    async function submitWeek(weekNum, taskName) {
+      const submitBtn = document.getElementById(`w${weekNum}Submit`);
+      submitBtn.disabled = true; submitBtn.innerText = "⏳ Mengirim Tugas...";
 
-    function resetSentence() {
-      const target = document.getElementById('sentence-target');
-      const bank = document.getElementById('word-bank');
-      while (target.firstChild) {
-        bank.appendChild(target.firstChild);
-      }
-    }
+      let textRes = "Task Completed";
+      let drawImg = "";
 
-    // Send Payload to Backend
-    async function submitAll() {
-      const imageBase64 = canvas.toDataURL('image/png');
-      const sentenceText = Array.from(document.getElementById('sentence-target').children)
-                                 .map(c => c.innerText).join(' ');
+      // Gather input per week
+      if (weekNum === 2) textRes = document.getElementById('w2Text').value || "Food chain order submitted";
+      if (weekNum === 3) textRes = document.getElementById('w3State').innerText;
+      if (weekNum === 5) textRes = document.getElementById('w5Slogan').value;
+      if (weekNum === 6) textRes = document.getElementById('w6Notes').value || "Final Showcase Completed";
 
-      if (!sentenceText) {
-        alert("Silakan susun kalimat terlebih dahulu!");
-        return;
-      }
-
-      const submitBtn = document.getElementById('submitBtn');
-      submitBtn.disabled = true;
-      submitBtn.innerText = "⏳ Mengirim Tugas...";
+      const canvasEl = document.getElementById(`w${weekNum}Canvas`);
+      if (canvasEl) drawImg = canvasEl.toDataURL('image/png');
 
       const payload = {
         action: "submitTask",
         folderId: DRIVE_FOLDER_ID,
         studentId: "STD-001",
         studentName: "Budi (Kelas 3)",
-        week: 1,
-        taskType: "Super Animal Task",
-        textResponse: sentenceText,
-        drawingBase64: imageBase64,
-        audioBase64: audioBase64
+        week: weekNum,
+        taskType: taskName,
+        textResponse: textRes,
+        drawingBase64: drawImg,
+        audioBase64: audioData[weekNum]
       };
 
       try {
         await fetch(GAS_ENDPOINT, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { 
-            "Content-Type": "text/plain;charset=utf-8" 
-          },
+          method: "POST", mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload)
         });
-
-        alert("Tugas Berhasil Terkirim! 🎉");
-      } catch (err) {
-        alert("Terjadi kesalahan koneksi saat mengirim tugas.");
-      } finally {
         submitBtn.disabled = false;
-        submitBtn.innerText = "🚀 Kirim Tugas ke Guru";
+        submitBtn.innerText = `🚀 Kirim Tugas Minggu ${weekNum}`;
+        alert(`Tugas Minggu ${weekNum} Berhasil Terkirim ke Guru! 🎉`);
+      } catch (err) {
+        alert("Terjadi kesalahan koneksi.");
+        submitBtn.disabled = false;
+        submitBtn.innerText = `🚀 Kirim Tugas Minggu ${weekNum}`;
       }
     }
   </script>
