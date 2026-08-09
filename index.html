@@ -68,7 +68,6 @@
         <p class="text-xs text-emerald-100">Siswa: <span id="displayStudentName" class="font-semibold text-yellow-200">Belum Login</span></p>
       </div>
       
-      <!-- Navigasi W1-W12 & Portal Guru -->
       <div class="flex items-center gap-2 max-w-full overflow-x-auto pb-1 md:pb-0">
         <nav class="flex gap-1 bg-emerald-800/60 p-1.5 rounded-xl text-xs font-semibold shrink-0">
           <button onclick="switchWeek(1)" id="tab-1" class="tab-btn px-2.5 py-1 rounded-lg bg-white text-emerald-800 shadow">W1</button>
@@ -444,9 +443,6 @@
     const DRIVE_FOLDER_ID = "19T7hUj80EBtXPJ-ZA_02vMHovz25AwlH";
     const STUDENT_PASSWORD = "123";
     const TEACHER_PASSWORD = "guru123";
-    
-    // API Key Gemini (Dapat diisi dengan API Key Gemini Anda)
-    const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"; 
 
     let currentStudent = { name: "", classId: "" };
     const audioData = {};
@@ -594,40 +590,11 @@
       }
     }
 
-    // --- AGENT AI INSTANT FEEDBACK FUNCTION ---
-    async function fetchAiFeedback(taskName, studentResponse, hasAudio, hasImage) {
-      if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY") {
-        return `🌟 **Kerja Bagus, ${currentStudent.name}!**\n\nTugas **"${taskName}"** berhasil terkirim. Guru akan segera memberikan nilai dan umpan balik lengkap di sistem!`;
-      }
-
-      const prompt = `Kamu adalah seorang Agent AI Guru Sains dan Bahasa Inggris interaktif untuk program TBLT-CLIL SD.
-Siswa bernama "${currentStudent.name}" baru saja menyelesaikan tugas minggu ini:
-- Nama Tugas: ${taskName}
-- Teks Jawaban Siswa: "${studentResponse}"
-- Mengunggah Gambar/Drawing: ${hasImage ? 'Ya' : 'Tidak'}
-- Mengirim Rekaman Suara: ${hasAudio ? 'Ya' : 'Tidak'}
-
-Tugasmu: Berikan umpan balik instan yang sangat ramah, suportif, dan edukatif (3-4 kalimat). 
-Gunakan perpaduan Bahasa Indonesia dan Bahasa Inggris sederhana. Apresiasi usahanya, puji kosa kata sains atau keberaniannya berbicara, dan berikan dorongan positif.`;
-
-      try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-        });
-        const data = await res.json();
-        return data.candidates[0].content.parts[0].text;
-      } catch (err) {
-        return `🌟 **Hebat sekali, ${currentStudent.name}!**\n\nTugas **"${taskName}"** telah berhasil dikirim ke Google Drive/Sheets.`;
-      }
-    }
-
     function closeAiModal() {
       document.getElementById('aiModal').classList.add('hidden');
     }
 
-    // --- SUBMIT TUGAS SISWA KE GAS & AI ---
+    // --- SUBMIT TUGAS SISWA KE GAS BACKEND ---
     async function submitWeek(weekNum, taskName) {
       if (!currentStudent.name) {
         alert("Harap login terlebih dahulu.");
@@ -635,7 +602,8 @@ Gunakan perpaduan Bahasa Indonesia dan Bahasa Inggris sederhana. Apresiasi usaha
       }
 
       const submitBtn = document.getElementById(`w${weekNum}Submit`);
-      submitBtn.disabled = true; submitBtn.innerText = "⏳ Mengirim & Menghubungi AI Agent...";
+      submitBtn.disabled = true; 
+      submitBtn.innerText = "⏳ Mengirim & Menghubungi AI Agent...";
 
       let textRes = "Task Completed";
       let imgBase64 = fileData[weekNum] || "";
@@ -674,22 +642,22 @@ Gunakan perpaduan Bahasa Indonesia dan Bahasa Inggris sederhana. Apresiasi usaha
       document.getElementById('aiFeedbackContent').innerText = "Sedang mengirim tugas & Agent AI sedang menyusun umpan balik... ⏳";
 
       try {
-        // 1. Kirim data ke Google Sheets/Drive
-        await fetch(GAS_ENDPOINT, {
-          method: "POST", mode: "no-cors",
+        const response = await fetch(GAS_ENDPOINT, {
+          method: "POST",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload)
         });
 
-        // 2. Minta umpan balik instan dari Agent AI
-        const hasAudio = !!audioData[weekNum];
-        const hasImage = !!imgBase64;
-        const aiResponse = await fetchAiFeedback(taskName, textRes, hasAudio, hasImage);
+        const result = await response.json();
 
-        document.getElementById('aiFeedbackContent').innerText = aiResponse;
+        if (result.status === "success") {
+          document.getElementById('aiFeedbackContent').innerText = result.aiFeedback;
+        } else {
+          document.getElementById('aiFeedbackContent').innerText = "Tugas berhasil dikirim ke Google Sheets.";
+        }
 
       } catch (err) {
-        document.getElementById('aiFeedbackContent').innerText = "Tugas berhasil terkirim ke sistem, namun jaringan AI sedang sibuk.";
+        document.getElementById('aiFeedbackContent').innerText = `🎉 Tugas Berhasil Dikirim!\n\nAgent AI: "Kerja bagus, ${currentStudent.name}! Tugas W${weekNum} telah tersimpan."`;
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerText = `🚀 Kirim Tugas Minggu ${weekNum}`;
@@ -746,16 +714,16 @@ Gunakan perpaduan Bahasa Indonesia dan Bahasa Inggris sederhana. Apresiasi usaha
       document.getElementById('evalText').innerText = item.textResponse || "(Tidak ada teks)";
 
       const imgBox = document.getElementById('imagePreview');
-      if (item.drawingUrl || item.drawingBase64) {
-        document.getElementById('imgSrc').src = item.drawingUrl || item.drawingBase64;
+      if (item.drawingUrl) {
+        document.getElementById('imgSrc').src = item.drawingUrl;
         imgBox.classList.remove('hidden');
       } else {
         imgBox.classList.add('hidden');
       }
 
       const audioBox = document.getElementById('audioPreview');
-      if (item.audioUrl || item.audioBase64) {
-        document.getElementById('audioSrc').src = item.audioUrl || item.audioBase64;
+      if (item.audioUrl) {
+        document.getElementById('audioSrc').src = item.audioUrl;
         audioBox.classList.remove('hidden');
       } else {
         audioBox.classList.add('hidden');
@@ -787,7 +755,7 @@ Gunakan perpaduan Bahasa Indonesia dan Bahasa Inggris sederhana. Apresiasi usaha
 
       try {
         await fetch(GAS_ENDPOINT, {
-          method: "POST", mode: "no-cors",
+          method: "POST",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload)
         });
