@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinguaExplorer - Student Portal</title>
+  <title>LinguaExplorer - 12 Weeks TBLT-CLIL Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen select-none pb-10">
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen select-none pb-12">
 
-  <!-- MODAL LOGIN / INPUT NAMA & PASSWORD -->
+  <!-- MODAL LOGIN / INPUT IDENTITAS & PASSWORD -->
   <div id="loginModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 w-full max-w-md border-4 border-emerald-500">
       <div class="text-center mb-6">
         <h1 class="text-3xl font-extrabold text-emerald-700">🌿 LinguaExplorer</h1>
-        <p class="text-xs text-slate-500 font-semibold mt-1">Masukkan Identitas Siswa untuk Memulai</p>
+        <p class="text-xs text-slate-500 font-semibold mt-1">Siswa Login - 12 Weeks TBLT-CLIL Program</p>
       </div>
 
       <form onsubmit="handleLogin(event)" class="space-y-4">
@@ -29,198 +29,279 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Password / PIN Akses</label>
-          <input type="password" id="inputPassword" required placeholder="Masukkan PIN/Password" class="w-full p-3 border-2 border-slate-200 rounded-xl font-semibold focus:border-emerald-500 focus:outline-none">
+          <input type="password" id="inputPassword" required placeholder="Masukkan Password" class="w-full p-3 border-2 border-slate-200 rounded-xl font-semibold focus:border-emerald-500 focus:outline-none">
         </div>
 
         <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition">
-          🔓 Masuk ke Modul Pembelajaran
+          🔓 Masuk ke Portal Pembelajaran
         </button>
       </form>
     </div>
   </div>
 
-  <!-- HEADER PROGRAM (Hanya Aktif Setelah Login) -->
+  <!-- HEADER PROGRAM & NAVIGASI TAB W1-W12 -->
   <header class="bg-emerald-600 text-white p-4 shadow-lg sticky top-0 z-40">
-    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
       <div>
         <h1 class="text-2xl font-bold tracking-wide">🌿 LinguaExplorer</h1>
         <p class="text-xs text-emerald-100">Siswa: <span id="displayStudentName" class="font-semibold text-yellow-200">Belum Login</span></p>
       </div>
       
-      <!-- Tab Menu Navigasi Minggu -->
-      <nav class="flex gap-1 bg-emerald-800/60 p-1.5 rounded-xl text-xs sm:text-sm font-semibold">
-        <button onclick="switchWeek(1)" id="tab-1" class="tab-btn px-3 py-1.5 rounded-lg bg-white text-emerald-800 shadow">W1</button>
-        <button onclick="switchWeek(2)" id="tab-2" class="tab-btn px-3 py-1.5 rounded-lg hover:bg-emerald-700">W2</button>
-        <button onclick="switchWeek(3)" id="tab-3" class="tab-btn px-3 py-1.5 rounded-lg hover:bg-emerald-700">W3</button>
-        <button onclick="switchWeek(4)" id="tab-4" class="tab-btn px-3 py-1.5 rounded-lg hover:bg-emerald-700">W4</button>
-        <button onclick="switchWeek(5)" id="tab-5" class="tab-btn px-3 py-1.5 rounded-lg hover:bg-emerald-700">W5</button>
-        <button onclick="switchWeek(6)" id="tab-6" class="tab-btn px-3 py-1.5 rounded-lg hover:bg-emerald-700">W6</button>
+      <!-- Tab Navigasi 12 Minggu -->
+      <nav class="flex flex-wrap justify-center gap-1 bg-emerald-800/60 p-1.5 rounded-xl text-xs font-semibold max-w-full overflow-x-auto">
+        <button onclick="switchWeek(1)" id="tab-1" class="tab-btn px-2.5 py-1 rounded-lg bg-white text-emerald-800 shadow">W1</button>
+        <button onclick="switchWeek(2)" id="tab-2" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W2</button>
+        <button onclick="switchWeek(3)" id="tab-3" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W3</button>
+        <button onclick="switchWeek(4)" id="tab-4" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W4</button>
+        <button onclick="switchWeek(5)" id="tab-5" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W5</button>
+        <button onclick="switchWeek(6)" id="tab-6" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W6</button>
+        <button onclick="switchWeek(7)" id="tab-7" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W7</button>
+        <button onclick="switchWeek(8)" id="tab-8" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W8</button>
+        <button onclick="switchWeek(9)" id="tab-9" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W9</button>
+        <button onclick="switchWeek(10)" id="tab-10" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W10</button>
+        <button onclick="switchWeek(11)" id="tab-11" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W11</button>
+        <button onclick="switchWeek(12)" id="tab-12" class="tab-btn px-2.5 py-1 rounded-lg hover:bg-emerald-700">W12</button>
       </nav>
     </div>
   </header>
 
   <main class="max-w-4xl mx-auto p-4 space-y-6">
 
-    <!-- WEEK 1 -->
+    <!-- ==================== MODUL 1: NATURAL SCIENCES ==================== -->
+
+    <!-- WEEK 1: Animal Adaptations -->
     <div id="week-1" class="week-content space-y-6">
+      <div class="bg-emerald-100 p-4 rounded-xl border-l-4 border-emerald-600"><h2 class="font-bold text-emerald-900">Module 1 - Week 1: Animal Adaptations</h2></div>
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
-        <h2 class="text-xl font-bold text-emerald-800 mb-2">1. Pre-Task: Animal Sounds & Names</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          <button onclick="speak('Lion')" class="p-3 bg-emerald-50 rounded-xl font-bold text-emerald-900 border border-emerald-200">🔊 Lion</button>
-          <button onclick="speak('Elephant')" class="p-3 bg-emerald-50 rounded-xl font-bold text-emerald-900 border border-emerald-200">🔊 Elephant</button>
-          <button onclick="speak('Monkey')" class="p-3 bg-emerald-50 rounded-xl font-bold text-emerald-900 border border-emerald-200">🔊 Monkey</button>
+        <h3 class="font-bold text-emerald-800 mb-2">1. Pre-Task Vocab (Audio)</h3>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="speak('Habitat')" class="px-3 py-2 bg-emerald-50 rounded-xl font-semibold border">🔊 Habitat</button>
+          <button onclick="speak('Camouflage')" class="px-3 py-2 bg-emerald-50 rounded-xl font-semibold border">🔊 Camouflage</button>
+          <button onclick="speak('Sharp Claws')" class="px-3 py-2 bg-emerald-50 rounded-xl font-semibold border">🔊 Sharp Claws</button>
         </div>
       </section>
-
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
-        <h2 class="text-xl font-bold text-emerald-800 mb-2">2. Main Task: Draw Your Favorite Animal</h2>
+        <h3 class="font-bold text-emerald-800 mb-2">2. Main Task: Draw Your Super Animal</h3>
         <canvas id="w1Canvas" width="400" height="200" class="border-2 border-dashed border-emerald-300 rounded-xl bg-amber-50/20 w-full cursor-crosshair touch-none"></canvas>
-        <button onclick="clearCanvas('w1Canvas')" class="mt-2 px-3 py-1 bg-slate-200 text-xs rounded-lg">Bersihkan Canvas</button>
+        <button onclick="clearCanvas('w1Canvas')" class="mt-2 px-3 py-1 bg-slate-200 text-xs rounded-lg">Clear Canvas</button>
       </section>
-
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
-        <h2 class="text-xl font-bold text-emerald-800 mb-2">3. Oral Task: Describe Your Animal</h2>
-        <div class="flex items-center gap-3">
-          <button id="w1RecBtn" onclick="toggleRecording(1)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
-          <audio id="w1Audio" controls class="hidden h-10"></audio>
-        </div>
+        <h3 class="font-bold text-emerald-800 mb-2">3. Oral Task: Describe Your Animal</h3>
+        <button id="w1RecBtn" onclick="toggleRecording(1)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
+        <audio id="w1Audio" controls class="hidden h-10 mt-2"></audio>
       </section>
-
-      <button id="w1Submit" onclick="submitWeek(1, 'Super Animal Studio')" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-emerald-700">🚀 Kirim Tugas Minggu 1</button>
+      <button id="w1Submit" onclick="submitWeek(1, 'Super Animal Studio')" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W1</button>
     </div>
 
-    <!-- WEEK 2 -->
+    <!-- WEEK 2: Food Chains & Webs -->
     <div id="week-2" class="week-content hidden space-y-6">
-      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-teal-100">
-        <h2 class="text-xl font-bold text-teal-800 mb-2">1. Pre-Task: Food Chain Vocab</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          <button onclick="speak('Producer')" class="p-3 bg-teal-50 rounded-xl font-bold text-teal-900 border border-teal-200">🔊 Producer</button>
-          <button onclick="speak('Herbivore')" class="p-3 bg-teal-50 rounded-xl font-bold text-teal-900 border border-teal-200">🔊 Herbivore</button>
-          <button onclick="speak('Carnivore')" class="p-3 bg-teal-50 rounded-xl font-bold text-teal-900 border border-teal-200">🔊 Carnivore</button>
+      <div class="bg-emerald-100 p-4 rounded-xl border-l-4 border-emerald-600"><h2 class="font-bold text-emerald-900">Module 1 - Week 2: Food Chains & Webs</h2></div>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
+        <h3 class="font-bold text-emerald-800 mb-2">1. Pre-Task Vocab</h3>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="speak('Producer')" class="px-3 py-2 bg-emerald-50 rounded-xl font-semibold border">🔊 Producer</button>
+          <button onclick="speak('Consumer')" class="px-3 py-2 bg-emerald-50 rounded-xl font-semibold border">🔊 Consumer</button>
+          <button onclick="speak('Predator')" class="px-3 py-2 bg-emerald-50 rounded-xl font-semibold border">🔊 Predator</button>
         </div>
       </section>
-
-      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-teal-100">
-        <h2 class="text-xl font-bold text-teal-800 mb-2">2. Main Task: Food Chain Order</h2>
-        <input type="text" id="w2Text" class="w-full p-3 border-2 border-teal-200 rounded-xl font-bold text-teal-900" placeholder="Ketik urutan di sini (misal: Grass -> Zebra -> Lion)...">
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
+        <h3 class="font-bold text-emerald-800 mb-2">2. Main Task: Arrange Food Chain Sequence</h3>
+        <input type="text" id="w2Text" class="w-full p-3 border-2 rounded-xl font-semibold" placeholder="Urutan: Grass -> Zebra -> Lion">
       </section>
-
-      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-teal-100">
-        <h2 class="text-xl font-bold text-teal-800 mb-2">3. Oral Task: Explain Food Chain</h2>
-        <div class="flex items-center gap-3">
-          <button id="w2RecBtn" onclick="toggleRecording(2)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
-          <audio id="w2Audio" controls class="hidden h-10"></audio>
-        </div>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
+        <h3 class="font-bold text-emerald-800 mb-2">3. Oral Task: Explain Ecosystem Chain</h3>
+        <button id="w2RecBtn" onclick="toggleRecording(2)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
+        <audio id="w2Audio" controls class="hidden h-10 mt-2"></audio>
       </section>
-
-      <button id="w2Submit" onclick="submitWeek(2, 'Food Chain Puzzle')" class="w-full py-4 bg-teal-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-teal-700">🚀 Kirim Tugas Minggu 2</button>
+      <button id="w2Submit" onclick="submitWeek(2, 'Ecosystem Web')" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W2</button>
     </div>
 
-    <!-- WEEK 3 -->
+    <!-- WEEK 3: Rainforest Layers -->
     <div id="week-3" class="week-content hidden space-y-6">
-      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
-        <h2 class="text-xl font-bold text-sky-800 mb-2">1. Pre-Task: Water Cycle Words</h2>
-        <div class="grid grid-cols-3 gap-2">
-          <button onclick="speak('Evaporation')" class="p-3 bg-sky-50 rounded-xl font-bold text-sky-900 border border-sky-200">🔊 Evaporation</button>
-          <button onclick="speak('Condensation')" class="p-3 bg-sky-50 rounded-xl font-bold text-sky-900 border border-sky-200">🔊 Condensation</button>
-          <button onclick="speak('Precipitation')" class="p-3 bg-sky-50 rounded-xl font-bold text-sky-900 border border-sky-200">🔊 Precipitation</button>
-        </div>
+      <div class="bg-emerald-100 p-4 rounded-xl border-l-4 border-emerald-600"><h2 class="font-bold text-emerald-900">Module 1 - Week 3: Rainforest Layers</h2></div>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
+        <h3 class="font-bold text-emerald-800 mb-2">1. Main Task: 3D Diorama Note & Upload Foto</h3>
+        <textarea id="w3Notes" class="w-full p-3 border-2 rounded-xl text-sm mb-3" placeholder="Tuliskan 4 lapisan hutan hujan yang kamu buat pada diorama..."></textarea>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Unggah Foto Diorama (Opsional):</label>
+        <input type="file" id="w3File" accept="image/*" class="w-full text-sm border p-2 rounded-xl">
       </section>
-
-      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
-        <h2 class="text-xl font-bold text-sky-800 mb-2">2. Main Task: Simulator Siklus Air</h2>
-        <div class="bg-sky-100 p-4 rounded-xl text-center mb-3">
-          <p id="w3State" class="font-bold text-sky-900">Klik tombol di bawah untuk menjalankan simulator!</p>
-        </div>
-        <div class="grid grid-cols-3 gap-2">
-          <button onclick="triggerW3(1)" class="p-2 bg-sky-500 text-white rounded-lg font-bold">1. Evap</button>
-          <button onclick="triggerW3(2)" class="p-2 bg-sky-600 text-white rounded-lg font-bold">2. Cond</button>
-          <button onclick="triggerW3(3)" class="p-2 bg-sky-700 text-white rounded-lg font-bold">3. Precip</button>
-        </div>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
+        <h3 class="font-bold text-emerald-800 mb-2">2. Oral Task: Present Your Diorama</h3>
+        <button id="w3RecBtn" onclick="toggleRecording(3)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
+        <audio id="w3Audio" controls class="hidden h-10 mt-2"></audio>
       </section>
-
-      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
-        <h2 class="text-xl font-bold text-sky-800 mb-2">3. Oral Task: Explain Water Cycle</h2>
-        <div class="flex items-center gap-3">
-          <button id="w3RecBtn" onclick="toggleRecording(3)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
-          <audio id="w3Audio" controls class="hidden h-10"></audio>
-        </div>
-      </section>
-
-      <button id="w3Submit" onclick="submitWeek(3, 'Water Cycle Simulator')" class="w-full py-4 bg-sky-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-sky-700">🚀 Kirim Tugas Minggu 3</button>
+      <button id="w3Submit" onclick="submitWeek(3, 'Rainforest Diorama')" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W3</button>
     </div>
 
-    <!-- WEEK 4 -->
+    <!-- WEEK 4: Endangered Species -->
     <div id="week-4" class="week-content hidden space-y-6">
-      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-lime-100">
-        <h2 class="text-xl font-bold text-lime-800 mb-2">1. Pre-Task: Plant Vocab</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <button onclick="speak('Roots')" class="p-2 bg-lime-50 font-bold text-lime-900 border border-lime-200 rounded-xl">🔊 Roots</button>
-          <button onclick="speak('Stem')" class="p-2 bg-lime-50 font-bold text-lime-900 border border-lime-200 rounded-xl">🔊 Stem</button>
-          <button onclick="speak('Leaves')" class="p-2 bg-lime-50 font-bold text-lime-900 border border-lime-200 rounded-xl">🔊 Leaves</button>
-          <button onclick="speak('Sunlight')" class="p-2 bg-lime-50 font-bold text-lime-900 border border-lime-200 rounded-xl">🔊 Sunlight</button>
-        </div>
+      <div class="bg-emerald-100 p-4 rounded-xl border-l-4 border-emerald-600"><h2 class="font-bold text-emerald-900">Module 1 - Week 4: Endangered Species Campaign</h2></div>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
+        <h3 class="font-bold text-emerald-800 mb-2">1. Main Task: Draw Save Species Poster</h3>
+        <canvas id="w4Canvas" width="400" height="200" class="border-2 border-dashed border-emerald-300 rounded-xl bg-amber-50/20 w-full cursor-crosshair touch-none"></canvas>
+        <button onclick="clearCanvas('w4Canvas')" class="mt-2 px-3 py-1 bg-slate-200 text-xs rounded-lg">Clear Canvas</button>
       </section>
-
-      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-lime-100">
-        <h2 class="text-xl font-bold text-lime-800 mb-2">2. Main Task: Gambar Fotosintesis</h2>
-        <canvas id="w4Canvas" width="400" height="200" class="border-2 border-dashed border-lime-300 rounded-xl bg-lime-50/30 w-full cursor-crosshair touch-none"></canvas>
-        <button onclick="clearCanvas('w4Canvas')" class="mt-2 px-3 py-1 bg-slate-200 text-xs rounded-lg">Bersihkan Canvas</button>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
+        <h3 class="font-bold text-emerald-800 mb-2">2. Oral Task: Campaign Audio (1 Min)</h3>
+        <button id="w4RecBtn" onclick="toggleRecording(4)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
+        <audio id="w4Audio" controls class="hidden h-10 mt-2"></audio>
       </section>
-
-      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-lime-100">
-        <h2 class="text-xl font-bold text-lime-800 mb-2">3. Oral Task: Photosynthesis Speech</h2>
-        <div class="flex items-center gap-3">
-          <button id="w4RecBtn" onclick="toggleRecording(4)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
-          <audio id="w4Audio" controls class="hidden h-10"></audio>
-        </div>
-      </section>
-
-      <button id="w4Submit" onclick="submitWeek(4, 'Plant & Photosynthesis')" class="w-full py-4 bg-lime-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-lime-700">🚀 Kirim Tugas Minggu 4</button>
+      <button id="w4Submit" onclick="submitWeek(4, 'Save Species Campaign')" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-lg">🏆 Kirim Sumatif Modul 1 (W4)</button>
     </div>
 
-    <!-- WEEK 5 -->
+    <!-- ==================== MODUL 2: EARTH & ENVIRONMENT ==================== -->
+
+    <!-- WEEK 5: Water Cycle -->
     <div id="week-5" class="week-content hidden space-y-6">
-      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
-        <h2 class="text-xl font-bold text-emerald-800 mb-2">1. Main Task: Desain Eco Poster</h2>
-        <select id="w5Slogan" class="w-full p-3 mb-3 border-2 border-emerald-200 rounded-xl font-bold text-emerald-800">
-          <option value="Save Our Planet!">🌍 Save Our Planet!</option>
-          <option value="Plant More Trees!">🌱 Plant More Trees!</option>
-          <option value="Keep Clean!">🌊 Keep Ocean Clean!</option>
-        </select>
-        <canvas id="w5Canvas" width="400" height="200" class="border-2 border-dashed border-emerald-300 rounded-xl bg-amber-50/20 w-full cursor-crosshair touch-none"></canvas>
-        <button onclick="clearCanvas('w5Canvas')" class="mt-2 px-3 py-1 bg-slate-200 text-xs rounded-lg">Bersihkan Canvas</button>
-      </section>
-
-      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-emerald-100">
-        <h2 class="text-xl font-bold text-emerald-800 mb-2">2. Oral Task: Eco Speech</h2>
-        <div class="flex items-center gap-3">
-          <button id="w5RecBtn" onclick="toggleRecording(5)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
-          <audio id="w5Audio" controls class="hidden h-10"></audio>
+      <div class="bg-sky-100 p-4 rounded-xl border-l-4 border-sky-600"><h2 class="font-bold text-sky-900">Module 2 - Week 5: The Water Cycle</h2></div>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
+        <h3 class="font-bold text-sky-800 mb-2">1. Main Task: Interactive Simulator</h3>
+        <div class="bg-sky-50 p-3 rounded-xl text-center font-bold text-sky-900 mb-3" id="w5State">Klik tombol untuk menjalankan simulator</div>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="triggerW5(1)" class="p-2 bg-sky-500 text-white rounded-lg font-bold text-xs">1. Evaporation</button>
+          <button onclick="triggerW5(2)" class="p-2 bg-sky-600 text-white rounded-lg font-bold text-xs">2. Condensation</button>
+          <button onclick="triggerW5(3)" class="p-2 bg-sky-700 text-white rounded-lg font-bold text-xs">3. Precipitation</button>
         </div>
       </section>
-
-      <button id="w5Submit" onclick="submitWeek(5, 'Eco Poster Studio')" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-emerald-700">🚀 Kirim Tugas Minggu 5</button>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
+        <h3 class="font-bold text-sky-800 mb-2">2. Oral Task: Explain Water Process</h3>
+        <button id="w5RecBtn" onclick="toggleRecording(5)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
+        <audio id="w5Audio" controls class="hidden h-10 mt-2"></audio>
+      </section>
+      <button id="w5Submit" onclick="submitWeek(5, 'Water Cycle Simulator')" class="w-full py-4 bg-sky-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W5</button>
     </div>
 
-    <!-- WEEK 6 -->
+    <!-- WEEK 6: Extreme Weather -->
     <div id="week-6" class="week-content hidden space-y-6">
-      <div class="bg-gradient-to-r from-amber-400 to-amber-500 text-white p-6 rounded-2xl text-center shadow-md">
-        <h2 class="text-3xl font-extrabold mb-1">🎉 Final Grand Showcase</h2>
-        <p class="text-amber-100 text-sm">Selamat telah menyelesaikan seluruh modul pembelajaran!</p>
+      <div class="bg-sky-100 p-4 rounded-xl border-l-4 border-sky-600"><h2 class="font-bold text-sky-900">Module 2 - Week 6: Extreme Weather Reporter</h2></div>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
+        <h3 class="font-bold text-sky-800 mb-2">1. Main Task: Weather Report Script</h3>
+        <textarea id="w6Script" class="w-full p-3 border-2 rounded-xl text-sm" placeholder="Script: Today in [City], it is snowing/raining heavily..."></textarea>
+      </section>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
+        <h3 class="font-bold text-sky-800 mb-2">2. Oral Task: Weather Forecast Report</h3>
+        <button id="w6RecBtn" onclick="toggleRecording(6)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Siaran Berita</button>
+        <audio id="w6Audio" controls class="hidden h-10 mt-2"></audio>
+      </section>
+      <button id="w6Submit" onclick="submitWeek(6, 'Weather News Report')" class="w-full py-4 bg-sky-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W6</button>
+    </div>
+
+    <!-- WEEK 7: Renewable Energy -->
+    <div id="week-7" class="week-content hidden space-y-6">
+      <div class="bg-sky-100 p-4 rounded-xl border-l-4 border-sky-600"><h2 class="font-bold text-sky-900">Module 2 - Week 7: Renewable Energy Windmill</h2></div>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
+        <h3 class="font-bold text-sky-800 mb-2">1. Main Task: Upload Foto Kincir Angin (Windmill)</h3>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Unggah Foto Hasil STEM Challenge:</label>
+        <input type="file" id="w7File" accept="image/*" class="w-full text-sm border p-2 rounded-xl mb-3">
+        <input type="text" id="w7Text" class="w-full p-3 border-2 rounded-xl text-sm" placeholder="When wind blows, it generates electricity...">
+      </section>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
+        <h3 class="font-bold text-sky-800 mb-2">2. Oral Task: Explain Energy Generation</h3>
+        <button id="w7RecBtn" onclick="toggleRecording(7)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
+        <audio id="w7Audio" controls class="hidden h-10 mt-2"></audio>
+      </section>
+      <button id="w7Submit" onclick="submitWeek(7, 'Windmill STEM Challenge')" class="w-full py-4 bg-sky-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W7</button>
+    </div>
+
+    <!-- WEEK 8: Zero Waste & Recycling -->
+    <div id="week-8" class="week-content hidden space-y-6">
+      <div class="bg-sky-100 p-4 rounded-xl border-l-4 border-sky-600"><h2 class="font-bold text-sky-900">Module 2 - Week 8: Zero Waste & Bin System</h2></div>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
+        <h3 class="font-bold text-sky-800 mb-2">1. Main Task: Waste Audit Checklist</h3>
+        <div class="space-y-2 text-sm font-semibold">
+          <label class="flex items-center gap-2"><input type="checkbox" class="w8Check" value="Plastic Bottle -> Blue Bin"> Plastic Bottle -> Blue Bin (Recycle)</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="w8Check" value="Food Scraps -> Green Bin"> Food Scraps -> Green Bin (Compost)</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="w8Check" value="Paper -> Yellow Bin"> Paper & Cardboard -> Yellow Bin</label>
+        </div>
+      </section>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-sky-100">
+        <h3 class="font-bold text-sky-800 mb-2">2. Oral Task: Sorting Instruction Speech</h3>
+        <button id="w8RecBtn" onclick="toggleRecording(8)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
+        <audio id="w8Audio" controls class="hidden h-10 mt-2"></audio>
+      </section>
+      <button id="w8Submit" onclick="submitWeek(8, 'Zero Waste Action Plan')" class="w-full py-4 bg-sky-600 text-white rounded-2xl font-bold text-lg">🏆 Kirim Sumatif Modul 2 (W8)</button>
+    </div>
+
+    <!-- ==================== MODUL 3: PHYSICAL GEOGRAPHY ==================== -->
+
+    <!-- WEEK 9: Volcanoes -->
+    <div id="week-9" class="week-content hidden space-y-6">
+      <div class="bg-amber-100 p-4 rounded-xl border-l-4 border-amber-600"><h2 class="font-bold text-amber-900">Module 3 - Week 9: Volcano Eruption</h2></div>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-amber-100">
+        <h3 class="font-bold text-amber-800 mb-2">1. Main Task: Vocab Matching Quiz</h3>
+        <select id="w9Q1" class="w-full p-2 border rounded-xl mb-2 text-sm">
+          <option value="">Pilih Arti 'Magma'...</option>
+          <option value="Hot liquid rock inside volcano">Hot liquid rock inside volcano</option>
+          <option value="Rock outside volcano">Rock outside volcano</option>
+        </select>
+        <select id="w9Q2" class="w-full p-2 border rounded-xl text-sm">
+          <option value="">Pilih Arti 'Lava'...</option>
+          <option value="Liquid rock flowing outside">Liquid rock flowing outside</option>
+          <option value="Cold water">Cold water</option>
+        </select>
+      </section>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-amber-100">
+        <h3 class="font-bold text-amber-800 mb-2">2. Oral Task: Explain Eruption Reaction</h3>
+        <button id="w9RecBtn" onclick="toggleRecording(9)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara</button>
+        <audio id="w9Audio" controls class="hidden h-10 mt-2"></audio>
+      </section>
+      <button id="w9Submit" onclick="submitWeek(9, 'Volcano Eruption')" class="w-full py-4 bg-amber-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W9</button>
+    </div>
+
+    <!-- WEEK 10: Treasure Maps -->
+    <div id="week-10" class="week-content hidden space-y-6">
+      <div class="bg-amber-100 p-4 rounded-xl border-l-4 border-amber-600"><h2 class="font-bold text-amber-900">Module 3 - Week 10: Map Navigation</h2></div>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-amber-100">
+        <h3 class="font-bold text-amber-800 mb-2">1. Main Task: Treasure Coordinate Grid Input</h3>
+        <div class="grid grid-cols-2 gap-2 text-sm">
+          <input type="text" id="w10Coord" placeholder="Koordinat Harta (misal: B3)" class="p-2 border rounded-xl">
+          <input type="text" id="w10Dir" placeholder="Petunjuk (misal: Go straight 2 steps)" class="p-2 border rounded-xl">
+        </div>
+      </section>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-amber-100">
+        <h3 class="font-bold text-amber-800 mb-2">2. Oral Task: Navigation Audio Prompt</h3>
+        <button id="w10RecBtn" onclick="toggleRecording(10)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Suara Navigasi</button>
+        <audio id="w10Audio" controls class="hidden h-10 mt-2"></audio>
+      </section>
+      <button id="w10Submit" onclick="submitWeek(10, 'Treasure Map Task')" class="w-full py-4 bg-amber-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W10</button>
+    </div>
+
+    <!-- WEEK 11: Travel Agent Pitch -->
+    <div id="week-11" class="week-content hidden space-y-6">
+      <div class="bg-amber-100 p-4 rounded-xl border-l-4 border-amber-600"><h2 class="font-bold text-amber-900">Module 3 - Week 11: Natural Wonders Travel Pitch</h2></div>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-amber-100">
+        <h3 class="font-bold text-amber-800 mb-2">1. Main Task: Travel Brochure Upload & Script</h3>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Unggah Poster/Brosur Wisata:</label>
+        <input type="file" id="w11File" accept="image/*" class="w-full text-sm border p-2 rounded-xl mb-3">
+        <textarea id="w11Script" class="w-full p-3 border-2 rounded-xl text-sm" placeholder="Pitching: Welcome to Komodo Island! You can see..."></textarea>
+      </section>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-amber-100">
+        <h3 class="font-bold text-amber-800 mb-2">2. Oral Task: Promo Pitch Audio</h3>
+        <button id="w11RecBtn" onclick="toggleRecording(11)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Pitching Promosi</button>
+        <audio id="w11Audio" controls class="hidden h-10 mt-2"></audio>
+      </section>
+      <button id="w11Submit" onclick="submitWeek(11, 'Travel Pitch Task')" class="w-full py-4 bg-amber-600 text-white rounded-2xl font-bold text-lg">🚀 Kirim Tugas W11</button>
+    </div>
+
+    <!-- WEEK 12: Capstone Grand Showcase -->
+    <div id="week-12" class="week-content hidden space-y-6">
+      <div class="bg-gradient-to-r from-amber-500 to-emerald-600 text-white p-6 rounded-2xl text-center shadow-lg">
+        <h2 class="text-3xl font-extrabold mb-1">🎓 Capstone Grand Showcase Expo</h2>
+        <p class="text-xs">Junior Scientist & Explorer Expo Final Presentation</p>
       </div>
 
       <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-amber-200">
-        <h2 class="text-xl font-bold text-amber-900 mb-2">Final Speech & Reflection</h2>
-        <textarea id="w6Notes" rows="3" class="w-full p-3 border-2 border-amber-200 rounded-xl text-sm mb-3" placeholder="Pesan dan kesan kamu..."></textarea>
-        
-        <div class="flex items-center gap-3">
-          <button id="w6RecBtn" onclick="toggleRecording(6)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Pidato Akhir</button>
-          <audio id="w6Audio" controls class="hidden h-10"></audio>
-        </div>
+        <h3 class="font-bold text-amber-900 mb-2">1. Final Self-Reflection & Portfolio Summary</h3>
+        <textarea id="w12Reflection" rows="3" class="w-full p-3 border-2 border-amber-200 rounded-xl text-sm mb-3" placeholder="Pesan, kesan, dan modul sains terfavorit selama 12 minggu..."></textarea>
       </section>
 
-      <button id="w6Submit" onclick="submitWeek(6, 'Grand Showcase Portfolio')" class="w-full py-4 bg-amber-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-amber-700">🏆 Submit Portofolio Akhir Program</button>
+      <section class="bg-white p-6 rounded-2xl shadow-md border-2 border-amber-200">
+        <h3 class="font-bold text-amber-900 mb-2">2. Final Expo Oral Speech (Summary Presentation)</h3>
+        <button id="w12RecBtn" onclick="toggleRecording(12)" class="px-4 py-2 bg-rose-500 text-white rounded-xl font-bold shadow">🎙️ Rekam Pidato Expo Akhir</button>
+        <audio id="w12Audio" controls class="hidden h-10 mt-2"></audio>
+      </section>
+
+      <button id="w12Submit" onclick="submitWeek(12, 'Capstone Showcase')" class="w-full py-4 bg-amber-600 text-white rounded-2xl font-bold text-lg shadow-xl">🏆 Submit Capstone Portfolio Program</button>
     </div>
 
   </main>
@@ -228,13 +309,11 @@
   <script>
     const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwgcfcfMx9CfCx-njEdz336BayzaUSUoH375cQ5X-3J1UK_ANsVzamK_CblIcp4FXps/exec";
     const DRIVE_FOLDER_ID = "19T7hUj80EBtXPJ-ZA_02vMHovz25AwlH";
-    const VALID_PASSWORD = "123"; // Ganti password sesuai keinginan (misal: 123)
+    const VALID_PASSWORD = "123";
 
-    // Variable Identitas Siswa
     let currentStudent = { name: "", classId: "" };
-
-    // Audio Engine Store
-    const audioData = { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null };
+    const audioData = {};
+    const fileData = {};
     let mediaRecorder, audioChunks = [];
 
     // --- HANDLE LOGIN ---
@@ -267,8 +346,10 @@
       });
 
       const activeTab = document.getElementById(`tab-${weekNum}`);
-      activeTab.classList.add('bg-white', 'text-emerald-800', 'shadow');
-      activeTab.classList.remove('hover:bg-emerald-700');
+      if (activeTab) {
+        activeTab.classList.add('bg-white', 'text-emerald-800', 'shadow');
+        activeTab.classList.remove('hover:bg-emerald-700');
+      }
     }
 
     // --- TTS (Text to Speech) ---
@@ -278,15 +359,15 @@
       window.speechSynthesis.speak(msg);
     }
 
-    // --- SIMULATOR W3 ---
-    function triggerW3(step) {
-      const state = document.getElementById('w3State');
-      if (step === 1) { state.innerText = "💨 Step 1: Evaporation - Air menguap!"; speak("Evaporation"); }
-      if (step === 2) { state.innerText = "☁️ Step 2: Condensation - Awan terbentuk!"; speak("Condensation"); }
-      if (step === 3) { state.innerText = "🌧️ Step 3: Precipitation - Hujan turun!"; speak("Precipitation"); }
+    // --- SIMULATOR W5 ---
+    function triggerW5(step) {
+      const state = document.getElementById('w5State');
+      if (step === 1) { state.innerText = "💨 Step 1: Evaporation - Water turns to vapor!"; speak("Evaporation"); }
+      if (step === 2) { state.innerText = "☁️ Step 2: Condensation - Clouds are formed!"; speak("Condensation"); }
+      if (step === 3) { state.innerText = "🌧️ Step 3: Precipitation - Rain is falling!"; speak("Precipitation"); }
     }
 
-    // --- CANVAS ENGINE (W1, W4, W5) ---
+    // --- CANVAS ENGINE (W1, W4) ---
     function initCanvas(id) {
       const c = document.getElementById(id);
       if (!c) return;
@@ -317,7 +398,22 @@
       if (c) c.getContext('2d').clearRect(0, 0, c.width, c.height);
     }
 
-    ['w1Canvas', 'w4Canvas', 'w5Canvas'].forEach(initCanvas);
+    ['w1Canvas', 'w4Canvas'].forEach(initCanvas);
+
+    // --- FILE UPLOAD ENGINE (W3, W7, W11) ---
+    function setupFileInput(week) {
+      const el = document.getElementById(`w${week}File`);
+      if (!el) return;
+      el.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => { fileData[week] = reader.result; };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+    [3, 7, 11].forEach(setupFileInput);
 
     // --- AUDIO RECORDER ---
     async function toggleRecording(week) {
@@ -339,7 +435,7 @@
             reader.onloadend = () => { audioData[week] = reader.result; };
           };
           mediaRecorder.start();
-          btn.innerText = "⏹️ Hentikan Rekaman"; btn.classList.replace('bg-rose-500', 'bg-slate-700');
+          btn.innerText = "⏹️ Stop Rekaman"; btn.classList.replace('bg-rose-500', 'bg-slate-700');
         } catch (err) { alert("Mikrofon tidak dapat diakses."); }
       } else {
         mediaRecorder.stop();
@@ -355,18 +451,29 @@
       }
 
       const submitBtn = document.getElementById(`w${weekNum}Submit`);
-      submitBtn.disabled = true; submitBtn.innerText = "⏳ Mengirim Tugas...";
+      submitBtn.disabled = true; submitBtn.innerText = "⏳ Mengirim...";
 
       let textRes = "Task Completed";
-      let drawImg = "";
+      let imgBase64 = fileData[weekNum] || "";
 
-      if (weekNum === 2) textRes = document.getElementById('w2Text').value || "Food chain order submitted";
-      if (weekNum === 3) textRes = document.getElementById('w3State').innerText;
-      if (weekNum === 5) textRes = document.getElementById('w5Slogan').value;
-      if (weekNum === 6) textRes = document.getElementById('w6Notes').value || "Final Showcase Completed";
+      // Ekstraksi jawaban per minggu
+      if (weekNum === 2) textRes = document.getElementById('w2Text').value;
+      if (weekNum === 3) textRes = document.getElementById('w3Notes').value;
+      if (weekNum === 5) textRes = document.getElementById('w5State').innerText;
+      if (weekNum === 6) textRes = document.getElementById('w6Script').value;
+      if (weekNum === 7) textRes = document.getElementById('w7Text').value;
+      if (weekNum === 8) {
+        const checked = Array.from(document.querySelectorAll('.w8Check:checked')).map(c => c.value);
+        textRes = checked.join(', ') || "No item selected";
+      }
+      if (weekNum === 9) textRes = `Q1: ${document.getElementById('w9Q1').value} | Q2: ${document.getElementById('w9Q2').value}`;
+      if (weekNum === 10) textRes = `Coord: ${document.getElementById('w10Coord').value} | Direction: ${document.getElementById('w10Dir').value}`;
+      if (weekNum === 11) textRes = document.getElementById('w11Script').value;
+      if (weekNum === 12) textRes = document.getElementById('w12Reflection').value;
 
+      // Canvas image
       const canvasEl = document.getElementById(`w${weekNum}Canvas`);
-      if (canvasEl) drawImg = canvasEl.toDataURL('image/png');
+      if (canvasEl) imgBase64 = canvasEl.toDataURL('image/png');
 
       const payload = {
         action: "submitTask",
@@ -376,7 +483,7 @@
         week: weekNum,
         taskType: taskName,
         textResponse: textRes,
-        drawingBase64: drawImg,
+        drawingBase64: imgBase64,
         audioBase64: audioData[weekNum]
       };
 
@@ -388,7 +495,7 @@
         });
         submitBtn.disabled = false;
         submitBtn.innerText = `🚀 Kirim Tugas Minggu ${weekNum}`;
-        alert(`Tugas Minggu ${weekNum} Berhasil Terkirim atas nama ${currentStudent.name}! 🎉`);
+        alert(`Tugas Minggu ${weekNum} (${taskName}) Berhasil Terkirim atas nama ${currentStudent.name}! 🎉`);
       } catch (err) {
         alert("Terjadi kesalahan koneksi.");
         submitBtn.disabled = false;
